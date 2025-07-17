@@ -1,0 +1,88 @@
+{
+  "Footer": {
+    "aboutUs": {
+      "title": "ഞങ്ങളേക്കുറിച്ച്",
+      "links": {
+        "goals": "ലക്ഷ്യങ്ങൾ",
+        "howWeWork": "അറിയുക",
+        "commitmentProgress": "പുരോഗതിക്കുള്ള പ്രതിബദ്ധത",
+        "volunteer": "സന്നദ്ധപ്രവർത്തകൻ"
+      }
+    },
+    "membershipArea": {
+      "title": "അംഗത്വ മേഖല",
+      "links": {
+        "membersFaq": "അംഗങ്ങളുടെ പതിവ് ചോദ്യങ്ങൾ",
+        "membersLogin": "അംഗങ്ങൾ ലോഗിൻ ചെയ്യുക",
+        "membershipPrivileges": "അംഗത്വ പ്രത്യേകാവകാശങ്ങൾ",
+        "wings": "ചിറകുകൾ",
+        "codeOfConduct": "പെരുമാറ്റച്ചട്ടം",
+        "complaints": "പരാതികൾ",
+        "membershipRenewals": "അംഗത്വ പുതുക്കലുകൾ"
+      }
+    },
+    "businessCommunity": {
+      "title": "ബിസിനസ്സ് കമ്മ്യൂണിറ്റി",
+      "links": {
+        "vendorSuppliers": "വെണ്ടർ & വിതരണക്കാർ",
+        "businessCommunityJoin": "ബിസിനസ്സ് കമ്മ്യൂണിറ്റി ചേരുക",
+        "businessVendorDisclosure": "ബിസിനസ്/വെണ്ടർ വെളിപ്പെടുത്തൽ",
+        "ethicsVendorSupplier": "എത്തിക്സ് വെണ്ടർ വിതരണക്കാരൻ",
+        "supplierInclusion": "വിതരണക്കാരൻ്റെ ഉൾപ്പെടുത്തൽ"
+      }
+    },
+    "communityContributions": {
+      "title": "കമ്മ്യൂണിറ്റി സംഭാവനകൾ",
+      "links": {
+        "introduction": "ആമുഖം",
+        "howItWorks": "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു"
+      }
+    },
+    "updates": {
+      "title": "അപ്ഡേറ്റുകൾ",
+      "links": {
+        "updates": "അപ്ഡേറ്റുകൾ"
+      }
+    },
+    "memberSupport": {
+      "title": "അംഗ പിന്തുണ",
+      "links": {
+        "memberServices": "അംഗ സേവനങ്ങൾ",
+        "appTechnicalSupport": "APP സാങ്കേതിക പിന്തുണ",
+        "accessibility": "പ്രവേശനക്ഷമത"
+      }
+    },
+    "others": {
+      "title": "മറ്റുള്ളവ",
+      "links": {
+        "dashboard": "ഡാഷ്ബോർഡ്",
+        "logoMediaRequest": "ലോഗോ & മീഡിയ അഭ്യർത്ഥന"
+      }
+    },
+    "contactDetails": {
+      "name": "ഭാരതീയ പോപ്പുലർ പാർട്ടി",
+      "location": "നവി മുംബൈ, മഹാരാഷ്ട്ര ഇന്ത്യ",
+      "description": "ഭാരതീയ പോപ്പുലർ പാർട്ടി പ്ലാറ്റ്‌ഫോമിൽ ചേരുക, ചലനാത്മകവും സുതാര്യവുമായ ഒരു കമ്മ്യൂണിറ്റിയുടെ ഭാഗമാകൂ. ",
+      "copyright": "© 2025 ഭാരതീയ പോപ്പുലർ പാർട്ടി. "
+    },
+    "socialMedia": {
+      "twitter": "ട്വിറ്റർ",
+      "facebook": "ഫേസ്ബുക്ക്",
+      "instagram": "ഇൻസ്റ്റാഗ്രാം",
+      "linkedin": "ലിങ്ക്ഡ്ഇൻ"
+    },
+    "downloadApp": {
+      "text": "BPP ആപ്പ് ഡൗൺലോഡ് ചെയ്യുക",
+      "android": "ആൻഡ്രോയിഡിൽ ഡൗൺലോഡ് ചെയ്യുക"
+    },
+    "footerLinks": {
+      "siteMap": "സൈറ്റ് മാപ്പ്",
+      "termsConditions": "ഉപാധികളും നിബന്ധനകളും",
+      "privacyPolicy": "സ്വകാര്യതാ നയം",
+      "cookies": "കുക്കികൾ",
+      "feedback": "പ്രതികരണം",
+      "disclaimer": "നിരാകരണം",
+      "contactUs": "ഞങ്ങളെ സമീപിക്കുക"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "Footer": {
+    "aboutUs": {
+      "title": "हमारे बारे में",
+      "links": {
+        "goals": "लक्ष्य",
+        "howWeWork": "हम कैसे काम करते हैं",
+        "commitmentProgress": "प्रगति की प्रतिबद्धता",
+        "volunteer": "स्वयंसेवक"
+      }
+    },
+    "membershipArea": {
+      "title": "सदस्यता क्षेत्र",
+      "links": {
+        "membersFaq": "सदस्य एफएक्यू",
+        "membersLogin": "सदस्य लॉगिन",
+        "membershipPrivileges": "सदस्यता लाभ",
+        "wings": "विंग्स",
+        "codeOfConduct": "आचार संहिता",
+        "complaints": "शिकायतें",
+        "membershipRenewals": "सदस्यता नवीकरण"
+      }
+    },
+    "businessCommunity": {
+      "title": "व्यापार समुदाय",
+      "links": {
+        "vendorSuppliers": "वेंडर और आपूर्तिकर्ता",
+        "businessCommunityJoin": "व्यापार समुदाय में जुड़ें",
+        "businessVendorDisclosure": "व्यापार/वेंडर खुलासा",
+        "ethicsVendorSupplier": "नैतिकता वेंडर आपूर्तिकर्ता",
+        "supplierInclusion": "आपूर्तिकर्ता समावेशन"
+      }
+    },
+    "communityContributions": {
+      "title": "समुदाय योगदान",
+      "links": {
+        "introduction": "परिचय",
+        "howItWorks": "यह कैसे काम करता है"
+      }
+    },
+    "updates": {
+      "title": "अद्यतन",
+      "links": {
+        "updates": "अद्यतन"
+      }
+    },
+    "memberSupport": {
+      "title": "सदस्य समर्थन",
+      "links": {
+        "memberServices": "सदस्य सेवाएं",
+        "appTechnicalSupport": "ऐप तकनीकी सहायता",
+        "accessibility": "सुलभता"
+      }
+    },
+    "others": {
+      "title": "अन्य",
+      "links": {
+        "dashboard": "डैशबोर्ड",
+        "logoMediaRequest": "लोगो और मीडिया अनुरोध"
+      }
+    },
+    "contactDetails": {
+      "name": "भारतीय पॉपुलर पार्टी",
+      "location": "नवी मुंबई, महाराष्ट्र भारत",
+      "description": "भारतीय पॉपुलर पार्टी प्लेटफ़ॉर्म से जुड़ें और एक गतिशील और पारदर्शी समुदाय का हिस्सा बनें। आपकी आवाज़ मायने रखती है, और मिलकर हम सार्थक बदलाव ला सकते हैं।",
+      "copyright": "© 2025 भारतीय पॉपुलर पार्टी। सर्वाधिकार सुरक्षित।"
+    },
+    "socialMedia": {
+      "twitter": "ट्विटर",
+      "facebook": "फेसबुक",
+      "instagram": "इंस्टाग्राम",
+      "linkedin": "लिंक्डइन"
+    },
+    "downloadApp": {
+      "text": "BPP ऐप डाउनलोड करें",
+      "android": "एंड्रॉइड पर डाउनलोड करें"
+    },
+    "footerLinks": {
+      "siteMap": "साइट मानचित्र",
+      "termsConditions": "नियम और शर्तें",
+      "privacyPolicy": "गोपनीयता नीति",
+      "cookies": "कुकीज़",
+      "feedback": "प्रतिक्रिया",
+      "disclaimer": "अस्वीकरण",
+      "contactUs": "संपर्क करें"
+    }
+  }
+}

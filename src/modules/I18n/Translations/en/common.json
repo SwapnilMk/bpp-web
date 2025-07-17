@@ -1,0 +1,10 @@
+{
+  "PartyName": {
+    "name": "Bharatiya Popular Party"
+  },
+  "Modes": {
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  }
+}

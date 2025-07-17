@@ -1,0 +1,112 @@
+{
+  "AboutUs": {
+    "label": "About Us",
+    "submenus": {
+      "goals": {
+        "label": "Goals",
+        "description": "Learn about the goals that drive Bharatiya Popular Party's mission and vision"
+      },
+      "howWeWork": {
+        "label": "How We Work",
+        "description": "Discover more about Bharatiya Popular Party, its values, and its journey."
+      },
+      "commitmentProgress": {
+        "label": "Commitment to Progress",
+        "description": "Understand Bharatiya Popular Party's dedication to sustainability and environmental responsibility."
+      },
+      "contactUs": {
+        "label": "Contact Us",
+        "description": "Get in touch with Bharatiya Popular Party for any inquiries or support."
+      },
+      "wings": {
+        "label": "Wings",
+        "description": "Explore the wings of Bharatiya Popular Party."
+      },
+      "career": {
+        "label": "Career",
+        "description": "Explore exciting career opportunities at Bharatiya Popular Party."
+      },
+      "constitution": {
+        "label": "Constitution",
+        "description": "Learn about the constitution of Bharatiya Popular Party."
+      }
+    }
+  },
+  "Wings": {
+    "label": "wings"
+  },
+  "Membership": {
+    "label": "Membership",
+    "submenus": {
+      "faq": {
+        "label": "Members FAQ",
+        "description": "Find answers to common questions about membership."
+      },
+      "login": {
+        "label": "Members Login",
+        "description": "Log in to access your membership account."
+      },
+      "privileges": {
+        "label": "Membership Privileges",
+        "description": "Learn about the benefits and privileges of being a member."
+      },
+      "codeOfConduct": {
+        "label": "Code of Conduct",
+        "description": "Understand the rules and ethical guidelines for members."
+      },
+      "complaints": {
+        "label": "Complaints",
+        "description": "Submit and track your complaints related to membership."
+      },
+      "upgradeRenewals": {
+        "label": "Upgrade & Renewals",
+        "description": "Easily Upgrade & renew your membership online."
+      }
+    }
+  },
+  "BusinessCommunity": {
+    "label": "Business Community",
+    "submenus": {
+      "vendorSuppliers": {
+        "label": "Vendor & Suppliers",
+        "description": "Explore vendors and suppliers within the community."
+      },
+      "join": {
+        "label": "Business Community Join",
+        "description": "Join the business community and grow your network."
+      },
+      "disclosure": {
+        "label": "Business/Vendor Disclosure",
+        "description": "View important business/vendor disclosure information."
+      },
+      "ethics": {
+        "label": "Ethics Vendor Supplier",
+        "description": "Understand the ethics for vendors and suppliers."
+      },
+      "inclusion": {
+        "label": "Supplier Inclusion",
+        "description": "Learn about supplier inclusion initiatives."
+      }
+    }
+  },
+  "CommunityContribution": {
+    "label": "Community Contribution",
+    "submenus": {
+      "introduction": {
+        "label": "Introduction",
+        "description": "Community contribution"
+      },
+      "howItWorks": {
+        "label": "How it works",
+        "description": "Join the business community and grow your network."
+      }
+    }
+  },
+  "Join": {
+    "label": "Login"
+  },
+  "Download": {
+    "label": "Scan to Download App Android",
+    "button": "More Download Options"
+  }
+}

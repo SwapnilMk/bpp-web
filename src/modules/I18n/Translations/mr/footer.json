@@ -1,0 +1,88 @@
+{
+  "Footer": {
+    "aboutUs": {
+      "title": "आमच्याबद्दल",
+      "links": {
+        "goals": "उद्दिष्टे",
+        "howWeWork": "ओळख करून घ्या",
+        "commitmentProgress": "प्रगतीसाठी वचनबद्धता",
+        "volunteer": "स्वयंसेवक"
+      }
+    },
+    "membershipArea": {
+      "title": "सदस्यता क्षेत्र",
+      "links": {
+        "membersFaq": "सदस्य FAQ",
+        "membersLogin": "सदस्य लॉगिन",
+        "membershipPrivileges": "सदस्यता विशेषाधिकार",
+        "wings": "विंग्स",
+        "codeOfConduct": "आचारसंहिता",
+        "complaints": "तक्रारी",
+        "membershipRenewals": "सदस्यता नूतनीकरण"
+      }
+    },
+    "businessCommunity": {
+      "title": "व्यवसाय समुदाय",
+      "links": {
+        "vendorSuppliers": "विक्रेता आणि पुरवठादार",
+        "businessCommunityJoin": "व्यवसाय समुदाय सामील व्हा",
+        "businessVendorDisclosure": "व्यवसाय/विक्रेता प्रकटीकरण",
+        "ethicsVendorSupplier": "नैतिकता विक्रेता पुरवठादार",
+        "supplierInclusion": "पुरवठादार समावेश"
+      }
+    },
+    "communityContributions": {
+      "title": "समुदाय योगदान",
+      "links": {
+        "introduction": "परिचय",
+        "howItWorks": "हे कसे कार्य करते"
+      }
+    },
+    "updates": {
+      "title": "अद्यतने",
+      "links": {
+        "updates": "अद्यतने"
+      }
+    },
+    "memberSupport": {
+      "title": "सदस्य समर्थन",
+      "links": {
+        "memberServices": "सदस्य सेवा",
+        "appTechnicalSupport": "अॅप तांत्रिक समर्थन",
+        "accessibility": "प्रवेशयोग्यता"
+      }
+    },
+    "others": {
+      "title": "इतर",
+      "links": {
+        "dashboard": "डॅशबोर्ड",
+        "logoMediaRequest": "लोगो आणि मीडिया विनंती"
+      }
+    },
+    "contactDetails": {
+      "name": "भारतीय लोकप्रिय पार्टी",
+      "location": "नवी मुंबई, महाराष्ट्र भारत",
+      "description": "भारतीय लोकप्रिय पार्टी प्लॅटफॉर्ममध्ये सामील व्हा आणि गतिशील आणि पारदर्शक समुदायाचा भाग व्हा. तुमचा आवाज महत्त्वाचा आहे आणि एकत्रितपणे, आपण अर्थपूर्ण बदल घडवू शकतो.",
+      "copyright": "© 2025 भारतीय लोकप्रिय पार्टी. सर्व हक्क राखीव."
+    },
+    "socialMedia": {
+      "twitter": "ट्विटर",
+      "facebook": "फेसबुक",
+      "instagram": "इंस्टाग्राम",
+      "linkedin": "लिंक्डइन"
+    },
+    "downloadApp": {
+      "text": "बीपीपी अॅप डाउनलोड करा",
+      "android": "अँड्रॉइडवर डाउनलोड करा"
+    },
+    "footerLinks": {
+      "siteMap": "साइट मॅप",
+      "termsConditions": "अटी आणि शर्ती",
+      "privacyPolicy": "गोपनीयता धोरण",
+      "cookies": "कुकीज",
+      "feedback": "अभिप्राय",
+      "disclaimer": "अस्वीकरण",
+      "contactUs": "आमच्याशी संपर्क साधा"
+    }
+  }
+}
