@@ -44,7 +44,7 @@ const memberRoutes = {
   ],
 }
 
-export const roleAccessMap = {
+const roleAccessMap = {
   [UserRole.MEMBER]: memberRoutes,
   [UserRole.PRIMARY_MEMBER]: [
     '/dashboard',

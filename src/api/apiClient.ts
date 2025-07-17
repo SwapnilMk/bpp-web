@@ -103,7 +103,7 @@ export const postData = async <T>(
   }
 }
 
-export const putData = async <T>(
+const putData = async <T>(
   endpoint: string,
   data: Record<string, unknown>
 ): Promise<T> => {

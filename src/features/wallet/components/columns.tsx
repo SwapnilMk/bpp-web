@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Transaction } from '../data/schema'
 import { DataTableColumnHeader } from './data-table-column-header'
 
-export const statuses = [
+const statuses = [
   {
     value: 'PENDING',
     label: 'Pending',
@@ -28,7 +28,7 @@ export const statuses = [
   },
 ]
 
-export const transactionTypes = [
+const transactionTypes = [
   {
     value: 'CREDIT',
     label: 'Credit',

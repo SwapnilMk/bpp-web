@@ -23,14 +23,14 @@ export interface AuthContextType {
   revokeAllOtherSessions: () => Promise<void>
 }
 
-export interface CookieOptions {
+interface CookieOptions {
   expires: number
   secure: boolean
   sameSite: 'strict' | 'lax' | 'none'
   path: string
 }
 
-export const COOKIE_OPTIONS: CookieOptions = {
+const COOKIE_OPTIONS: CookieOptions = {
   expires: 4,
   secure: import.meta.env.PROD,
   sameSite: 'strict',
