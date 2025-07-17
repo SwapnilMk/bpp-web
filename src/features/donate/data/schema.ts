@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const donationSchema = z.object({
+const donationSchema = z.object({
   _id: z.string(),
   userId: z.string(),
   amount: z.number().min(0, 'Amount cannot be negative'),

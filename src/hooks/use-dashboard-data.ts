@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { RootState } from '@/store/store'
-import { asApiResponse } from '@/types/api'
+import { useQuery } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import { getData } from '@/api/apiClient'
+import { RootState } from '@/store/store'
+import { asApiResponse } from '@/types/api'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
 
 // Define types for dashboard data
@@ -181,55 +180,36 @@ const defaultData: DashboardData = {
   },
 }
 
+const fetchDashboardData = async (): Promise<DashboardData> => {
+  try {
+    const response = await getData('/user-dashboard/stats')
+    const typedResponse = asApiResponse<DashboardData>(response)
+    return typedResponse.data
+  } catch (err) {
+    const error =
+      err instanceof Error ? err : new Error('Failed to load dashboard data')
+    toast.error(error.message)
+    throw error
+  }
+}
+
 // Custom hook to fetch dashboard data
 export function useDashboardData() {
-  const user = useSelector((state: RootState) => state.auth.user)
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
-  const navigate = useNavigate()
 
-  const state = user?.address?.state || 'Unknown'
-  const district = user?.address?.district || 'Unknown'
-
-  const [data, setData] = useState<DashboardData>(defaultData)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setIsLoading(false)
-      return
-    }
-
-    const fetchData = async () => {
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        const response = await getData('/user-dashboard/stats')
-        const typedResponse = asApiResponse<DashboardData>(response)
-        setData(typedResponse.data)
-      } catch (err) {
-        const error =
-          err instanceof Error
-            ? err
-            : new Error('Failed to load dashboard data')
-        setError(error)
-        toast.error('Failed to load dashboard data. Please try again later.')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-
-    // Set up interval to refresh data every 5 minutes
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000)
-
-    // Clean up interval on unmount
-    return () => clearInterval(intervalId)
-  }, [isAuthenticated, state, district, navigate])
+  const {
+    data = defaultData,
+    isLoading,
+    error,
+  } = useQuery<DashboardData, Error>({
+    queryKey: ['dashboardData'],
+    queryFn: fetchDashboardData,
+    enabled: isAuthenticated,
+    refetchOnWindowFocus: true,
+    staleTime: 1 * 60 * 1000, // 1 minute
+  })
 
   return { data, isLoading, error }
 }

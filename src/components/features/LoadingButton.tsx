@@ -34,7 +34,7 @@ const buttonVariants = cva(
   }
 )
 
-export interface ButtonProps
+interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
@@ -71,4 +71,4 @@ const LoadingButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 LoadingButton.displayName = 'LoadingButton'
 
-export { LoadingButton, buttonVariants }
+export { LoadingButton }

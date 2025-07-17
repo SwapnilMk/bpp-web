@@ -19,7 +19,7 @@ export interface NotificationResponse {
   hasMore: boolean
 }
 
-export interface UnreadCountResponse {
+interface UnreadCountResponse {
   count: number
 }
 

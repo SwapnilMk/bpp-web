@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const referredUserSchema = z.object({
+const referredUserSchema = z.object({
   _id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -10,7 +10,7 @@ export const referredUserSchema = z.object({
   status: z.string(),
 })
 
-export const referralSchema = z.object({
+const referralSchema = z.object({
   _id: z.string(),
   referrer: z.string(),
   referredUser: referredUserSchema,
@@ -21,7 +21,7 @@ export const referralSchema = z.object({
   __v: z.number(),
 })
 
-export const referralProfileSchema = z.object({
+const referralProfileSchema = z.object({
   referralCode: z.string(),
   referralLink: z.string(),
   totalReferrals: z.number(),
@@ -30,6 +30,6 @@ export const referralProfileSchema = z.object({
   canUpgrade: z.boolean(),
 })
 
-export type ReferredUser = z.infer<typeof referredUserSchema>
+type ReferredUser = z.infer<typeof referredUserSchema>
 export type Referral = z.infer<typeof referralSchema>
 export type ReferralProfile = z.infer<typeof referralProfileSchema>

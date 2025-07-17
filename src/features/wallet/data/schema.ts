@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const walletSchema = z.object({
+const walletSchema = z.object({
   _id: z.string(),
   user: z.string(),
   balance: z.number(),
@@ -9,7 +9,7 @@ export const walletSchema = z.object({
   updatedAt: z.string(),
 })
 
-export const transactionSchema = z.object({
+const transactionSchema = z.object({
   _id: z.string(),
   wallet: z.string(),
   user: z.string(),
