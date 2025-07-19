@@ -137,6 +137,7 @@ export interface DashboardData {
       cityOrVillage?: string
       district?: string
       state?: string
+      area?: string // Added for backend compatibility
       pincode?: string
     }
     aadhaar?: {
@@ -154,10 +155,11 @@ export interface DashboardData {
     firstName: string
     middleName?: string
     lastName: string
-    email?: string
+    email?: string | null
     phone?: string
     dateOfBirth?: string
     age?: number
+    gender?: string // Added for backend compatibility
     role: string
     occupation?: string
     status: string

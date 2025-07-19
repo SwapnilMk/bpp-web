@@ -144,7 +144,7 @@ export default function LeafletMap({
           minZoom={10}
           maxZoom={40}
           scrollWheelZoom={false}
-          style={{ height: '500px', width: '100%' }}
+          style={{ height: '500px', width: '100%', zIndex: 0 }}
           zoomControl={false}
           attributionControl={false}
           ref={mapRef}

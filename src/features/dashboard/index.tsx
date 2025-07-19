@@ -1,5 +1,6 @@
 import { Users, UserCheck, TrendingUp } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
 import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
@@ -15,7 +16,8 @@ import { StatsGrid } from './components/stats-grid'
 import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
 import { DashboardData } from '@/types/api'
-import { mockDashboardData } from './mock-dashboard-data'
+import { fetchDashboardData } from '@/store/thunks'
+import { AppDispatch, RootState } from '@/store/store'
 
 type StatCardKey = 'totalMembersIndia' | 'totalPrimaryMembersState' | 'totalActiveMembersState' | 'referrals' | 'activeMembers';
 
@@ -59,39 +61,29 @@ const statCards = [
 
 // Main Dashboard Component
 export default function Dashboard() {
-  // const dispatch: AppDispatch = useDispatch()
-  // const { data: dashboardData, isLoading } = useSelector(
-  //   (state: RootState) => state.dashboard
-  // )
-  // const authUser = useSelector((state: RootState) => state.user.user)
-
-  // Temporary local state for demo/mock
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const dispatch: AppDispatch = useDispatch()
+  const { data: dashboardData, isLoading } = useSelector(
+    (state: RootState) => state.dashboard
+  )
 
   useEffect(() => {
-    setIsLoading(true)
-    // Simulate API delay
-    setTimeout(() => {
-      setDashboardData(mockDashboardData)
-      setIsLoading(false)
-    }, 1000)
-  }, [])
+    dispatch(fetchDashboardData())
+  }, [dispatch])
 
   const user =
     !isLoading && dashboardData
       ? {
-          firstName: dashboardData.user?.firstName,
-          lastName: dashboardData.user?.lastName,
-          role: (dashboardData.user?.role as UserRole) || UserRole.MEMBER,
-          status: (dashboardData.user?.status as UserStatus) || UserStatus.PROCESSING,
-          membership: dashboardData.membership?.number || 'N/A',
-          address: {
-            state: dashboardData.user?.address?.state,
-            district: dashboardData.user?.address?.district,
-            city: dashboardData.user?.address?.cityOrVillage,
-          },
-        }
+        firstName: dashboardData.user?.firstName,
+        lastName: dashboardData.user?.lastName,
+        role: (dashboardData.user?.role as UserRole) || UserRole.MEMBER,
+        status: (dashboardData.user?.status as UserStatus) || UserStatus.PROCESSING,
+        membership: dashboardData.membership?.number || 'N/A',
+        address: {
+          state: dashboardData.user?.address?.state,
+          district: dashboardData.user?.address?.district,
+          city: dashboardData.user?.address?.cityOrVillage,
+        },
+      }
       : null
 
   // If you want to use isVerified, you can set it based on status or role
