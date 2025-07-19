@@ -1,3 +1,4 @@
+import { DashboardData } from '@/types/api'
 import {
   AreaChart,
   Area,
@@ -8,7 +9,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import { DashboardData } from '@/types/api'
 import {
   Card,
   CardContent,
@@ -62,13 +62,15 @@ export function AreaChartComponent({
     )
   }
 
-  const data = dashboardData.charts.areaStats.map((item: { date: string; primary: number; active: number }) => ({
-    ...item,
-    date: new Date(item.date).toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric',
-    }),
-  }))
+  const data = dashboardData.charts.areaStats.map(
+    (item: { date: string; primary: number; active: number }) => ({
+      ...item,
+      date: new Date(item.date).toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric',
+      }),
+    })
+  )
 
   return (
     <Card className='col-span-1'>

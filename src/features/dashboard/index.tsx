@@ -1,11 +1,11 @@
-import { Users, UserCheck, TrendingUp } from 'lucide-react'
 import { memo, useEffect } from 'react'
+import { AppDispatch, RootState } from '@/store/store'
+import { fetchDashboardData } from '@/store/thunks'
+import { DashboardData } from '@/types/api'
+import { Users, UserCheck, TrendingUp } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
 import { Main } from '@/components/layout/dashboard/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
 import { AreaChartComponent } from './components/area-chart'
 import LeafletMap from './components/leaflet-map'
 import { PieChartComponent } from './components/pie-chart'
@@ -13,11 +13,13 @@ import { RecentActivities } from './components/recent-activities'
 import { StatsGrid } from './components/stats-grid'
 import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
-import { DashboardData } from '@/types/api'
-import { fetchDashboardData } from '@/store/thunks'
-import { AppDispatch, RootState } from '@/store/store'
 
-type StatCardKey = 'totalMembersIndia' | 'totalPrimaryMembersState' | 'totalActiveMembersState' | 'referrals' | 'activeMembers';
+type StatCardKey =
+  | 'totalMembersIndia'
+  | 'totalPrimaryMembersState'
+  | 'totalActiveMembersState'
+  | 'referrals'
+  | 'activeMembers'
 
 // Stat card configuration
 const statCards = [
@@ -71,17 +73,18 @@ const Dashboard = memo(() => {
   const user =
     !isLoading && dashboardData
       ? {
-        firstName: dashboardData.user?.firstName,
-        lastName: dashboardData.user?.lastName,
-        role: (dashboardData.user?.role as UserRole) || UserRole.MEMBER,
-        status: (dashboardData.user?.status as UserStatus) || UserStatus.PROCESSING,
-        membership: dashboardData.membership?.number || 'N/A',
-        address: {
-          state: dashboardData.user?.address?.state,
-          district: dashboardData.user?.address?.district,
-          city: dashboardData.user?.address?.cityOrVillage,
-        },
-      }
+          firstName: dashboardData.user?.firstName,
+          lastName: dashboardData.user?.lastName,
+          role: (dashboardData.user?.role as UserRole) || UserRole.MEMBER,
+          status:
+            (dashboardData.user?.status as UserStatus) || UserStatus.PROCESSING,
+          membership: dashboardData.membership?.number || 'N/A',
+          address: {
+            state: dashboardData.user?.address?.state,
+            district: dashboardData.user?.address?.district,
+            city: dashboardData.user?.address?.cityOrVillage,
+          },
+        }
       : null
 
   // If you want to use isVerified, you can set it based on status or role
@@ -126,9 +129,9 @@ const Dashboard = memo(() => {
 
   return (
     <Main>
-      <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
-      <StepperStats />
-      <div className='space-y-6'>
+      <div className='space-y-3'>
+        <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
+        <StepperStats />
         <StatsGrid
           isLoading={isLoading}
           dashboardData={safeDashboardData}
@@ -136,7 +139,7 @@ const Dashboard = memo(() => {
           statCards={statCards}
         />
 
-        <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
+        <div className='grid grid-cols-1 gap-3 lg:grid-cols-7'>
           <LeafletMap
             city={user?.address?.city || ''}
             state={user?.address?.state || ''}
@@ -150,7 +153,7 @@ const Dashboard = memo(() => {
           />
         </div>
 
-        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-3 lg:grid-cols-2'>
           <AreaChartComponent
             dashboardData={safeDashboardData}
             isLoading={isLoading}

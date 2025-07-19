@@ -7,7 +7,7 @@ import {
   CancelUpdateRequestResponse,
   ResendOtpResponse,
 } from '@/types/profile'
-import { postData, getData } from './apiService'
+import { postData, getData } from './api.service'
 
 export const profileService = {
   requestUpdate: async (

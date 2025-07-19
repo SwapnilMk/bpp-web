@@ -245,10 +245,7 @@ const Chats = memo(() => {
                       variant='ghost'
                       className='h-8 rounded-md'
                     >
-                      <IconPlus
-                        size={20}
-                        className='stroke-muted-foreground'
-                      />
+                      <IconPlus size={20} className='stroke-muted-foreground' />
                     </Button>
                     <Button
                       size='icon'
@@ -328,4 +325,6 @@ const Chats = memo(() => {
       />
     </Main>
   )
-}
+})
+
+export default Chats

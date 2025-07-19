@@ -1,5 +1,5 @@
-import { LucideIcon } from 'lucide-react'
 import { DashboardData } from '@/types/api'
+import { LucideIcon } from 'lucide-react'
 import { StatCard } from './stat-card'
 
 type StatCardKey = keyof DashboardData | 'activeMembers'

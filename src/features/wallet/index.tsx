@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { getData } from '@/services/apiService'
+import { getData } from '@/services/api.service'
 import { Button } from '@/components/ui/button'
 import {
   Card,

@@ -2,6 +2,7 @@ import { FormEvent, useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from '@tanstack/react-router'
 import { useAppDispatch } from '@/store/hooks'
 import { register as registerUser, sendOtp, verifyOtp } from '@/store/thunks'
+import { RegistrationData } from '@/types/auth'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import bpplogo from '@/assets/logo/bppLogo.png'
@@ -17,7 +18,6 @@ import { EmailForm } from './EmailForm'
 import { OtpVerificationForm } from './OtpVerificationForm'
 import { PersonalDetailForm } from './PersonalDetailForm'
 import { RegistrationForm } from './RegistrationDetails'
-import { RegistrationData } from '@/types/auth'
 
 const INITIAL_DATA: RegistrationData = {
   identifier: '',

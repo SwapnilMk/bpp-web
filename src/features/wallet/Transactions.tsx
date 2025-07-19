@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getData } from '@/services/apiService'
+import { getData } from '@/services/api.service'
 import { Button } from '@/components/ui/button'
 import {
   Card,

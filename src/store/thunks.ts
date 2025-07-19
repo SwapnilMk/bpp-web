@@ -1,9 +1,10 @@
+import * as authService from '@/services/auth.service'
+import * as dashboardService from '@/services/dashboard.service'
+import { disconnectWebSocket } from '@/services/socket.service'
+import * as userService from '@/services/user.service'
+import { LoginCredentials, RegistrationData, User } from '@/types/auth'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
-import * as authService from '@/services/authService'
-import * as userService from '@/services/userService'
-import * as dashboardService from '@/services/dashboardService'
-import { disconnectWebSocket } from '@/services/socketService'
 import {
   setCookie,
   removeCookie,
@@ -11,10 +12,13 @@ import {
   getErrorMessage,
 } from '@/context/authUtils'
 import { setCredentials, clearCredentials } from './authSlice'
+import {
+  setDashboardData,
+  setDashboardLoading,
+  setDashboardError,
+} from './dashboardSlice'
 import { persistor } from './store'
 import { setUser, clearUser } from './userSlice'
-import { setDashboardData, setDashboardLoading, setDashboardError } from './dashboardSlice'
-import { LoginCredentials, RegistrationData, User } from '@/types/auth'
 
 export const login = createAsyncThunk(
   'auth/login',

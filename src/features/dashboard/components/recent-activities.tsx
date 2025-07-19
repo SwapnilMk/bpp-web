@@ -1,4 +1,5 @@
 import { formatDistanceToNow, format } from 'date-fns'
+import { DashboardData } from '@/types/api'
 import {
   LogIn,
   CreditCard,
@@ -10,7 +11,6 @@ import {
   Clock4,
   ArrowRight,
 } from 'lucide-react'
-import { DashboardData } from '@/types/api'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {

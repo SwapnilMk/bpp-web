@@ -1,3 +1,4 @@
+import { DashboardData } from '@/types/api'
 import {
   PieChart,
   Pie,
@@ -6,7 +7,6 @@ import {
   Legend,
   Tooltip,
 } from 'recharts'
-import { DashboardData } from '@/types/api'
 import {
   Card,
   CardContent,
@@ -86,12 +86,14 @@ export function PieChartComponent({ dashboardData, isLoading }: PieChartProps) {
                   `${name} ${(percent * 100).toFixed(0)}%`
                 }
               >
-                {data.map((_entry: { name: string; value: number }, index: number) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
+                {data.map(
+                  (_entry: { name: string; value: number }, index: number) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  )
+                )}
               </Pie>
               <Tooltip />
               <Legend />

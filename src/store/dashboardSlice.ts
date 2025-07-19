@@ -40,10 +40,10 @@ const dashboardSlice = createSlice({
   },
 })
 
-export const { 
-  setDashboardData, 
-  setDashboardLoading, 
-  setDashboardError, 
-  clearDashboardData 
+export const {
+  setDashboardData,
+  setDashboardLoading,
+  setDashboardError,
+  clearDashboardData,
 } = dashboardSlice.actions
 export default dashboardSlice.reducer

@@ -1,6 +1,3 @@
-import { io, Socket } from 'socket.io-client'
-import { Store } from '@reduxjs/toolkit'
-import { toast } from 'sonner'
 import {
   setNotifications,
   addNotification,
@@ -10,6 +7,9 @@ import {
   markAllAsRead,
 } from '@/store/notificationSlice'
 import { Notification } from '@/types/notifications'
+import { Store } from '@reduxjs/toolkit'
+import { io, Socket } from 'socket.io-client'
+import { toast } from 'sonner'
 
 declare global {
   interface Window {

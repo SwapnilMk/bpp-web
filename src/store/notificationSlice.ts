@@ -1,5 +1,5 @@
+import { Notification } from '@/types/notifications'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Notification } from '@/services/notification.service'
 
 interface NotificationsState {
   notifications: Notification[]
@@ -15,10 +15,7 @@ const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setNotifications: (
-      state,
-      action: PayloadAction<Notification[]>
-    ) => {
+    setNotifications: (state, action: PayloadAction<Notification[]>) => {
       state.notifications = action.payload
       state.unreadCount = action.payload.filter((n) => !n.read).length
     },

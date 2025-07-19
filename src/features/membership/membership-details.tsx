@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
-import apiClient from '@/services/apiService'
+import apiClient from '@/services/api.service'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 

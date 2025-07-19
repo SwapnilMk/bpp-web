@@ -9,8 +9,8 @@ import { ThemeProvider } from './context/theme-context'
 import './index.css'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
-import store, { persistor } from './store/store'
 import { initWebSocket } from './services/socket.service'
+import store, { persistor } from './store/store'
 
 // Initialize WebSocket connection
 initWebSocket(store)

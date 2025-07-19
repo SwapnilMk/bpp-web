@@ -140,7 +140,7 @@ export const StepperStats = () => {
   }
 
   return (
-    <Card className='mb-6 overflow-hidden'>
+    <Card className='overflow-hidden'>
       <CardContent className='p-4 sm:p-6'>
         <div
           ref={stepperRef}

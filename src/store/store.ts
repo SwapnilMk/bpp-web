@@ -4,10 +4,10 @@ import storage from 'redux-persist/lib/storage'
 import authReducer from './authSlice'
 import dashboardReducer from './dashboardSlice'
 import membershipReducer from './membershipSlice'
+import notificationReducer from './notificationSlice'
 import referralReducer from './referralSlice'
 import userReducer from './userSlice'
 import walletReducer from './walletSlice'
-import notificationReducer from './notificationSlice'
 
 const persistConfig = {
   key: 'root',

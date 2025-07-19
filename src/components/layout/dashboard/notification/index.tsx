@@ -1,20 +1,9 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import {
-  setNotifications,
-  addNotification,
-  updateNotification,
-  removeNotification,
-  clearNotifications,
-  markAllAsRead,
-} from '@/store/notificationSlice'
-import { Bell, Trash2 } from 'lucide-react'
 import { getSocket } from '@/services/socket.service'
-import { toast } from 'sonner'
-
+import { useAppSelector } from '@/store/hooks'
+import { Bell, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { type Notification } from '@/types/notifications'
+import { Notification } from '../../../../types/notifications'
 
 function Dot({ className }: { className?: string }) {
   return (
@@ -41,11 +30,9 @@ function Dot({ className }: { className?: string }) {
 }
 
 export const NotificationHeaderMenu = () => {
-  const dispatch = useAppDispatch()
   const { notifications, unreadCount } = useAppSelector(
     (state) => state.notifications
   )
-  const user = useAppSelector((state) => state.user.user)
   const socket = getSocket()
 
   const handleMarkAllAsRead = () => {

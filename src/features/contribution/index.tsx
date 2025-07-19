@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { memo, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchDashboardData } from '@/store/thunks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import ShiftingCountdown from '@/components/features/countdown-timer'

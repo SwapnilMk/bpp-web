@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
+import { getData } from '@/services/api.service'
 import { CopyIcon, Share2Icon } from 'lucide-react'
 import { toast } from 'sonner'
-import { getData } from '@/services/apiService'
 import { Button } from '@/components/ui/button'
 import {
   Card,

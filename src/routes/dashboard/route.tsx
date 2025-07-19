@@ -3,15 +3,14 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
+import { VerificationManager } from '@/components/features/verification/verification-manager'
+import { AppSidebar } from '@/components/layout/dashboard/app-sidebar'
 import { Header } from '@/components/layout/dashboard/header'
-import { Main } from '@/components/layout/dashboard/main'
 import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
-import { VerificationManager } from '@/components/features/verification/verification-manager'
-import { AppSidebar } from '@/components/layout/dashboard/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
+import { ThemeSwitch } from '@/components/theme-switch'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardLayout,

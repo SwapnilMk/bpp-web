@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { getData } from '@/services/api.service'
 import { PlusIcon } from 'lucide-react'
-import { getData } from '@/services/apiService'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
