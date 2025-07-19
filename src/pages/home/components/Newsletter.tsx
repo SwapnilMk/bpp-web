@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ArrowRight, LoaderCircle } from 'lucide-react'
-import { postData } from '@/api/apiClient'
+import { postData } from '@/services/apiService'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

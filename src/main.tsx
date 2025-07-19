@@ -10,6 +10,10 @@ import './index.css'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
 import store, { persistor } from './store/store'
+import { initWebSocket } from './services/socketService'
+
+// Initialize WebSocket connection
+initWebSocket(store)
 
 // Create a new router instance
 const router = createRouter({

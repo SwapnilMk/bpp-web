@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api'
-import { postData } from '@/api/apiClient'
+import { postData } from './apiService'
 
 interface CertificateRequestResponse {
   success: boolean

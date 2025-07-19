@@ -1,8 +1,9 @@
-import { RootState } from '@/store/store'
+import { RootState, AppDispatch } from '@/store/store'
 import { Users, UserCheck, TrendingUp } from 'lucide-react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { DashboardData, useDashboardData } from '@/hooks/use-dashboard-data'
+import { fetchDashboardData } from '@/store/thunks'
 import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
 import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
@@ -17,7 +18,7 @@ import { StatsGrid } from './components/stats-grid'
 import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
 
-type StatCardKey = keyof DashboardData | 'activeMembers'
+type StatCardKey = 'totalMembersIndia' | 'totalPrimaryMembersState' | 'totalActiveMembersState' | 'referrals' | 'activeMembers';
 
 // Stat card configuration
 const statCards = [
@@ -25,7 +26,7 @@ const statCards = [
     title: 'Total Members',
     icon: Users,
     key: 'totalMembersIndia' as StatCardKey,
-    subKey: 'totalMembersState' as keyof DashboardData,
+    subKey: 'totalMembersState',
     subText: (value: number) => `+${value} in your state`,
     showAlways: true,
     trend: 'up' as const,
@@ -59,8 +60,15 @@ const statCards = [
 
 // Main Dashboard Component
 export default function Dashboard() {
-  const { data: dashboardData, isLoading } = useDashboardData()
+  const dispatch: AppDispatch = useDispatch()
+  const { data: dashboardData, isLoading } = useSelector(
+    (state: RootState) => state.dashboard
+  )
   const authUser = useSelector((state: RootState) => state.user.user)
+
+  useEffect(() => {
+    dispatch(fetchDashboardData())
+  }, [dispatch])
 
   // --- FAKE DATA OVERRIDE ---
   const fakeDashboardData = {

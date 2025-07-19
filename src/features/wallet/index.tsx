@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { getData } from '@/api/apiClient'
+import { getData } from '@/services/apiService'
 import { Button } from '@/components/ui/button'
 import {
   Card,

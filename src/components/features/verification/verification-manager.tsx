@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/store/hooks'
-import { postData } from '@/api/apiClient'
+import { postData } from '@/services/apiService'
 import { needsVerification, needsPrimaryMembership } from '@/utils/roleAccess'
 import { UserRole } from '@/utils/roleAccess'
 import { useToast } from '@/hooks/use-toast'

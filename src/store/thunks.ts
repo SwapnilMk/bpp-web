@@ -1,42 +1,26 @@
-import {
-  LoginResponse,
-  RegistrationResponse,
-  asApiResponse,
-  Session,
-} from '@/types/api'
-import {
-  LoginCredentials,
-  RegistrationData,
-  LoginResponseData,
-  User,
-} from '@/types/auth'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
-import { postData, deleteData, getData } from '@/api/apiClient'
-import { initWebSocket, disconnectWebSocket } from '@/lib/realtime'
+import * as authService from '@/services/authService'
+import * as userService from '@/services/userService'
+import * as dashboardService from '@/services/dashboardService'
+import { disconnectWebSocket } from '@/services/socketService'
 import {
   setCookie,
   removeCookie,
   COOKIE_KEYS,
   getErrorMessage,
-  isFile,
 } from '@/context/authUtils'
 import { setCredentials, clearCredentials } from './authSlice'
 import { persistor } from './store'
 import { setUser, clearUser } from './userSlice'
+import { setDashboardData } from './dashboardSlice'
+import { LoginCredentials, RegistrationData, User } from '@/types/auth'
 
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, { dispatch }) => {
     try {
-      const response = await postData<LoginResponse>(
-        '/auth/login',
-        credentials as unknown as Record<string, unknown>,
-        {
-          withCredentials: true,
-        }
-      )
-      const loginResponse = response.data.data as LoginResponseData
+      const loginResponse = await authService.login(credentials)
       const userData = loginResponse.user as unknown as User
       const sessionId = loginResponse.sessionId
       const accessToken = loginResponse.accessToken
@@ -51,7 +35,7 @@ export const login = createAsyncThunk(
       setCookie(COOKIE_KEYS.SESSION_ID, sessionId)
       localStorage.setItem('sessionId', sessionId)
       localStorage.setItem(COOKIE_KEYS.USER_DETAILS, JSON.stringify(userData))
-      initWebSocket()
+      // initWebSocket()
 
       toast.success('Login Successful!', {
         description: 'Redirecting to the dashboard page...',
@@ -65,73 +49,32 @@ export const login = createAsyncThunk(
   }
 )
 
+export const fetchDashboardData = createAsyncThunk(
+  'dashboard/fetchDashboardData',
+  async (_, { dispatch }) => {
+    try {
+      const dashboardData = await dashboardService.fetchDashboardData()
+      dispatch(setDashboardData(dashboardData))
+      return dashboardData
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+)
+
 export const register = createAsyncThunk(
   'auth/register',
   async (registrationData: RegistrationData, { dispatch }) => {
     try {
-      const formData = new FormData()
-      const {
-        addressLine1,
-        addressLine2,
-        cityOrVillage,
-        district,
-        state,
-        pincode,
-        aadhaarFront,
-        aadhaarBack,
-        voterFront,
-        voterBack,
-        profilePicture,
-        ...rest
-      } = registrationData
-
-      // Add all non-file fields
-      Object.entries(rest).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
-          formData.append(key, isFile(value) ? value : String(value))
-        }
-      })
-
-      // Add address fields
-      const addressFields = {
-        addressLine1,
-        addressLine2,
-        cityOrVillage,
-        district,
-        state,
-        pincode,
-      }
-      Object.entries(addressFields).forEach(([key, value]) => {
-        if (value) formData.append(key, value)
-      })
-
-      // Add file fields
-      const files = {
-        aadhaarFront,
-        aadhaarBack,
-        voterFront,
-        voterBack,
-        profilePicture,
-      }
-      Object.entries(files).forEach(([key, value]) => {
-        if (value) formData.append(key, value)
-      })
-
-      const response = await postData<RegistrationResponse>(
-        '/auth/register',
-        formData as unknown as Record<string, unknown>,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
-      )
-      const typedResponse = asApiResponse<RegistrationResponse>(response)
-
-      if (typedResponse.data.success) {
-        const userData = typedResponse.data as unknown as User
-        if (typedResponse.data.token) {
-          dispatch(setCredentials({ token: typedResponse.data.token }))
+      const response = await authService.register(registrationData)
+      if (response.success) {
+        const userData = response as unknown as User
+        if (response.token) {
+          dispatch(setCredentials({ token: response.token }))
           dispatch(setUser(userData))
-          setCookie(COOKIE_KEYS.AUTH_TOKEN, typedResponse.data.token)
+          setCookie(COOKIE_KEYS.AUTH_TOKEN, response.token)
           localStorage.setItem(
             COOKIE_KEYS.USER_DETAILS,
             JSON.stringify(userData)
@@ -140,7 +83,7 @@ export const register = createAsyncThunk(
         toast.success('Registration successful!')
         return
       }
-      throw new Error(typedResponse.data.message || 'Registration failed')
+      throw new Error(response.message || 'Registration failed')
     } catch (error) {
       const errorMessage = getErrorMessage(error)
       toast.error(errorMessage)
@@ -153,32 +96,16 @@ export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { dispatch }) => {
     try {
-      await postData(
-        '/auth/sessions/logout',
-        {},
-        {
-          headers: { 'x-session-id': localStorage.getItem('sessionId') },
-          withCredentials: true,
-        }
-      )
-
+      await authService.logout()
       disconnectWebSocket()
-
-      // Clear all authentication data
       removeCookie(COOKIE_KEYS.AUTH_TOKEN)
       removeCookie(COOKIE_KEYS.SESSION_ID)
-
       localStorage.removeItem('sessionId')
       localStorage.removeItem('authToken')
       localStorage.removeItem(COOKIE_KEYS.USER_DETAILS)
-
-      // Clear Redux state
       dispatch(clearCredentials())
       dispatch(clearUser())
-
-      // Purge persisted state
       await persistor.purge()
-
       toast.success('Logged out successfully')
     } catch (error) {
       const errorMessage = getErrorMessage(error)
@@ -192,10 +119,7 @@ export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async (_, { dispatch }) => {
     try {
-      const response = await getData<{ data: User }>('/users/me')
-      const typedResponse = asApiResponse<{ data: User }>(response)
-      const userData = typedResponse.data as User
-
+      const userData = await userService.fetchUserData()
       dispatch(setUser(userData))
       return userData
     } catch (error) {
@@ -210,10 +134,7 @@ export const getActiveSessions = createAsyncThunk(
   'auth/getActiveSessions',
   async () => {
     try {
-      const response = await getData<{ success: boolean; data: Session[] }>(
-        '/auth/sessions/active'
-      )
-      return response.data
+      return await authService.getActiveSessions()
     } catch (_error) {
       throw new Error('Failed to get active sessions')
     }
@@ -224,9 +145,7 @@ export const revokeSession = createAsyncThunk(
   'auth/revokeSession',
   async (sessionId: string) => {
     try {
-      await deleteData<{ success: boolean; message: string }>(
-        `/auth/sessions/${sessionId}`
-      )
+      await authService.revokeSession(sessionId)
     } catch (_error) {
       throw new Error('Failed to revoke session')
     }
@@ -237,22 +156,14 @@ export const sendOtp = createAsyncThunk(
   'auth/sendOtp',
   async (identifier: string) => {
     try {
-      const response = await postData<{ success: boolean; message: string }>(
-        '/auth/register/send-otp',
-        { identifier }
-      )
-      const typedResponse = asApiResponse<{
-        success: boolean
-        message: string
-      }>(response)
-
-      if (typedResponse.data.success) {
+      const response = await authService.sendOtp(identifier)
+      if (response.success) {
         toast.success(
           `OTP sent successfully to your ${identifier.includes('@') ? 'email' : 'phone'}!`
         )
-        return typedResponse.data
+        return response
       }
-      throw new Error(typedResponse.data.message || 'Failed to send OTP')
+      throw new Error(response.message || 'Failed to send OTP')
     } catch (error) {
       const errorMessage = getErrorMessage(error)
       toast.error(errorMessage)
@@ -265,20 +176,12 @@ export const verifyOtp = createAsyncThunk(
   'auth/verifyOtp',
   async ({ identifier, otp }: { identifier: string; otp: string }) => {
     try {
-      const response = await postData<{ success: boolean; message: string }>(
-        '/auth/register/verify-otp',
-        { identifier, otp }
-      )
-      const typedResponse = asApiResponse<{
-        success: boolean
-        message: string
-      }>(response)
-
-      if (typedResponse.data.success) {
+      const response = await authService.verifyOtp({ identifier, otp })
+      if (response.success) {
         toast.success('OTP verified successfully!')
-        return typedResponse.data
+        return response
       }
-      throw new Error(typedResponse.data.message || 'Failed to verify OTP')
+      throw new Error(response.message || 'Failed to verify OTP')
     } catch (error) {
       const errorMessage = getErrorMessage(error)
       toast.error(errorMessage)
@@ -291,9 +194,7 @@ export const revokeAllOtherSessions = createAsyncThunk(
   'auth/revokeAllOtherSessions',
   async () => {
     try {
-      await deleteData<{ success: boolean; message: string }>(
-        '/auth/sessions/logout-others'
-      )
+      await authService.revokeAllOtherSessions()
     } catch (_error) {
       throw new Error('Failed to revoke other sessions')
     }

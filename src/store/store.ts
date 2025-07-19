@@ -7,6 +7,7 @@ import membershipReducer from './membershipSlice'
 import referralReducer from './referralSlice'
 import userReducer from './userSlice'
 import walletReducer from './walletSlice'
+import notificationReducer from './notificationSlice'
 
 const persistConfig = {
   key: 'root',
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   membership: membershipReducer,
   wallet: walletReducer,
   referral: referralReducer,
+  notifications: notificationReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
