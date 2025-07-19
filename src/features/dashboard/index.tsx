@@ -1,10 +1,10 @@
-import { Users, UserCheck, TrendingUp } from 'lucide-react'
-import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAuth } from '@/context/AuthContext'
-import { DashboardData, useDashboardData } from '@/hooks/use-dashboard-data'
-import { RouteGuard } from '@/components/features/auth/route-guard'
-import { Header } from '@/components/layout/dashboard/header'
-import { Main } from '@/components/layout/dashboard/main'
+import { Users, UserCheck, TrendingUp } from 'lucide-react';
+import { UserRole, UserStatus } from '@/utils/roleAccess';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { DashboardData, useDashboardData } from '@/hooks/use-dashboard-data';
+import { Header } from '@/components/layout/dashboard/header';
+import { Main } from '@/components/layout/dashboard/main';
 import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
@@ -59,8 +59,8 @@ const statCards = [
 
 // Main Dashboard Component
 export default function Dashboard() {
-  const { data: dashboardData, isLoading } = useDashboardData()
-  const { user: authUser } = useAuth()
+  const { data: dashboardData, isLoading } = useDashboardData();
+  const authUser = useSelector((state: RootState) => state.user.user);
 
   // --- FAKE DATA OVERRIDE ---
   const fakeDashboardData = {
@@ -95,7 +95,7 @@ export default function Dashboard() {
   const isVerified = user?.isVerified && user?.status === UserStatus.APPROVED
 
   return (
-    <RouteGuard>
+    <>
       <Header fixed>
         <Search />
         <div className='ml-auto flex items-center space-x-4'>
@@ -142,6 +142,6 @@ export default function Dashboard() {
           </div>
         </div>
       </Main>
-    </RouteGuard>
+    </>
   )
 }

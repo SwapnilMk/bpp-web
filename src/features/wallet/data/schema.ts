@@ -1,15 +1,15 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-const walletSchema = z.object({
+const _walletSchema = z.object({
   _id: z.string(),
   user: z.string(),
   balance: z.number(),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
-})
+});
 
-const transactionSchema = z.object({
+const _transactionSchema = z.object({
   _id: z.string(),
   wallet: z.string(),
   user: z.string(),

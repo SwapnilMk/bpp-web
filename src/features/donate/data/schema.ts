@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-const donationSchema = z.object({
+const _donationSchema = z.object({
   _id: z.string(),
   userId: z.string(),
   amount: z.number().min(0, 'Amount cannot be negative'),
