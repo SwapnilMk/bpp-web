@@ -1,4 +1,4 @@
-import { getData, deleteData, patchData } from '@/api/apiClient'
+import { getData, deleteData, patchData } from './apiService'
 
 export interface Notification {
   _id: string

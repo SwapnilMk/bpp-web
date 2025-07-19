@@ -6,7 +6,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useAppSelector } from '@/store/hooks'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { postData } from '@/api/apiClient'
+import { postData } from '@/services/apiService'
 import { Button } from '@/components/ui/button'
 import {
   Card,

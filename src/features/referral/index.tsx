@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CopyIcon, Share2Icon } from 'lucide-react'
 import { toast } from 'sonner'
-import { getData } from '@/api/apiClient'
+import { getData } from '@/services/apiService'
 import { Button } from '@/components/ui/button'
 import {
   Card,

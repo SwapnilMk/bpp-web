@@ -1,5 +1,6 @@
-import { useAppSelector } from '@/store/hooks'
-import { useDashboardData } from '@/hooks/use-dashboard-data'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useEffect } from 'react'
+import { fetchDashboardData } from '@/store/thunks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import ShiftingCountdown from '@/components/features/countdown-timer'
 import { Header } from '@/components/layout/dashboard/header'
@@ -20,8 +21,15 @@ const steps = [
 ] as const
 
 const Contribution = () => {
-  const { data: dashboardData, isLoading } = useDashboardData()
+  const dispatch = useAppDispatch()
+  const { data: dashboardData, isLoading } = useAppSelector(
+    (state) => state.dashboard
+  )
   const authUser = useAppSelector((state) => state.user.user)
+
+  useEffect(() => {
+    dispatch(fetchDashboardData())
+  }, [dispatch])
 
   const user =
     !isLoading && authUser
