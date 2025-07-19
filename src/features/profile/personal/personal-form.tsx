@@ -4,9 +4,10 @@ import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileService } from '@/services/profile.service'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { setUser } from '@/store/userSlice'
 import { ImagePlus } from 'lucide-react'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -53,21 +54,22 @@ const PersonalFormSchema = z.object({
 type PersonalFormValues = z.infer<typeof PersonalFormSchema>
 
 export default function PersonalForm() {
-  const { user, updateUser } = useAuth()
+  const user = useAppSelector((state) => state.user.user)
+  const dispatch = useAppDispatch()
   const [loading, setLoading] = useState(true)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const form = useForm<PersonalFormValues>({
     resolver: zodResolver(PersonalFormSchema),
     defaultValues: {
-      profilePicture: user?.profilePicture?.toString() ?? '',
-      title: user?.title as Title | undefined,
-      firstName: user?.firstName ?? '',
-      middleName: user?.middleName ?? '',
-      lastName: user?.lastName ?? '',
-      dateOfBirth: user?.dateOfBirth ?? '',
-      age: user?.age ?? 18,
-      gender: (user?.gender as Gender) ?? 'male',
+      profilePicture: '',
+      title: undefined,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      dateOfBirth: '',
+      age: 18,
+      gender: 'male',
     },
     mode: 'onChange',
   })
@@ -84,8 +86,8 @@ export default function PersonalForm() {
         age: user.age,
         gender: user.gender as Gender,
       })
-      setLoading(false)
     }
+    setLoading(false)
   }, [user, form])
 
   const handleUpdate: SubmitHandler<PersonalFormValues> = async (data) => {
@@ -101,7 +103,7 @@ export default function PersonalForm() {
 
         if (response.data.success && response.data.data) {
           // Update user in context (assuming backend returns updated user)
-          updateUser({ ...user!, profilePicture: data.profilePicture })
+          dispatch(setUser({ ...user!, profilePicture: data.profilePicture }))
           toast.success('Profile picture updated successfully')
         }
       }

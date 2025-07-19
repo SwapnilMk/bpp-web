@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useAppSelector } from '@/store/hooks'
 import { Pencil } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
 import { cn } from '@/lib/utils'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAppSelector } from '@/store/hooks'
 import { DashboardData } from '@/hooks/use-dashboard-data'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -71,7 +71,7 @@ interface UserCardProps {
 }
 
 const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
-  const authUser = useAppSelector((state) => state.auth.user);
+  const authUser = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
   const isPrimaryMember = dashboardData.user.role === UserRole.PRIMARY_MEMBER
   const isActiveMember = dashboardData.user.role === UserRole.ACTIVE_MEMBER

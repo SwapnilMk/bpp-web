@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface MembershipState {
-  number: string | null;
-  type: string | null;
-  status: string | null;
-  cardUrl?: string;
-  startDate?: string;
-  expiryDate?: string;
+  number: string | null
+  type: string | null
+  status: string | null
+  cardUrl?: string
+  startDate?: string
+  expiryDate?: string
 }
 
 const initialState: MembershipState = {
@@ -16,20 +16,20 @@ const initialState: MembershipState = {
   cardUrl: undefined,
   startDate: undefined,
   expiryDate: undefined,
-};
+}
 
 const membershipSlice = createSlice({
   name: 'membership',
   initialState,
   reducers: {
     setMembership: (state, action: PayloadAction<MembershipState>) => {
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload }
     },
     clearMembership: () => {
-      return initialState;
+      return initialState
     },
   },
-});
+})
 
-export const { setMembership, clearMembership } = membershipSlice.actions;
-export default membershipSlice.reducer;
+export const { setMembership, clearMembership } = membershipSlice.actions
+export default membershipSlice.reducer

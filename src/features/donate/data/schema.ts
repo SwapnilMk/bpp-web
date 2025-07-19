@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-const _donationSchema = z.object({
+const donationSchema = z.object({
   _id: z.string(),
   userId: z.string(),
   amount: z.number().min(0, 'Amount cannot be negative'),
@@ -23,3 +23,4 @@ const _donationSchema = z.object({
 })
 
 export type Donation = z.infer<typeof donationSchema>
+export { donationSchema }

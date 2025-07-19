@@ -1,5 +1,5 @@
-import { hasAccess, hasBusinessCommunityAccess } from '@/utils/roleAccess';
-import { useAppSelector } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks'
+import { hasAccess, hasBusinessCommunityAccess } from '@/utils/roleAccess'
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import { sidebarData } from './data/sidebar-data'
 import { type NavItem, type NavCollapsible } from './types'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.user.user)
 
   // Filter navigation groups based on user role and verification status
   const filteredNavGroups = sidebarData.navGroups.filter((group) => {

@@ -1,8 +1,8 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { clearCredentials } from '@/store/authSlice';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { logout } from '@/store/thunks'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,16 +15,16 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ProfileDropdown() {
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
-      dispatch(clearCredentials());
+      await dispatch(logout()).unwrap()
       navigate({ to: '/sign-in', replace: true })
     } catch (_error) {
-      // Error is handled by toast in AuthContext
+      // Error is handled by the thunk with toast
     }
   }
 

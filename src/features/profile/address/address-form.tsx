@@ -4,8 +4,8 @@ import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileService } from '@/services/profile.service'
+import { useAppSelector } from '@/store/hooks'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -36,13 +36,13 @@ const AddressFormSchema = z.object({
 type AddressFormValues = z.infer<typeof AddressFormSchema>
 
 export default function AddressForm() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.user.user)
   const [loading, setLoading] = useState(true)
 
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(AddressFormSchema),
     defaultValues: {
-      address: user?.address || {
+      address: {
         line1: '',
         line2: '',
         cityOrVillage: '',
@@ -55,19 +55,10 @@ export default function AddressForm() {
   })
 
   useEffect(() => {
-    if (user) {
-      form.reset({
-        address: user.address || {
-          line1: '',
-          line2: '',
-          cityOrVillage: '',
-          district: '',
-          state: '',
-          pincode: '',
-        },
-      })
-      setLoading(false)
+    if (user && user.address) {
+      form.reset({ address: user.address })
     }
+    setLoading(false)
   }, [user, form])
 
   const handleUpdate: SubmitHandler<AddressFormValues> = async (data) => {

@@ -1,15 +1,14 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { RootState } from '@/store/store'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { logout } from '@/store/thunks'
 import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
   LogOut,
   Sparkles,
-} from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { clearCredentials } from '@/store/authSlice';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,16 +27,16 @@ import {
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const user = useAppSelector((state) => state.auth.user)
+  const user = useAppSelector((state) => state.user.user)
 
   const handleLogout = async () => {
     try {
-      dispatch(clearCredentials());
+      await dispatch(logout()).unwrap()
       navigate({ to: '/sign-in', replace: true })
     } catch (_error) {
-      // Error is handled by toast in AuthContext
+      // Error is handled by the thunk with toast
     }
   }
 

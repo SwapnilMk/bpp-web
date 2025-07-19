@@ -1,13 +1,13 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { NotificationResponse } from '@/services/notification.service';
-import { User } from '@/types/auth';
-import { io, Socket } from 'socket.io-client';
-import { toast } from 'sonner';
+import { useEffect, useRef, useCallback } from 'react'
+import { NotificationResponse } from '@/services/notification.service'
+import { User } from '@/types/auth'
+import { io, Socket } from 'socket.io-client'
+import { toast } from 'sonner'
 
 // Extend Window interface to include currentSocket
 declare global {
   interface Window {
-    currentSocket?: Socket;
+    currentSocket?: Socket
   }
 }
 

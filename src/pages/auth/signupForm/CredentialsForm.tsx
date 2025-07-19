@@ -42,7 +42,7 @@ export function CredentialsForm({
       { regex: /[!@#$%^&*]/, text: 'At least 1 special character (!@#$%^&*)' },
     ],
     []
-  );
+  )
 
   const strength = useMemo(
     () =>
@@ -51,7 +51,7 @@ export function CredentialsForm({
         text: req.text,
       })),
     [password, passwordRequirements]
-  );
+  )
   const strengthScore = strength.filter((req) => req.met).length
 
   useEffect(() => {

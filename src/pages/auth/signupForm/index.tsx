@@ -1,9 +1,10 @@
 import { FormEvent, useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from '@tanstack/react-router'
+import { useAppDispatch } from '@/store/hooks'
+import { register as registerUser, sendOtp, verifyOtp } from '@/store/thunks'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import bpplogo from '@/assets/logo/bppLogo.png'
-import { useAuth } from '@/context/AuthContext'
 import { useMultiStepForm } from '@/hooks/useMultiStepForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -16,45 +17,7 @@ import { EmailForm } from './EmailForm'
 import { OtpVerificationForm } from './OtpVerificationForm'
 import { PersonalDetailForm } from './PersonalDetailForm'
 import { RegistrationForm } from './RegistrationDetails'
-
-type RegistrationData = {
-  identifier: string
-  termsAccepted: boolean
-  partyObjectivesAccepted: boolean
-  serveCommunityAccepted?: boolean
-  title: string
-  firstName: string
-  middleName?: string
-  lastName: string
-  email?: string
-  phone: string
-  dateOfBirth: string
-  gender: string
-  age: number
-  otp: string
-  occupation: string
-  addressLine1: string
-  addressLine2?: string
-  cityOrVillage: string
-  area: string
-  district: string
-  state: string
-  pincode: string
-  qualification?: string
-  profession?: string
-  position?: string
-  aadhaarNumber?: string
-  aadhaarFront?: File | null
-  aadhaarBack?: File | null
-  voterId?: string
-  voterFront?: File | null
-  voterBack?: File | null
-  password: string
-  confirmPassword: string
-  referralCode?: string
-  recaptchaToken?: string
-  profilePicture: File | null
-}
+import { RegistrationData } from '@/types/auth'
 
 const INITIAL_DATA: RegistrationData = {
   identifier: '',
@@ -100,7 +63,30 @@ const MultiStepForm = () => {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { sendOtp, verifyOtp, register, loading } = useAuth()
+  const dispatch = useAppDispatch()
+  const [loading, setLoading] = useState(false)
+
+  const handleSendOtp = async (identifier: string) => {
+    try {
+      setLoading(true)
+      await dispatch(sendOtp(identifier)).unwrap()
+    } catch (_error) {
+      // Error is handled by the thunk with toast
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVerifyOtp = async (identifier: string, otp: string) => {
+    try {
+      setLoading(true)
+      await dispatch(verifyOtp({ identifier, otp })).unwrap()
+    } catch (_error) {
+      // Error is handled by the thunk with toast
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
@@ -144,7 +130,7 @@ const MultiStepForm = () => {
         return false
       }
       try {
-        await sendOtp(`+91${data.phone}`)
+        await handleSendOtp(`+91${data.phone}`)
         updateFields({ identifier: `+91${data.phone}` })
         return true
       } catch {
@@ -158,7 +144,7 @@ const MultiStepForm = () => {
         return false
       }
       try {
-        await verifyOtp(data.identifier, data.otp)
+        await handleVerifyOtp(data.identifier, data.otp)
         return true
       } catch {
         return false
@@ -257,16 +243,19 @@ const MultiStepForm = () => {
     if (await validateStep(currentStepIndex)) {
       if (isLastStep) {
         try {
+          setLoading(true)
           const registrationData = { ...data, phone: `+91${data.phone}` }
-          await register(registrationData)
+          await dispatch(registerUser(registrationData)).unwrap()
           toast.success('Registration Successful! Redirecting to login...', {
             duration: 3000,
           })
           setTimeout(() => navigate({ to: '/sign-in' }), 2000)
         } catch (error) {
-          toast.error(
-            error instanceof Error ? error.message : 'Registration failed'
-          )
+          // Error is already handled by the thunk with toast
+          // eslint-disable-next-line no-console
+          console.error('Registration failed:', error)
+        } finally {
+          setLoading(false)
         }
       } else {
         next()

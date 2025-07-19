@@ -4,8 +4,8 @@ import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileService } from '@/services/profile.service'
+import { useAppSelector } from '@/store/hooks'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -45,14 +45,14 @@ const ProfessionalFormSchema = z.object({
 type ProfessionalFormValues = z.infer<typeof ProfessionalFormSchema>
 
 export default function ProfessionalForm() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.user.user)
   const [loading, setLoading] = useState(true)
 
   const form = useForm<ProfessionalFormValues>({
     resolver: zodResolver(ProfessionalFormSchema),
     defaultValues: {
-      occupation: user?.occupation || '',
-      professional: user?.professional || {
+      occupation: '',
+      professional: {
         qualification: undefined,
         profession: undefined,
         position: undefined,
@@ -85,8 +85,8 @@ export default function ProfessionalForm() {
           experienceCert: undefined,
         },
       })
-      setLoading(false)
     }
+    setLoading(false)
   }, [user, form])
 
   const handleUpdate: SubmitHandler<ProfessionalFormValues> = async (data) => {

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useAppSelector } from '@/store/hooks'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { postData } from '@/api/apiClient'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -33,8 +33,7 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 
 export function UpgradeForm() {
-  const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)

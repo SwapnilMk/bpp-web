@@ -4,9 +4,9 @@ import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileService } from '@/services/profile.service'
+import { useAppSelector } from '@/store/hooks'
 import type { User } from '@/types/auth'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -58,14 +58,14 @@ const DocumentsFormSchema = z.object({
 type DocumentsFormValues = z.infer<typeof DocumentsFormSchema>
 
 export default function DocumentsForm() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.user.user)
   const [loading, setLoading] = useState(true)
 
   const form = useForm<DocumentsFormValues>({
     resolver: zodResolver(DocumentsFormSchema),
     defaultValues: {
-      aadhaar: user?.aadhaar ?? undefined,
-      voter: user?.voter ?? undefined,
+      aadhaar: undefined,
+      voter: undefined,
     },
     mode: 'onChange',
   })
@@ -73,11 +73,11 @@ export default function DocumentsForm() {
   useEffect(() => {
     if (user) {
       form.reset({
-        aadhaar: user.aadhaar ?? undefined,
-        voter: user.voter ?? undefined,
+        aadhaar: (user as UserWithDocumentUpdates).aadhaar ?? undefined,
+        voter: (user as UserWithDocumentUpdates).voter ?? undefined,
       })
-      setLoading(false)
     }
+    setLoading(false)
   }, [user, form])
 
   const handleUpdate: SubmitHandler<DocumentsFormValues> = async (data) => {

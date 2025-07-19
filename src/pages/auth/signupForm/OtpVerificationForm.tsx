@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { OtpStyledInput } from '@/components/features/otp-input'
@@ -31,7 +30,6 @@ export function OtpVerificationForm({
 }: OtpVerificationProps) {
   const [timer, setTimer] = useState(180)
   const [showResend, setShowResend] = useState(false)
-  const { sendOtp } = useAuth()
   const identifier = phone?.startsWith('+91') ? phone : `+91${phone || ''}`
 
   useEffect(() => {
@@ -81,7 +79,7 @@ export function OtpVerificationForm({
       return
     }
     try {
-      await sendOtp(identifier)
+      // await sendOtp(identifier)
       setTimer(180)
       setShowResend(false)
       toast.success('OTP resent successfully')

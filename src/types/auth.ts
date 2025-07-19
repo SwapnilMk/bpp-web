@@ -116,35 +116,42 @@ export interface LoginCredentials {
 }
 
 export interface RegistrationData {
-  title?: string
-  firstName?: string
+  identifier: string
+  termsAccepted: boolean
+  partyObjectivesAccepted: boolean
+  serveCommunityAccepted?: boolean
+  title: string
+  firstName: string
   middleName?: string
-  lastName?: string
+  lastName: string
   email?: string
-  phone?: string
-  dateOfBirth?: string
-  age?: number
-  gender?: string
-  occupation?: string
-  addressLine1?: string
+  phone: string
+  dateOfBirth: string
+  gender: string
+  age: number
+  otp: string
+  occupation: string
+  addressLine1: string
   addressLine2?: string
-  cityOrVillage?: string
-  district?: string
-  state?: string
-  pincode?: string
+  cityOrVillage: string
+  area: string
+  district: string
+  state: string
+  pincode: string
   qualification?: string
   profession?: string
   position?: string
   aadhaarNumber?: string
-  voterId?: string
   aadhaarFront?: File | null
   aadhaarBack?: File | null
+  voterId?: string
   voterFront?: File | null
   voterBack?: File | null
-  password?: string
+  password: string
+  confirmPassword: string
   referralCode?: string
-  identifier?: string
-  otp?: string
+  recaptchaToken: string
+  profilePicture: File | null
 }
 
 export interface LoginResponseData {

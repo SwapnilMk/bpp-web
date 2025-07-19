@@ -1,29 +1,29 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { postData, deleteData, getData } from '@/api/apiClient';
-import {
-  LoginCredentials,
-  RegistrationData,
-  LoginResponseData,
-  User,
-} from '@/types/auth';
 import {
   LoginResponse,
   RegistrationResponse,
   asApiResponse,
   Session,
-} from '@/types/api';
+} from '@/types/api'
+import {
+  LoginCredentials,
+  RegistrationData,
+  LoginResponseData,
+  User,
+} from '@/types/auth'
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { toast } from 'sonner'
+import { postData, deleteData, getData } from '@/api/apiClient'
+import { initWebSocket, disconnectWebSocket } from '@/lib/realtime'
 import {
   setCookie,
   removeCookie,
   COOKIE_KEYS,
   getErrorMessage,
   isFile,
-} from '@/context/authUtils';
-import { persistor } from './store';
-import { setCredentials, clearCredentials } from './authSlice';
-import { setUser, clearUser } from './userSlice';
-import { toast } from 'sonner';
-import { initWebSocket, disconnectWebSocket } from '@/lib/realtime';
+} from '@/context/authUtils'
+import { setCredentials, clearCredentials } from './authSlice'
+import { persistor } from './store'
+import { setUser, clearUser } from './userSlice'
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -35,41 +35,41 @@ export const login = createAsyncThunk(
         {
           withCredentials: true,
         }
-      );
-      const loginResponse = response.data.data as LoginResponseData;
-      const userData = loginResponse.user as unknown as User;
-      const sessionId = loginResponse.sessionId;
-      const accessToken = loginResponse.accessToken;
+      )
+      const loginResponse = response.data.data as LoginResponseData
+      const userData = loginResponse.user as unknown as User
+      const sessionId = loginResponse.sessionId
+      const accessToken = loginResponse.accessToken
 
       if (!accessToken || !sessionId) {
-        throw new Error('No token or session ID received from server');
+        throw new Error('No token or session ID received from server')
       }
 
-      dispatch(setCredentials({ token: accessToken, sessionId }));
-      dispatch(setUser(userData));
-      setCookie(COOKIE_KEYS.AUTH_TOKEN, accessToken);
-      setCookie(COOKIE_KEYS.SESSION_ID, sessionId);
-      localStorage.setItem('sessionId', sessionId);
-      localStorage.setItem(COOKIE_KEYS.USER_DETAILS, JSON.stringify(userData));
-      initWebSocket();
+      dispatch(setCredentials({ token: accessToken, sessionId }))
+      dispatch(setUser(userData))
+      setCookie(COOKIE_KEYS.AUTH_TOKEN, accessToken)
+      setCookie(COOKIE_KEYS.SESSION_ID, sessionId)
+      localStorage.setItem('sessionId', sessionId)
+      localStorage.setItem(COOKIE_KEYS.USER_DETAILS, JSON.stringify(userData))
+      initWebSocket()
 
       toast.success('Login Successful!', {
         description: 'Redirecting to the dashboard page...',
-      });
-      return { token: accessToken, user: userData, sessionId };
+      })
+      return { token: accessToken, user: userData, sessionId }
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
     }
   }
-);
+)
 
 export const register = createAsyncThunk(
   'auth/register',
   async (registrationData: RegistrationData, { dispatch }) => {
     try {
-      const formData = new FormData();
+      const formData = new FormData()
       const {
         addressLine1,
         addressLine2,
@@ -81,15 +81,18 @@ export const register = createAsyncThunk(
         aadhaarBack,
         voterFront,
         voterBack,
+        profilePicture,
         ...rest
-      } = registrationData;
+      } = registrationData
 
+      // Add all non-file fields
       Object.entries(rest).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
-          formData.append(key, isFile(value) ? value : String(value));
+          formData.append(key, isFile(value) ? value : String(value))
         }
-      });
+      })
 
+      // Add address fields
       const addressFields = {
         addressLine1,
         addressLine2,
@@ -97,20 +100,22 @@ export const register = createAsyncThunk(
         district,
         state,
         pincode,
-      };
+      }
       Object.entries(addressFields).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
-      });
+        if (value) formData.append(key, value)
+      })
 
+      // Add file fields
       const files = {
         aadhaarFront,
         aadhaarBack,
         voterFront,
         voterBack,
-      };
+        profilePicture,
+      }
       Object.entries(files).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
-      });
+        if (value) formData.append(key, value)
+      })
 
       const response = await postData<RegistrationResponse>(
         '/auth/register',
@@ -118,28 +123,31 @@ export const register = createAsyncThunk(
         {
           headers: { 'Content-Type': 'multipart/form-data' },
         }
-      );
-      const typedResponse = asApiResponse<RegistrationResponse>(response);
+      )
+      const typedResponse = asApiResponse<RegistrationResponse>(response)
 
       if (typedResponse.data.success) {
-        const userData = typedResponse.data as unknown as User;
+        const userData = typedResponse.data as unknown as User
         if (typedResponse.data.token) {
-          dispatch(setCredentials({ token: typedResponse.data.token }));
-          dispatch(setUser(userData));
-          setCookie(COOKIE_KEYS.AUTH_TOKEN, typedResponse.data.token);
-          localStorage.setItem(COOKIE_KEYS.USER_DETAILS, JSON.stringify(userData));
+          dispatch(setCredentials({ token: typedResponse.data.token }))
+          dispatch(setUser(userData))
+          setCookie(COOKIE_KEYS.AUTH_TOKEN, typedResponse.data.token)
+          localStorage.setItem(
+            COOKIE_KEYS.USER_DETAILS,
+            JSON.stringify(userData)
+          )
         }
-        toast.success('Registration successful!');
-        return;
+        toast.success('Registration successful!')
+        return
       }
-      throw new Error(typedResponse.data.message || 'Registration failed');
+      throw new Error(typedResponse.data.message || 'Registration failed')
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-      throw error;
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw error
     }
   }
-);
+)
 
 export const logout = createAsyncThunk(
   'auth/logout',
@@ -152,51 +160,51 @@ export const logout = createAsyncThunk(
           headers: { 'x-session-id': localStorage.getItem('sessionId') },
           withCredentials: true,
         }
-      );
+      )
 
-      disconnectWebSocket();
+      disconnectWebSocket()
 
       // Clear all authentication data
-      removeCookie(COOKIE_KEYS.AUTH_TOKEN);
-      removeCookie(COOKIE_KEYS.SESSION_ID);
+      removeCookie(COOKIE_KEYS.AUTH_TOKEN)
+      removeCookie(COOKIE_KEYS.SESSION_ID)
 
-      localStorage.removeItem('sessionId');
-      localStorage.removeItem('authToken');
-      localStorage.removeItem(COOKIE_KEYS.USER_DETAILS);
+      localStorage.removeItem('sessionId')
+      localStorage.removeItem('authToken')
+      localStorage.removeItem(COOKIE_KEYS.USER_DETAILS)
 
       // Clear Redux state
-      dispatch(clearCredentials());
-      dispatch(clearUser());
+      dispatch(clearCredentials())
+      dispatch(clearUser())
 
       // Purge persisted state
-      await persistor.purge();
+      await persistor.purge()
 
-      toast.success('Logged out successfully');
+      toast.success('Logged out successfully')
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
     }
   }
-);
+)
 
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async (_, { dispatch }) => {
     try {
-      const response = await getData<{ data: User }>('/users/me');
-      const typedResponse = asApiResponse<{ data: User }>(response);
-      const userData = typedResponse.data as User;
+      const response = await getData<{ data: User }>('/users/me')
+      const typedResponse = asApiResponse<{ data: User }>(response)
+      const userData = typedResponse.data as User
 
-      dispatch(setUser(userData));
-      return userData;
+      dispatch(setUser(userData))
+      return userData
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
     }
   }
-);
+)
 
 export const getActiveSessions = createAsyncThunk(
   'auth/getActiveSessions',
@@ -204,13 +212,13 @@ export const getActiveSessions = createAsyncThunk(
     try {
       const response = await getData<{ success: boolean; data: Session[] }>(
         '/auth/sessions/active'
-      );
-      return response.data;
+      )
+      return response.data
     } catch (_error) {
-      throw new Error('Failed to get active sessions');
+      throw new Error('Failed to get active sessions')
     }
   }
-);
+)
 
 export const revokeSession = createAsyncThunk(
   'auth/revokeSession',
@@ -218,12 +226,66 @@ export const revokeSession = createAsyncThunk(
     try {
       await deleteData<{ success: boolean; message: string }>(
         `/auth/sessions/${sessionId}`
-      );
+      )
     } catch (_error) {
-      throw new Error('Failed to revoke session');
+      throw new Error('Failed to revoke session')
     }
   }
-);
+)
+
+export const sendOtp = createAsyncThunk(
+  'auth/sendOtp',
+  async (identifier: string) => {
+    try {
+      const response = await postData<{ success: boolean; message: string }>(
+        '/auth/register/send-otp',
+        { identifier }
+      )
+      const typedResponse = asApiResponse<{
+        success: boolean
+        message: string
+      }>(response)
+
+      if (typedResponse.data.success) {
+        toast.success(
+          `OTP sent successfully to your ${identifier.includes('@') ? 'email' : 'phone'}!`
+        )
+        return typedResponse.data
+      }
+      throw new Error(typedResponse.data.message || 'Failed to send OTP')
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+)
+
+export const verifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async ({ identifier, otp }: { identifier: string; otp: string }) => {
+    try {
+      const response = await postData<{ success: boolean; message: string }>(
+        '/auth/register/verify-otp',
+        { identifier, otp }
+      )
+      const typedResponse = asApiResponse<{
+        success: boolean
+        message: string
+      }>(response)
+
+      if (typedResponse.data.success) {
+        toast.success('OTP verified successfully!')
+        return typedResponse.data
+      }
+      throw new Error(typedResponse.data.message || 'Failed to verify OTP')
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+)
 
 export const revokeAllOtherSessions = createAsyncThunk(
   'auth/revokeAllOtherSessions',
@@ -231,9 +293,9 @@ export const revokeAllOtherSessions = createAsyncThunk(
     try {
       await deleteData<{ success: boolean; message: string }>(
         '/auth/sessions/logout-others'
-      );
+      )
     } catch (_error) {
-      throw new Error('Failed to revoke other sessions');
+      throw new Error('Failed to revoke other sessions')
     }
   }
-);
+)

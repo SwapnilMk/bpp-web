@@ -1,15 +1,15 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-const _walletSchema = z.object({
+const walletSchema = z.object({
   _id: z.string(),
   user: z.string(),
   balance: z.number(),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
-});
+})
 
-const _transactionSchema = z.object({
+const transactionSchema = z.object({
   _id: z.string(),
   wallet: z.string(),
   user: z.string(),
@@ -42,3 +42,4 @@ const _transactionSchema = z.object({
 
 export type Wallet = z.infer<typeof walletSchema>
 export type Transaction = z.infer<typeof transactionSchema>
+export { walletSchema, transactionSchema }

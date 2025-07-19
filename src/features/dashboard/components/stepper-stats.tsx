@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useAppSelector } from '@/store/hooks'
 import {
   UserIcon,
   CheckCircleIcon,
@@ -6,7 +7,6 @@ import {
   IdCardIcon,
   TrophyIcon,
 } from 'lucide-react'
-import { useAppSelector } from '@/store/hooks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Stepper } from '@/components/layout/dashboard/labeled-stepper'
@@ -45,8 +45,8 @@ const steps = [
 ]
 
 export const StepperStats = () => {
-  const user = useAppSelector((state) => state.auth.user);
-  const loading = useAppSelector((state) => state.auth.loading);
+  const user = useAppSelector((state) => state.user.user)
+  const loading = useAppSelector((state) => state.dashboard.isLoading)
   const stepperRef = useRef<HTMLDivElement>(null)
   const currentStepRef = useRef<HTMLDivElement>(null)
 

@@ -1,6 +1,7 @@
-import Cookies from 'js-cookie';
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { SearchProvider } from '@/context/search-context';
+import Cookies from 'js-cookie'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { VerificationManager } from '@/components/features/verification/verification-manager'
 import { AppSidebar } from '@/components/layout/dashboard/app-sidebar'
@@ -9,7 +10,7 @@ import SkipToMain from '@/components/skip-to-main'
 export const Route = createFileRoute('/dashboard')({
   component: DashboardLayout,
   beforeLoad: async ({ location }) => {
-    const authToken = Cookies.get('authToken');
+    const authToken = Cookies.get('authToken')
 
     if (!authToken) {
       throw redirect({

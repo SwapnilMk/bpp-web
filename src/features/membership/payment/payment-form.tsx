@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { IndianBankNames } from '@/data/bank-names'
 import { PaymentMethods } from '@/data/payment'
+import { useAppSelector } from '@/store/hooks'
 import { CheckCircle2 } from 'lucide-react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { postData } from '@/api/apiClient'
 import { cn } from '@/lib/utils'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -50,8 +50,8 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 
 export function PaymentForm() {
-  const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user)
+
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showDonation, setShowDonation] = useState(false)

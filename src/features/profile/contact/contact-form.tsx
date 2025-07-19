@@ -4,8 +4,8 @@ import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileService } from '@/services/profile.service'
+import { useAppSelector } from '@/store/hooks'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -41,15 +41,15 @@ interface OtpDialogState {
 }
 
 export default function ContactForm() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.user.user)
   const [loading, setLoading] = useState(false)
   const [otpDialog, setOtpDialog] = useState<OtpDialogState | null>(null)
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(ContactFormSchema),
     defaultValues: {
-      email: user?.email ?? '',
-      phone: user?.phone ?? '',
+      email: '',
+      phone: '',
     },
     mode: 'onChange',
   })
@@ -60,8 +60,8 @@ export default function ContactForm() {
         email: user.email ?? '',
         phone: user.phone ?? '',
       })
-      setLoading(false)
     }
+    setLoading(false)
   }, [user, form])
 
   const handleOtpSuccess = () => {

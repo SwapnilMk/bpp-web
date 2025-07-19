@@ -1,39 +1,37 @@
 import { useState, useEffect, useCallback } from 'react'
 import { format } from 'date-fns'
+import { useAppDispatch } from '@/store/hooks'
+import {
+  getActiveSessions,
+  revokeSession,
+  revokeAllOtherSessions,
+} from '@/store/thunks'
 import { Session } from '@/types/api'
 import { Laptop, Smartphone, Tablet, Monitor } from 'lucide-react'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
-import { useWebSocket } from '@/hooks/useWebSocket'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const SessionManager = () => {
-  const { getActiveSessions, revokeSession, revokeAllOtherSessions, user } =
-    useAuth()
+  const dispatch = useAppDispatch()
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(false)
   const [revokingSession, setRevokingSession] = useState<string | null>(null)
   const [revokingAll, setRevokingAll] = useState(false)
   const currentSessionId = localStorage.getItem('sessionId')
 
-  const refreshSessions = async (): Promise<void> => {
-    void getActiveSessions()
-  }
-  useWebSocket({ user, getActiveSessions: refreshSessions })
-
   const fetchSessions = useCallback(async () => {
     try {
       setLoading(true)
-      const allSessions = await getActiveSessions()
-      setSessions(allSessions || [])
+      const result = await dispatch(getActiveSessions()).unwrap()
+      setSessions(result || [])
     } catch (_error) {
       toast.error('Failed to load sessions')
       setSessions([])
     } finally {
       setLoading(false)
     }
-  }, [getActiveSessions])
+  }, [dispatch])
 
   useEffect(() => {
     fetchSessions()
@@ -42,8 +40,9 @@ const SessionManager = () => {
   const handleRevokeSession = async (sessionId: string) => {
     try {
       setRevokingSession(sessionId)
-      await revokeSession(sessionId)
+      await dispatch(revokeSession(sessionId)).unwrap()
       toast.success('Session revoked successfully')
+      await fetchSessions()
     } catch (_error) {
       toast.error('Failed to revoke session')
     } finally {
@@ -54,8 +53,9 @@ const SessionManager = () => {
   const handleRevokeAllOtherSessions = async () => {
     try {
       setRevokingAll(true)
-      await revokeAllOtherSessions()
+      await dispatch(revokeAllOtherSessions()).unwrap()
       toast.success('All other sessions revoked successfully')
+      await fetchSessions()
     } catch (_error) {
       toast.error('Failed to revoke all other sessions')
     } finally {

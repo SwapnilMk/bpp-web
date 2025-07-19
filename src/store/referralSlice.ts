@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ReferralState {
-  totalReferrals: number;
-  successfulReferrals: number;
-  pendingReferrals: number;
-  referralEarnings: number;
-  referralCode: string | null;
-  referralLink: string | null;
+  totalReferrals: number
+  successfulReferrals: number
+  pendingReferrals: number
+  referralEarnings: number
+  referralCode: string | null
+  referralLink: string | null
 }
 
 const initialState: ReferralState = {
@@ -16,20 +16,20 @@ const initialState: ReferralState = {
   referralEarnings: 0,
   referralCode: null,
   referralLink: null,
-};
+}
 
 const referralSlice = createSlice({
   name: 'referral',
   initialState,
   reducers: {
     setReferralData: (state, action: PayloadAction<ReferralState>) => {
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload }
     },
     clearReferralData: () => {
-      return initialState;
+      return initialState
     },
   },
-});
+})
 
-export const { setReferralData, clearReferralData } = referralSlice.actions;
-export default referralSlice.reducer;
+export const { setReferralData, clearReferralData } = referralSlice.actions
+export default referralSlice.reducer

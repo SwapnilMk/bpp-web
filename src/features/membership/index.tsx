@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { membershipService } from '@/services/membership.service'
+import { useAppSelector } from '@/store/hooks'
 import {
   QrCode,
   Calendar,
@@ -18,7 +19,6 @@ import {
 } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAppSelector } from '@/store/hooks'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -87,7 +87,7 @@ const membershipBenefits = {
 }
 
 export default function Membership() {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [membershipData, setMembershipData] = useState<MembershipData | null>(

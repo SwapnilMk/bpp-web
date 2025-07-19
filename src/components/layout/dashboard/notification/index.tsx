@@ -6,10 +6,10 @@ import {
   notificationService,
   type Notification,
 } from '@/services/notification.service'
+import { useAppSelector } from '@/store/hooks'
 import { Bell, Trash2 } from 'lucide-react'
 import { Socket } from 'socket.io-client'
 import { toast } from 'sonner'
-import { useAppSelector } from '@/store/hooks'
 import { useNotificationSocket } from '@/hooks/useWebSocket'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,7 @@ function Dot({ className }: { className?: string }) {
 }
 
 export const NotificationHeaderMenu = () => {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.user.user)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(false)
