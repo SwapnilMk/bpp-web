@@ -6,7 +6,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { postData } from '@/api/apiClient'
-import { useAuth } from '@/context/AuthContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -65,7 +65,8 @@ interface DonationFormProps {
 }
 
 export function DonationForm({ amount, onBack }: DonationFormProps) {
-  const { user, fetchUserData } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
@@ -135,7 +136,7 @@ export function DonationForm({ amount, onBack }: DonationFormProps) {
       setShowSuccessDialog(true)
 
       // Refresh user data
-      await fetchUserData()
+      // await fetchUserData()
     } catch (error) {
       toast.error(
         error instanceof Error
