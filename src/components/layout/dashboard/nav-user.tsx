@@ -6,10 +6,10 @@ import {
   ChevronsUpDown,
   LogOut,
   Sparkles,
-} from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { useAuth } from '@/context/AuthContext'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+} from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { clearCredentials } from '@/store/authSlice';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,13 +28,13 @@ import {
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { logout } = useAuth()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
-  const user = useSelector((state: RootState) => state.auth.user)
+  const user = useAppSelector((state) => state.auth.user)
 
   const handleLogout = async () => {
     try {
-      await logout()
+      dispatch(clearCredentials());
       navigate({ to: '/sign-in', replace: true })
     } catch (_error) {
       // Error is handled by toast in AuthContext

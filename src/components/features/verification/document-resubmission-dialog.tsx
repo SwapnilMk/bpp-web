@@ -5,7 +5,7 @@ import { User } from '@/types/auth'
 import { CalendarIcon } from 'lucide-react'
 import { postData } from '@/api/apiClient'
 import { cn } from '@/lib/utils'
-import { useAuth } from '@/context/AuthContext'
+import { useAppSelector } from '@/store/hooks'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -75,7 +75,7 @@ export function DocumentResubmissionDialog({
   const [addressErrors, setAddressErrors] = useState<
     Partial<Record<keyof AddressData, string>>
   >({})
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
   const { toast } = useToast()
 
   useEffect(() => {
