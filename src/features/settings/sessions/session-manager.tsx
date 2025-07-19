@@ -24,7 +24,7 @@ const SessionManager = () => {
     try {
       setLoading(true)
       const result = await dispatch(getActiveSessions()).unwrap()
-      setSessions(result || [])
+      setSessions(result.data || [])
     } catch (_error) {
       toast.error('Failed to load sessions')
       setSessions([])

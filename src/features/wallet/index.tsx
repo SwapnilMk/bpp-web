@@ -47,10 +47,10 @@ export default function WalletPage() {
           }
         }>('/wallet/user')
 
-        if (response.success && response.data) {
-          setWallet(response.data.wallet)
-          setMembershipNo(response.data.membershipNo)
-          setRecentTransactions(response.data.recentTransactions)
+        if (response.data.success && response.data.data) {
+          setWallet(response.data.data.wallet)
+          setMembershipNo(response.data.data.membershipNo)
+          setRecentTransactions(response.data.data.recentTransactions)
         } else {
           throw new Error('Invalid response format')
         }

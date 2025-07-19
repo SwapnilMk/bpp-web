@@ -1,6 +1,8 @@
 import {
   LoginResponse,
   RegistrationResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
   asApiResponse,
   Session,
 } from '@/types/api'
@@ -12,18 +14,14 @@ import { postData, deleteData, getData } from './apiService'
 import { getErrorMessage, isFile } from '@/context/authUtils'
 
 export const login = async (credentials: LoginCredentials) => {
-  try {
-    const response = await postData<LoginResponse>(
-      '/auth/login',
-      credentials as unknown as Record<string, unknown>,
-      {
-        withCredentials: true,
-      }
-    )
-    return response.data.data
-  } catch (error) {
-    throw new Error(getErrorMessage(error))
-  }
+  const response = await postData<LoginResponse>(
+    '/auth/login',
+    credentials as unknown as Record<string, unknown>,
+    {
+      withCredentials: true,
+    }
+  )
+  return response.data.data
 }
 
 export const register = async (registrationData: RegistrationData) => {
@@ -165,5 +163,31 @@ export const revokeAllOtherSessions = async () => {
     )
   } catch (_error) {
     throw new Error('Failed to revoke other sessions')
+  }
+}
+
+export const forgotPassword = async (payload: {
+  email?: string
+  phone?: string
+}): Promise<ForgotPasswordResponse> => {
+  try {
+    const response = await postData<ForgotPasswordResponse>('/auth/forgot-password', payload)
+    return asApiResponse<ForgotPasswordResponse>(response).data
+  } catch (error) {
+    throw new Error(getErrorMessage(error))
+  }
+}
+
+export const resetPassword = async (payload: {
+  otp: string
+  newPassword: string
+  email?: string
+  phone?: string
+}): Promise<ResetPasswordResponse> => {
+  try {
+    const response = await postData<ResetPasswordResponse>('/auth/reset-password', payload)
+    return asApiResponse<ResetPasswordResponse>(response).data
+  } catch (error) {
+    throw new Error(getErrorMessage(error))
   }
 }

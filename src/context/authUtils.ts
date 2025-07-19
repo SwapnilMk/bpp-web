@@ -52,10 +52,6 @@ export const isFile = (value: unknown): value is File => {
  * Extract error message from various error types
  */
 export const getErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) {
-    return error.message
-  }
-
   if (error instanceof AxiosError) {
     // Handle Axios errors
     const responseData = error.response?.data
@@ -102,6 +98,10 @@ export const getErrorMessage = (error: unknown): string => {
     return (
       error.response?.statusText || error.message || 'Network error occurred'
     )
+  }
+
+  if (error instanceof Error) {
+    return error.message
   }
 
   if (typeof error === 'string') {

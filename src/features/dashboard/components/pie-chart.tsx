@@ -6,7 +6,7 @@ import {
   Legend,
   Tooltip,
 } from 'recharts'
-import { DashboardData } from '@/hooks/use-dashboard-data'
+import { DashboardData } from '@/types/api'
 import {
   Card,
   CardContent,
@@ -40,6 +40,25 @@ export function PieChartComponent({ dashboardData, isLoading }: PieChartProps) {
     )
   }
 
+  // Add null check for charts and pieStats
+  if (!dashboardData?.charts?.pieStats) {
+    return (
+      <Card className='col-span-1'>
+        <CardHeader>
+          <CardTitle>Members by State</CardTitle>
+          <CardDescription>
+            Distribution of members across different states
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex h-[300px] items-center justify-center text-muted-foreground'>
+            No data available
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   const data = dashboardData.charts.pieStats
 
   return (
@@ -67,7 +86,7 @@ export function PieChartComponent({ dashboardData, isLoading }: PieChartProps) {
                   `${name} ${(percent * 100).toFixed(0)}%`
                 }
               >
-                {data.map((_entry, index) => (
+                {data.map((_entry: { name: string; value: number }, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

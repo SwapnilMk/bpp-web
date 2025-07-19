@@ -25,8 +25,16 @@ export function StatCard({
   return (
     <Card className='overflow-hidden'>
       <CardHeader className='flex flex-row items-center justify-between pb-2'>
-        <CardTitle className='text-sm font-medium'>{title}</CardTitle>
-        <Icon className='h-4 w-4 text-muted-foreground' />
+        {isLoading ? (
+          <Skeleton className='h-4 w-24 rounded' />
+        ) : (
+          <CardTitle className='text-sm font-medium'>{title}</CardTitle>
+        )}
+        {isLoading ? (
+          <Skeleton className='h-4 w-4 rounded-full' />
+        ) : (
+          <Icon className='h-4 w-4 text-muted-foreground' />
+        )}
       </CardHeader>
       <CardContent>
         {isLoading ? (

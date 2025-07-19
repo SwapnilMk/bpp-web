@@ -8,7 +8,7 @@ import {
   removeNotification,
   clearNotifications,
 } from '@/store/notificationSlice'
-import { NotificationResponse } from './notification.service'
+import { Notification } from './notification.service'
 
 declare global {
   interface Window {
@@ -30,16 +30,16 @@ export const initWebSocket = (store: Store) => {
     socket?.emit('notification:fetch', { limit: 20, skip: 0 })
   })
 
-  socket.on('notification:list', (data: NotificationResponse) => {
+  socket.on('notification:list', (data: Notification[]) => {
     store.dispatch(setNotifications(data))
   })
-  socket.on('notification:new', (data: NotificationResponse) => {
+  socket.on('notification:new', (data: Notification) => {
     store.dispatch(addNotification(data))
   })
   socket.on(
     'notification:marked-as-read',
     (data: { notificationId: string }) => {
-      store.dispatch(updateNotification({ id: data.notificationId, changes: { isRead: true } }))
+      store.dispatch(updateNotification({ id: data.notificationId, changes: { read: true } }))
     }
   )
   socket.on('notification:all-marked-as-read', () => {

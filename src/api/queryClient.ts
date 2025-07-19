@@ -3,6 +3,7 @@ import { QueryClient, QueryCache } from '@tanstack/react-query'
 import store from '@/store/store'
 import { handleServerError } from '@/utils/handle-server-error'
 import { toast } from '@/hooks/use-toast'
+import { router } from '@/main' 
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +18,7 @@ export const queryClient = new QueryClient({
         )
       },
       refetchOnWindowFocus: import.meta.env.PROD,
-      staleTime: 10 * 1000, // 10s
+      staleTime: 10 * 1000, 
     },
     mutations: {
       onError: (error) => {
@@ -51,7 +52,7 @@ export const queryClient = new QueryClient({
           })
         }
         if (error.response?.status === 403) {
-          // router.navigate("/forbidden", { replace: true });
+          router.navigate({ to: '/403', replace: true })
         }
       }
     },

@@ -6,6 +6,18 @@ export interface ApiResponse<T> {
   token?: string
 }
 
+// Forgot password response type
+export interface ForgotPasswordResponse {
+  success: boolean
+  message: string
+}
+
+// Reset password response type
+export interface ResetPasswordResponse {
+  success: boolean
+  message: string
+}
+
 // Login response type
 export interface LoginResponse {
   success: boolean

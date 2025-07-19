@@ -6,7 +6,8 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Eye, EyeOff, Mail, Phone } from 'lucide-react'
 import { toast } from 'sonner'
 import bppLogo from '@/assets/logo/bppLogo.png'
-import { authService } from '@/api/authService'
+import { useAppDispatch } from '@/store/hooks'
+import { forgotPassword, resetPassword } from '@/store/thunks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -49,6 +50,7 @@ type InitialFormData = z.infer<typeof initialFormSchema>
 type ResetFormData = z.infer<typeof resetFormSchema>
 
 const ResetPassword = () => {
+  const dispatch = useAppDispatch()
   // Form states
   const [step, setStep] = useState(1)
   const [contactInfo, setContactInfo] = useState({ type: '', value: '' })
@@ -121,12 +123,7 @@ const ResetPassword = () => {
         ? { email: identifier }
         : { phone: `+91${identifier}` }
 
-      const response = await authService.forgotPassword(payload)
-
-      if (!response.success) {
-        toast.error(response.message || 'Failed to send OTP')
-        return
-      }
+      await dispatch(forgotPassword(payload)).unwrap()
 
       setContactInfo({
         type: isEmailInput ? 'email' : 'phone',
@@ -155,12 +152,7 @@ const ResetPassword = () => {
         contactInfo.type === 'email'
           ? { email: contactInfo.value }
           : { phone: `+91${contactInfo.value}` }
-      const response = await authService.forgotPassword(payload)
-
-      if (!response.success) {
-        toast.error(response.message || 'Failed to resend OTP')
-        return
-      }
+      await dispatch(forgotPassword(payload)).unwrap()
 
       setTimer(300) // Reset timer to 5 minutes
       setShowResend(false)
@@ -189,12 +181,7 @@ const ResetPassword = () => {
             : `+91${contactInfo.value}`,
       }
 
-      const response = await authService.resetPassword(payload)
-
-      if (!response.success) {
-        toast.error(response.message || 'Failed to reset password')
-        return
-      }
+      await dispatch(resetPassword(payload)).unwrap()
 
       toast.success('Password reset successfully')
       setTimeout(() => navigate({ to: '/sign-in' }), 3000)

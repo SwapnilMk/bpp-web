@@ -10,7 +10,7 @@ import {
   Clock4,
   ArrowRight,
 } from 'lucide-react'
-import { DashboardData } from '@/hooks/use-dashboard-data'
+import { DashboardData } from '@/types/api'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -150,7 +150,7 @@ export function RecentActivities({
   }
 
   // Get only the most recent 5 activities
-  const recentActivities = dashboardData.recentActivities.slice(0, 5)
+  const recentActivities = dashboardData?.recentActivities?.slice(0, 5) || []
 
   const handleViewAllActivities = () => {
     // TODO: Navigate to full activities page
@@ -167,13 +167,13 @@ export function RecentActivities({
           </CardDescription>
         </div>
         <Badge variant='outline' className='text-xs font-medium'>
-          {dashboardData.recentActivities.length} total
+          {dashboardData?.recentActivities?.length || 0} total
         </Badge>
       </CardHeader>
       <CardContent className='pt-0'>
         <div className='space-y-3'>
           {recentActivities.length > 0 ? (
-            recentActivities.map((activity) => (
+            recentActivities.map((activity: Activity) => (
               <div
                 key={activity._id}
                 className='flex items-center space-x-3 rounded-lg border p-3 transition-colors hover:bg-muted/50'
@@ -238,7 +238,7 @@ export function RecentActivities({
           )}
         </div>
 
-        {dashboardData.recentActivities.length > 5 && (
+        {(dashboardData?.recentActivities?.length || 0) > 5 && (
           <div className='mt-4 border-t pt-3'>
             <Button
               variant='outline'

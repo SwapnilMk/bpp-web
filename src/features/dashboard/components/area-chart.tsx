@@ -8,7 +8,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import { DashboardData } from '@/hooks/use-dashboard-data'
+import { DashboardData } from '@/types/api'
 import {
   Card,
   CardContent,
@@ -43,7 +43,26 @@ export function AreaChartComponent({
     )
   }
 
-  const data = dashboardData.charts.areaStats.map((item) => ({
+  // Add null check for charts and areaStats
+  if (!dashboardData?.charts?.areaStats) {
+    return (
+      <Card className='col-span-1'>
+        <CardHeader>
+          <CardTitle>Membership Trends</CardTitle>
+          <CardDescription>
+            Cumulative growth of primary and active members
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex h-[300px] items-center justify-center text-muted-foreground'>
+            No data available
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const data = dashboardData.charts.areaStats.map((item: { date: string; primary: number; active: number }) => ({
     ...item,
     date: new Date(item.date).toLocaleDateString('en-US', {
       month: 'short',

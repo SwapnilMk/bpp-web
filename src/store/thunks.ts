@@ -13,7 +13,7 @@ import {
 import { setCredentials, clearCredentials } from './authSlice'
 import { persistor } from './store'
 import { setUser, clearUser } from './userSlice'
-import { setDashboardData } from './dashboardSlice'
+import { setDashboardData, setDashboardLoading, setDashboardError } from './dashboardSlice'
 import { LoginCredentials, RegistrationData, User } from '@/types/auth'
 
 export const login = createAsyncThunk(
@@ -35,7 +35,6 @@ export const login = createAsyncThunk(
       setCookie(COOKIE_KEYS.SESSION_ID, sessionId)
       localStorage.setItem('sessionId', sessionId)
       localStorage.setItem(COOKIE_KEYS.USER_DETAILS, JSON.stringify(userData))
-      // initWebSocket()
 
       toast.success('Login Successful!', {
         description: 'Redirecting to the dashboard page...',
@@ -49,15 +48,58 @@ export const login = createAsyncThunk(
   }
 )
 
+export const forgotPassword = createAsyncThunk(
+  'auth/forgotPassword',
+  async (payload: { email?: string; phone?: string }) => {
+    try {
+      const response = await authService.forgotPassword(payload)
+      if (response.success) {
+        toast.success(response.message)
+        return response
+      }
+      throw new Error(response.message || 'Failed to send OTP')
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+)
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (payload: {
+    otp: string
+    newPassword: string
+    email?: string
+    phone?: string
+  }) => {
+    try {
+      const response = await authService.resetPassword(payload)
+      if (response.success) {
+        toast.success(response.message)
+        return response
+      }
+      throw new Error(response.message || 'Failed to reset password')
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  }
+)
+
 export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchDashboardData',
   async (_, { dispatch }) => {
     try {
+      dispatch(setDashboardLoading(true))
       const dashboardData = await dashboardService.fetchDashboardData()
       dispatch(setDashboardData(dashboardData))
       return dashboardData
     } catch (error) {
       const errorMessage = getErrorMessage(error)
+      dispatch(setDashboardError(errorMessage))
       toast.error(errorMessage)
       throw new Error(errorMessage)
     }

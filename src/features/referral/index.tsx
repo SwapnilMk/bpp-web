@@ -42,9 +42,9 @@ export default function Referral() {
           referrals: Referral[]
         }>('/referral/user')
 
-        setReferralProfile(data.profile)
-        setReferrals(data.referrals)
-        setReferralLink(data.profile.referralLink)
+        setReferralProfile(data.data.profile)
+        setReferrals(data.data.referrals)
+        setReferralLink(data.data.profile.referralLink)
       } catch (_err) {
         setError('Failed to load referral data. Please try again later.')
         toast.error('Failed to load referral data')

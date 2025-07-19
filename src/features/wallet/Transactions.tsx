@@ -58,9 +58,9 @@ export default function TransactionsPage() {
           }
         }>('/wallet/transactions')
 
-        if (response.success && response.data) {
-          setTransactions(response.data.transactions)
-          setSummary(response.data.summary)
+        if (response.data.success && response.data.data) {
+          setTransactions(response.data.data.transactions)
+          setSummary(response.data.data.summary)
         } else {
           throw new Error('Invalid response format')
         }

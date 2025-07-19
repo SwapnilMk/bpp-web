@@ -41,14 +41,14 @@ const Donate = () => {
           }
         }>('/donations/user')
 
-        setDonations(data.donations || [])
+        setDonations(data.data.donations || [])
 
         // Use the summary data from the API response
-        if (data.summary) {
+        if (data.data.summary) {
           setDonationSummary({
-            totalDonations: data.summary.totalDonations,
-            recurringDonations: data.summary.recurringDonations,
-            oneTimeDonations: data.summary.oneTimeDonations,
+            totalDonations: data.data.summary.totalDonations,
+            recurringDonations: data.data.summary.recurringDonations,
+            oneTimeDonations: data.data.summary.oneTimeDonations,
           })
         }
       } catch (_error) {

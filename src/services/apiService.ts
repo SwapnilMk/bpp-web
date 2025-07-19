@@ -44,4 +44,12 @@ export const deleteData = async <T>(
   return apiClient.delete(url, options)
 }
 
+export const patchData = async <T>(
+  url: string,
+  data: Record<string, unknown>,
+  options: Record<string, unknown> = {}
+): Promise<{ data: T }> => {
+  return apiClient.patch(url, data, options)
+}
+
 export default apiClient

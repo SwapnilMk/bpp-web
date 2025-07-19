@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import {
   ProfileUpdateResponse,
   UpdateRequestsResponse,
@@ -13,7 +12,7 @@ import { postData, getData } from './apiService'
 export const profileService = {
   requestUpdate: async (
     payload: ProfileUpdateRequestPayload
-  ): Promise<AxiosResponse<ProfileUpdateResponse>> => {
+  ): Promise<{ data: ProfileUpdateResponse }> => {
     return postData<ProfileUpdateResponse>(
       '/users/profile-update/request-update',
       payload
@@ -22,7 +21,7 @@ export const profileService = {
 
   verifyOtp: async (
     payload: VerifyOtpPayload
-  ): Promise<AxiosResponse<ProfileUpdateResponse>> => {
+  ): Promise<{ data: ProfileUpdateResponse }> => {
     return postData<ProfileUpdateResponse>(
       '/users/profile-update/verify-update',
       payload
@@ -32,7 +31,7 @@ export const profileService = {
   getUpdateRequests: async (
     page: number = 1,
     limit: number = 10
-  ): Promise<UpdateRequestsResponse> => {
+  ): Promise<{ data: UpdateRequestsResponse }> => {
     return getData<UpdateRequestsResponse>(
       `/users/profile-update/requests?page=${page}&limit=${limit}`
     )
@@ -40,7 +39,7 @@ export const profileService = {
 
   getUpdateRequestDetails: async (
     requestId: string
-  ): Promise<UpdateRequestDetailsResponse> => {
+  ): Promise<{ data: UpdateRequestDetailsResponse }> => {
     return getData<UpdateRequestDetailsResponse>(
       `/users/profile-update/requests/${requestId}`
     )
@@ -48,7 +47,7 @@ export const profileService = {
 
   cancelUpdateRequest: async (
     requestId: string
-  ): Promise<AxiosResponse<CancelUpdateRequestResponse>> => {
+  ): Promise<{ data: CancelUpdateRequestResponse }> => {
     return postData<CancelUpdateRequestResponse>(
       `/users/profile-update/requests/${requestId}/cancel`,
       {}
@@ -57,7 +56,7 @@ export const profileService = {
 
   resendOtp: async (
     requestId: string
-  ): Promise<AxiosResponse<ResendOtpResponse>> => {
+  ): Promise<{ data: ResendOtpResponse }> => {
     return postData<ResendOtpResponse>(
       `/users/profile-update/requests/${requestId}/resend-otp`,
       {}

@@ -5,7 +5,7 @@ import { Pencil } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
 import { cn } from '@/lib/utils'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { DashboardData } from '@/hooks/use-dashboard-data'
+import { DashboardData } from '@/types/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -73,12 +73,15 @@ interface UserCardProps {
 const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
   const authUser = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
-  const isPrimaryMember = dashboardData.user.role === UserRole.PRIMARY_MEMBER
-  const isActiveMember = dashboardData.user.role === UserRole.ACTIVE_MEMBER
+  
+  // Add null checks to prevent accessing properties of undefined objects
+  const userRole = dashboardData?.user?.role
+  const isPrimaryMember = userRole === UserRole.PRIMARY_MEMBER
+  const isActiveMember = userRole === UserRole.ACTIVE_MEMBER
 
   const getRemainingDays = () => {
-    if (!dashboardData.membership?.expiryDate) return null
-    const expiryDate = new Date(dashboardData.membership.expiryDate)
+    if (!dashboardData?.membership?.expiryDate) return null
+    const expiryDate = new Date(dashboardData?.membership?.expiryDate)
     const today = new Date()
     const diffTime = expiryDate.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -86,10 +89,14 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
   }
 
   const getCardStyle = (): CardStyle => {
-    if (dashboardData.user.status === UserStatus.PROCESSING) {
+    if (!dashboardData?.user?.status) {
       return userCardStyles[UserStatus.PROCESSING]
     }
-    if (dashboardData.user.status === UserStatus.APPROVED) {
+    
+    if (dashboardData?.user?.status === UserStatus.PROCESSING) {
+      return userCardStyles[UserStatus.PROCESSING]
+    }
+    if (dashboardData?.user?.status === UserStatus.APPROVED) {
       if (isActiveMember)
         return userCardStyles[UserStatus.APPROVED][UserRole.ACTIVE_MEMBER]
       if (isPrimaryMember)
@@ -117,53 +124,54 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
     }
 
     if (
-      dashboardData.user.status === UserStatus.PROCESSING ||
-      !dashboardData.membership
+      !dashboardData?.user ||
+      dashboardData?.user?.status === UserStatus.PROCESSING ||
+      !dashboardData?.membership
     ) {
       return (
         <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4'>
           <div>
             <p className='text-xs text-muted-foreground'>Email</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.email || 'N/A'}
+              {dashboardData?.user?.email || 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>Phone</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.phone || 'N/A'}
+              {dashboardData?.user?.phone || 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>Date of Birth</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.dateOfBirth
-                ? new Date(dashboardData.user.dateOfBirth).toLocaleDateString()
+              {dashboardData?.user?.dateOfBirth
+                ? new Date(dashboardData?.user?.dateOfBirth).toLocaleDateString()
                 : 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>Occupation</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.occupation || 'N/A'}
+              {dashboardData?.user?.occupation || 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>State</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.address.state || 'N/A'}
+              {dashboardData?.user?.address?.state || 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>District</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.address.district || 'N/A'}
+              {dashboardData?.user?.address?.district || 'N/A'}
             </p>
           </div>
           <div>
             <p className='text-xs text-muted-foreground'>City/Village</p>
             <p className='truncate text-sm'>
-              {dashboardData.user.address.cityOrVillage || 'N/A'}
+              {dashboardData?.user?.address?.cityOrVillage || 'N/A'}
             </p>
           </div>
         </div>
@@ -175,21 +183,21 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
         <div>
           <p className='text-xs text-muted-foreground'>Membership ID</p>
           <p className='truncate text-sm font-medium'>
-            {dashboardData.membership?.number || 'N/A'}
+            {dashboardData?.membership?.number || 'N/A'}
           </p>
         </div>
         <div>
           <p className='text-xs text-muted-foreground'>Membership Type</p>
           <p className='truncate text-sm font-medium'>
-            {dashboardData.user?.role || 'N/A'}
+            {dashboardData?.user?.role || 'N/A'}
           </p>
         </div>
         <div>
           <p className='text-xs text-muted-foreground'>Membership Validity</p>
           <p className='truncate text-sm font-medium'>
-            {dashboardData.membership?.expiryDate
+            {dashboardData?.membership?.expiryDate
               ? new Date(
-                  dashboardData.membership.expiryDate
+                  dashboardData?.membership?.expiryDate
                 ).toLocaleDateString()
               : 'N/A'}
           </p>
@@ -251,11 +259,11 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
                       ? authUser.profilePicture
                       : undefined
                   }
-                  alt={dashboardData.user.firstName}
+                  alt={dashboardData?.user?.firstName || 'User'}
                 />
                 <AvatarFallback>
-                  {dashboardData.user.firstName.charAt(0)}
-                  {dashboardData.user.lastName.charAt(0)}
+                  {dashboardData?.user?.firstName?.charAt(0) || ''}
+                  {dashboardData?.user?.lastName?.charAt(0) || ''}
                 </AvatarFallback>
               </Avatar>
               <div className='absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
@@ -269,11 +277,11 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
                 <Skeleton className='h-7 w-40' />
               ) : (
                 <h2 className='truncate text-lg font-bold sm:text-xl'>
-                  {dashboardData.user.title} {dashboardData.user.firstName}{' '}
-                  {dashboardData.user.middleName
-                    ? `${dashboardData.user.middleName} `
+                  {dashboardData?.user?.title || ''} {dashboardData?.user?.firstName || ''}{' '}
+                  {dashboardData?.user?.middleName
+                    ? `${dashboardData?.user?.middleName} `
                     : ''}
-                  {dashboardData.user.lastName}
+                  {dashboardData?.user?.lastName || ''}
                 </h2>
               )}
               {!isLoading && (

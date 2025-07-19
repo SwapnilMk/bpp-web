@@ -1,9 +1,6 @@
-import { RootState, AppDispatch } from '@/store/store'
 import { Users, UserCheck, TrendingUp } from 'lucide-react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { fetchDashboardData } from '@/store/thunks'
 import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
 import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
@@ -17,6 +14,8 @@ import { RecentActivities } from './components/recent-activities'
 import { StatsGrid } from './components/stats-grid'
 import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
+import { DashboardData } from '@/types/api'
+import { mockDashboardData } from './mock-dashboard-data'
 
 type StatCardKey = 'totalMembersIndia' | 'totalPrimaryMembersState' | 'totalActiveMembersState' | 'referrals' | 'activeMembers';
 
@@ -26,7 +25,7 @@ const statCards = [
     title: 'Total Members',
     icon: Users,
     key: 'totalMembersIndia' as StatCardKey,
-    subKey: 'totalMembersState',
+    subKey: 'totalMembersState' as keyof DashboardData,
     subText: (value: number) => `+${value} in your state`,
     showAlways: true,
     trend: 'up' as const,
@@ -60,47 +59,80 @@ const statCards = [
 
 // Main Dashboard Component
 export default function Dashboard() {
-  const dispatch: AppDispatch = useDispatch()
-  const { data: dashboardData, isLoading } = useSelector(
-    (state: RootState) => state.dashboard
-  )
-  const authUser = useSelector((state: RootState) => state.user.user)
+  // const dispatch: AppDispatch = useDispatch()
+  // const { data: dashboardData, isLoading } = useSelector(
+  //   (state: RootState) => state.dashboard
+  // )
+  // const authUser = useSelector((state: RootState) => state.user.user)
+
+  // Temporary local state for demo/mock
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(fetchDashboardData())
-  }, [dispatch])
-
-  // --- FAKE DATA OVERRIDE ---
-  const fakeDashboardData = {
-    ...dashboardData,
-    totalMembersIndia: 103824,
-    totalMembersState: 393,
-    totalPrimaryMembersState: 353,
-    totalActiveMembersState: 110,
-    referrals: {
-      ...(dashboardData?.referrals || {}),
-      totalReferrals: 5046,
-    },
-  }
+    setIsLoading(true)
+    // Simulate API delay
+    setTimeout(() => {
+      setDashboardData(mockDashboardData)
+      setIsLoading(false)
+    }, 1000)
+  }, [])
 
   const user =
-    !isLoading && authUser
+    !isLoading && dashboardData
       ? {
-          firstName: authUser.firstName,
-          lastName: authUser.lastName,
-          role: (authUser.role as UserRole) || UserRole.MEMBER,
-          status: (authUser.status as UserStatus) || UserStatus.PROCESSING,
-          membership: dashboardData?.membership?.number || 'N/A',
+          firstName: dashboardData.user?.firstName,
+          lastName: dashboardData.user?.lastName,
+          role: (dashboardData.user?.role as UserRole) || UserRole.MEMBER,
+          status: (dashboardData.user?.status as UserStatus) || UserStatus.PROCESSING,
+          membership: dashboardData.membership?.number || 'N/A',
           address: {
-            state: authUser.address?.state,
-            district: authUser.address?.district,
-            city: authUser.address?.cityOrVillage,
+            state: dashboardData.user?.address?.state,
+            district: dashboardData.user?.address?.district,
+            city: dashboardData.user?.address?.cityOrVillage,
           },
-          isVerified: authUser.isVerified || false,
         }
       : null
 
-  const isVerified = user?.isVerified && user?.status === UserStatus.APPROVED
+  // If you want to use isVerified, you can set it based on status or role
+  const isVerified = user?.status === UserStatus.APPROVED
+
+  // Provide fallback data when dashboardData is null
+  const safeDashboardData = dashboardData || {
+    totalMembersIndia: 0,
+    totalMembersState: 0,
+    totalMembersDistrict: 0,
+    totalPrimaryMembersState: 0,
+    totalActiveMembersState: 0,
+    recentMembersState: [],
+    referrals: {
+      totalReferrals: 0,
+      successfulReferrals: 0,
+      pendingReferrals: 0,
+      referralEarnings: 0,
+      referralCode: null,
+      referralLink: null,
+    },
+    wallet: {
+      balance: 0,
+      totalContributions: 0,
+      recentTransactions: [],
+    },
+    membership: null,
+    user: {
+      firstName: '',
+      lastName: '',
+      role: '',
+      status: '',
+      address: {},
+    },
+    recentActivities: [],
+    charts: {
+      pieStats: [],
+      barStats: [],
+      areaStats: [],
+    },
+  }
 
   return (
     <>
@@ -114,12 +146,12 @@ export default function Dashboard() {
       </Header>
 
       <Main>
-        <UserCard dashboardData={fakeDashboardData} isLoading={isLoading} />
+        <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
         <StepperStats />
         <div className='space-y-6'>
           <StatsGrid
             isLoading={isLoading}
-            dashboardData={fakeDashboardData}
+            dashboardData={safeDashboardData}
             isVerified={isVerified || false}
             statCards={statCards}
           />
@@ -133,18 +165,18 @@ export default function Dashboard() {
               isLoading={isLoading}
             />
             <RecentActivities
-              dashboardData={fakeDashboardData}
+              dashboardData={safeDashboardData}
               isLoading={isLoading}
             />
           </div>
 
           <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
             <AreaChartComponent
-              dashboardData={fakeDashboardData}
+              dashboardData={safeDashboardData}
               isLoading={isLoading}
             />
             <PieChartComponent
-              dashboardData={fakeDashboardData}
+              dashboardData={safeDashboardData}
               isLoading={isLoading}
             />
           </div>

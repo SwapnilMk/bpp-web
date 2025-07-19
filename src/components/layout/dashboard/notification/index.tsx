@@ -10,7 +10,7 @@ import { useAppSelector } from '@/store/hooks'
 import { Bell, Trash2 } from 'lucide-react'
 import { Socket } from 'socket.io-client'
 import { toast } from 'sonner'
-import { useNotificationSocket } from '@/hooks/useWebSocket'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,54 +45,9 @@ export const NotificationHeaderMenu = () => {
   const LIMIT = 20
   const socketRef = useRef<Socket | null>(null)
 
-  // Socket event handlers
-  const handleNotificationList = (data: {
-    notifications: Notification[]
-    total: number
-    hasMore: boolean
-  }) => {
-    setNotifications((prev) =>
-      skip === 0 ? data.notifications : [...prev, ...data.notifications]
-    )
-    setHasMore(data.hasMore)
-    setSkip((prev) => prev + data.notifications.length)
-    setUnreadCount(data.notifications.filter((n) => !n.read).length)
-    setLoading(false)
-  }
 
-  const handleMarkedAsRead = (notificationId: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n._id === notificationId ? { ...n, read: true } : n))
-    )
-    setUnreadCount((prev) => Math.max(0, prev - 1))
-  }
 
-  const handleAllMarkedAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
-    setUnreadCount(0)
-  }
 
-  const handleDeleted = (notificationId: string) => {
-    setNotifications((prev) => prev.filter((n) => n._id !== notificationId))
-    // If deleted notification was unread, decrement count
-    setUnreadCount((prev) => Math.max(0, prev - 1))
-  }
-
-  const handleAllDeleted = () => {
-    setNotifications([])
-    setUnreadCount(0)
-  }
-
-  useNotificationSocket({
-    user,
-    onNotificationList: handleNotificationList,
-    onMarkedAsRead: handleMarkedAsRead,
-    onAllMarkedAsRead: handleAllMarkedAsRead,
-    onDeleted: handleDeleted,
-    onAllDeleted: handleAllDeleted,
-    onError: (error) =>
-      toast.error(error.message || 'Notification socket error'),
-  })
 
   // Fetch notifications on mount (fallback for initial load)
   useEffect(() => {
@@ -101,10 +56,10 @@ export const NotificationHeaderMenu = () => {
       notificationService
         .getNotifications({ limit: LIMIT, skip: 0 })
         .then((response) => {
-          setNotifications(response.notifications)
-          setHasMore(response.hasMore)
-          setSkip(response.notifications.length)
-          setUnreadCount(response.notifications.filter((n) => !n.read).length)
+          setNotifications(response.data.notifications)
+          setHasMore(response.data.hasMore)
+          setSkip(response.data.notifications.length)
+          setUnreadCount(response.data.notifications.filter((n) => !n.read).length)
         })
         .catch(() => {
           toast.error('Failed to fetch notifications')
@@ -222,9 +177,9 @@ export const NotificationHeaderMenu = () => {
       notificationService
         .getNotifications({ limit: LIMIT, skip })
         .then((response) => {
-          setNotifications((prev) => [...prev, ...response.notifications])
-          setHasMore(response.hasMore)
-          setSkip(skip + response.notifications.length)
+          setNotifications((prev) => [...prev, ...response.data.notifications])
+          setHasMore(response.data.hasMore)
+          setSkip(skip + response.data.notifications.length)
         })
         .catch(() => {
           toast.error('Failed to fetch notifications')
