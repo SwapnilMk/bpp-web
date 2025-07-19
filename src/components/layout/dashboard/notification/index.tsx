@@ -9,7 +9,7 @@ import {
 import { Bell, Trash2 } from 'lucide-react'
 import { Socket } from 'socket.io-client'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useAppSelector } from '@/store/hooks'
 import { useNotificationSocket } from '@/hooks/useWebSocket'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,7 @@ function Dot({ className }: { className?: string }) {
 }
 
 export const NotificationHeaderMenu = () => {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(false)
