@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import {
   IconAdjustmentsHorizontal,
   IconSortAscendingLetters,
@@ -27,7 +27,7 @@ const appText = new Map<string, string>([
   ['notConnected', 'Not Connected'],
 ])
 
-export default function Apps() {
+const Apps = memo(() => {
   const [sort, setSort] = useState('ascending')
   const [appType, setAppType] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
@@ -141,4 +141,6 @@ export default function Apps() {
       </Main>
     </>
   )
-}
+})
+
+export default Apps

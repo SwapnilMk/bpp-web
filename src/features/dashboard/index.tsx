@@ -1,10 +1,8 @@
 import { Users, UserCheck, TrendingUp } from 'lucide-react'
-import { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
-import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -60,7 +58,7 @@ const statCards = [
 ]
 
 // Main Dashboard Component
-export default function Dashboard() {
+const Dashboard = memo(() => {
   const dispatch: AppDispatch = useDispatch()
   const { data: dashboardData, isLoading } = useSelector(
     (state: RootState) => state.dashboard
@@ -127,53 +125,43 @@ export default function Dashboard() {
   }
 
   return (
-    <>
-      <Header fixed>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
-          <NotificationHeaderMenu />
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </Header>
+    <Main>
+      <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
+      <StepperStats />
+      <div className='space-y-6'>
+        <StatsGrid
+          isLoading={isLoading}
+          dashboardData={safeDashboardData}
+          isVerified={isVerified || false}
+          statCards={statCards}
+        />
 
-      <Main>
-        <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
-        <StepperStats />
-        <div className='space-y-6'>
-          <StatsGrid
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
+          <LeafletMap
+            city={user?.address?.city || ''}
+            state={user?.address?.state || ''}
+            district={user?.address?.district || ''}
+            totalMembers={dashboardData?.totalMembersState || 0}
             isLoading={isLoading}
-            dashboardData={safeDashboardData}
-            isVerified={isVerified || false}
-            statCards={statCards}
           />
-
-          <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
-            <LeafletMap
-              city={user?.address?.city || ''}
-              state={user?.address?.state || ''}
-              district={user?.address?.district || ''}
-              totalMembers={dashboardData?.totalMembersState || 0}
-              isLoading={isLoading}
-            />
-            <RecentActivities
-              dashboardData={safeDashboardData}
-              isLoading={isLoading}
-            />
-          </div>
-
-          <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
-            <AreaChartComponent
-              dashboardData={safeDashboardData}
-              isLoading={isLoading}
-            />
-            <PieChartComponent
-              dashboardData={safeDashboardData}
-              isLoading={isLoading}
-            />
-          </div>
+          <RecentActivities
+            dashboardData={safeDashboardData}
+            isLoading={isLoading}
+          />
         </div>
-      </Main>
-    </>
+
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+          <AreaChartComponent
+            dashboardData={safeDashboardData}
+            isLoading={isLoading}
+          />
+          <PieChartComponent
+            dashboardData={safeDashboardData}
+            isLoading={isLoading}
+          />
+        </div>
+      </div>
+    </Main>
   )
-}
+})
+export default Dashboard
