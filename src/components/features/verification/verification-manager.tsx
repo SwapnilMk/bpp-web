@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import { postData } from '@/api/apiClient'
-import { needsVerification, needsPrimaryMembership } from '@/utils/roleAccess'
-import { UserRole } from '@/utils/roleAccess'
-import { useAuth } from '@/context/AuthContext'
-import { useToast } from '@/hooks/use-toast'
-import { ActiveMemberPaymentRequiredDialog } from './active-member-payment-required-dialog'
+import { useEffect, useState } from 'react';
+import { postData } from '@/api/apiClient';
+import { needsVerification, needsPrimaryMembership } from '@/utils/roleAccess';
+import { UserRole } from '@/utils/roleAccess';
+import { useToast } from '@/hooks/use-toast';
+import { useAppSelector } from '@/store/hooks';
+import { ActiveMemberPaymentRequiredDialog } from './active-member-payment-required-dialog';
 import { DocumentResubmissionDialog } from './document-resubmission-dialog'
 import { PaymentRequiredDialog } from './payment-required-dialog'
 import { VerificationPendingDialog } from './verification-pending-dialog'
@@ -12,7 +12,7 @@ import { VerificationPendingDialog } from './verification-pending-dialog'
 type NotificationType = 'PRIMARY' | 'ACTIVE'
 
 export function VerificationManager() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
   const { toast } = useToast()
   const [showVerificationDialog, setShowVerificationDialog] = useState(false)
   const [showPaymentDialog, setShowPaymentDialog] = useState(false)

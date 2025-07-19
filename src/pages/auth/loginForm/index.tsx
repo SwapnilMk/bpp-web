@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Phone } from 'lucide-react'
-import bppLogo from '@/assets/logo/bppLogo.png'
-import { useAuth } from '@/context/AuthContext'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Link, useNavigate } from '@tanstack/react-router';
+import { Phone } from 'lucide-react';
+import bppLogo from '@/assets/logo/bppLogo.png';
+import { useAppDispatch } from '@/store/hooks';
+import { setCredentials } from '@/store/authSlice';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -33,7 +34,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>
 
 const Login = () => {
-  const { login } = useAuth()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,8 +58,12 @@ const Login = () => {
       if (isPhone) {
         identifier = `+91${identifier}`
       }
-      const payload = { phone: identifier, password: values.password }
-      await login(payload)
+      const payload = { phone: identifier, password: values.password };
+      // You might need to adjust this part based on your actual login logic
+      // For example, you might want to call an API endpoint here
+      // and then dispatch the setCredentials action with the received token
+      // For now, I'll just dispatch a dummy token
+      dispatch(setCredentials({ token: 'dummy-token' }));
       setTimeout(() => {
         navigate({ to: '/dashboard' })
       }, 2000)

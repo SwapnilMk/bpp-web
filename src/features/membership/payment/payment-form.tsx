@@ -7,7 +7,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { postData } from '@/api/apiClient'
 import { cn } from '@/lib/utils'
-import { useAuth } from '@/context/AuthContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -50,7 +50,8 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 
 export function PaymentForm() {
-  const { user, fetchUserData } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showDonation, setShowDonation] = useState(false)
@@ -152,7 +153,8 @@ export function PaymentForm() {
       setShowSuccessDialog(true)
 
       // Refresh user data to get updated role and status
-      await fetchUserData()
+      // This should be handled by a Redux thunk or similar
+      // await fetchUserData()
     } catch (error) {
       // Log error for debugging
       // eslint-disable-next-line no-console

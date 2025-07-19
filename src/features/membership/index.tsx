@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAuth } from '@/context/AuthContext'
+import { useAppSelector } from '@/store/hooks'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -87,7 +87,7 @@ const membershipBenefits = {
 }
 
 export default function Membership() {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.auth.user);
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [membershipData, setMembershipData] = useState<MembershipData | null>(

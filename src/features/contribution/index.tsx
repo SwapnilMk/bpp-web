@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/AuthContext'
+import { useAppSelector } from '@/store/hooks';
 import { useDashboardData } from '@/hooks/use-dashboard-data'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import ShiftingCountdown from '@/components/features/countdown-timer'
@@ -21,7 +21,7 @@ const steps = [
 
 const Contribution = () => {
   const { data: dashboardData, isLoading } = useDashboardData()
-  const { user: authUser } = useAuth()
+  const authUser = useAppSelector((state) => state.auth.user);
 
   const user =
     !isLoading && authUser
