@@ -10,7 +10,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { AreaChartComponent } from './components/area-chart'
-import GoogleMap from './components/google-map'
+import LeafletMap from './components/leaflet-map'
 import { PieChartComponent } from './components/pie-chart'
 import { RecentActivities } from './components/recent-activities'
 import { StatsGrid } from './components/stats-grid'
@@ -78,14 +78,15 @@ export default function Dashboard() {
   const user =
     !isLoading && authUser
       ? {
-          firstName: authUser.firstName || 'User',
-          lastName: authUser.lastName || '',
+          firstName: authUser.firstName,
+          lastName: authUser.lastName,
           role: (authUser.role as UserRole) || UserRole.MEMBER,
           status: (authUser.status as UserStatus) || UserStatus.PROCESSING,
           membership: dashboardData?.membership?.number || 'N/A',
           address: {
-            state: authUser.address?.state || 'India',
-            district: authUser.address?.district || 'Raigarh',
+            state: authUser.address?.state,
+            district: authUser.address?.district,
+            city: authUser.address?.cityOrVillage,
           },
           isVerified: authUser.isVerified || false,
         }
@@ -116,10 +117,11 @@ export default function Dashboard() {
           />
 
           <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
-            <GoogleMap
-              state={user?.address.state || 'N/A'}
-              district={user?.address.district || 'N/A'}
-              totalMembers={fakeDashboardData.totalMembersState || 0}
+            <LeafletMap
+              city={user?.address?.city || ''}
+              state={user?.address?.state || ''}
+              district={user?.address?.district || ''}
+              totalMembers={dashboardData?.totalMembersState || 0}
               isLoading={isLoading}
             />
             <RecentActivities

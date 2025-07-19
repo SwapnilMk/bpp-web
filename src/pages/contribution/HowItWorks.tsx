@@ -26,7 +26,7 @@ import {
   Target,
 } from 'lucide-react'
 import flowchart3 from '@/assets/charts/bpp_flowchart3.svg'
-import internalworking from '@/assets/images/community/internalworking.png'
+import communityContribution from '@/assets/images/community/communitycontribution.png'
 import community from '@/assets/images/headerBanners/community.png'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -814,7 +814,7 @@ const HowItWorksContent = () => {
             className='relative'
           >
             <img
-              src={internalworking}
+              src={communityContribution}
               className='w-full rounded-md'
               alt='Verification process'
             />

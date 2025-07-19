@@ -20,7 +20,7 @@ export function Slide1() {
         <div className='absolute inset-0 bg-black/40'></div>
       </motion.div>
 
-      <div className='relative flex h-full flex-col justify-center px-8 md:px-16 lg:px-24'>
+      <div className='relative mx-auto flex h-full max-w-5xl flex-col justify-center px-8 md:px-16 lg:px-24'>
         <motion.h1
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}

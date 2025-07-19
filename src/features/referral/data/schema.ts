@@ -10,7 +10,7 @@ const referredUserSchema = z.object({
   status: z.string(),
 })
 
-const referralSchema = z.object({
+export const referralSchema = z.object({
   _id: z.string(),
   referrer: z.string(),
   referredUser: referredUserSchema,
@@ -21,7 +21,7 @@ const referralSchema = z.object({
   __v: z.number(),
 })
 
-const referralProfileSchema = z.object({
+export const referralProfileSchema = z.object({
   referralCode: z.string(),
   referralLink: z.string(),
   totalReferrals: z.number(),
@@ -30,6 +30,6 @@ const referralProfileSchema = z.object({
   canUpgrade: z.boolean(),
 })
 
-type ReferredUser = z.infer<typeof referredUserSchema>
+export type ReferredUser = z.infer<typeof referredUserSchema>
 export type Referral = z.infer<typeof referralSchema>
 export type ReferralProfile = z.infer<typeof referralProfileSchema>

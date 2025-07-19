@@ -22,7 +22,7 @@ interface ProfileUpdateRequest {
   isPending: boolean
 }
 
-interface ProfileUpdateTracker {
+export interface ProfileUpdateTracker {
   lastPersonalUpdate?: string
   lastAddressUpdate?: string
   lastProfessionalUpdate?: string
@@ -53,7 +53,7 @@ interface ProfileUpdateTracker {
   canUpdateVoter: boolean
 }
 
-interface ProfileFormData {
+export interface ProfileFormData {
   title?: string
   firstName: string
   middleName?: string

@@ -8,7 +8,7 @@ import { NotificationHeaderMenu } from '@/components/layout/dashboard/notificati
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import GoogleMap from '@/features/dashboard/components/google-map'
+import LeafletMap from '@/features/dashboard/components/leaflet-map'
 import { CommunityContribution } from './components/community-contribution'
 import { StatsSection } from './components/stats-section'
 
@@ -29,6 +29,7 @@ const Contribution = () => {
           address: {
             state: authUser.address?.state,
             district: authUser.address?.district,
+            city: authUser.address?.cityOrVillage,
           },
         }
       : null
@@ -65,7 +66,8 @@ const Contribution = () => {
             </div>
             <div className='my-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2'>
               <div className='w-full'>
-                <GoogleMap
+                <LeafletMap
+                  city={user?.address?.city || ''}
                   state={user?.address?.state || ''}
                   district={user?.address?.district || ''}
                   totalMembers={dashboardData?.totalMembersState || 0}

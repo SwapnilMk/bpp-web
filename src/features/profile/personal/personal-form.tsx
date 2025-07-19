@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
+import { EnhancedDatePicker } from '@/components/features/EnhancedDatePicker'
 
 type Title = 'Mr' | 'Ms' | 'Mrs' | 'Dr' | 'CA' | 'CS' | 'Adv'
 type Gender = 'male' | 'female' | 'other'
@@ -305,7 +306,17 @@ export default function PersonalForm() {
                     <FormItem>
                       <FormLabel>Date of Birth</FormLabel>
                       <FormControl>
-                        <Input type='date' {...field} />
+                        <EnhancedDatePicker
+                          date={field.value ? new Date(field.value) : undefined}
+                          setDate={(date) => {
+                            field.onChange(
+                              date ? date.toISOString().split('T')[0] : ''
+                            )
+                          }}
+                          minDate={new Date(1900, 0, 1)}
+                          maxDate={new Date()}
+                          className='w-full'
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

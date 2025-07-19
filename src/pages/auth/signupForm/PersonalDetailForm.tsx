@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { DatePicker } from '@/components/features/DatePicker'
+import { EnhancedDatePicker } from '@/components/features/EnhancedDatePicker'
 import CropperModal from './components/CropperModal'
 import { FormWrapper } from './components/FormWrapper'
 
@@ -338,7 +338,7 @@ export function PersonalDetailForm({
           <Label>
             Date of Birth <span className='text-red-700'>*</span>
           </Label>
-          <DatePicker
+          <EnhancedDatePicker
             date={dateOfBirth ? new Date(dateOfBirth) : undefined}
             setDate={(date) => {
               updateFields({
@@ -350,7 +350,8 @@ export function PersonalDetailForm({
                 date ? date.toLocaleDateString('en-CA') : ''
               )
             }}
-            endYear={2024}
+            maxDate={new Date()}
+            minDate={new Date(1900, 0, 1)}
           />
           {errors.age && (
             <p className='mt-1 text-xs text-red-500'>{errors.age}</p>

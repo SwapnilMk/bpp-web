@@ -51,15 +51,20 @@ export function Slide3() {
           className='text-md mb-4 text-white'
         >
           {t('Slider.Goal.description')}
-          <div className='mt-4'>
-            <button
-              className='rounded-full bg-[#2196f3] px-4 py-2 text-white hover:bg-[#1e40af]'
-              onClick={() => navigate({ to: '/sign-up' })}
-            >
-              {t('Slider.Goal.button')}
-            </button>
-          </div>
         </motion.p>
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className='mt-4'
+        >
+          <button
+            className='rounded-full bg-[#2196f3] px-4 py-2 text-white hover:bg-[#1e40af]'
+            onClick={() => navigate({ to: '/sign-up' })}
+          >
+            {t('Slider.Goal.button')}
+          </button>
+        </motion.div>
       </div>
     </div>
   )
