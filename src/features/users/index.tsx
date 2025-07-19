@@ -1,9 +1,5 @@
-import { Header } from '@/components/layout/dashboard/header'
+import { memo } from 'react'
 import { Main } from '@/components/layout/dashboard/main'
-import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
 import { columns } from './components/users-columns'
 import { UsersDialogs } from './components/users-dialogs'
 import { UsersPrimaryButtons } from './components/users-primary-buttons'
@@ -12,21 +8,12 @@ import { UsersProvider } from './context/users-context'
 import { userListSchema } from './data/schema'
 import { users } from './data/users'
 
-export default function Users() {
+const Users = memo(() => {
   // Parse user list
   const userList = userListSchema.parse(users)
 
   return (
     <UsersProvider>
-      <Header fixed>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
-          <NotificationHeaderMenu />
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </Header>
-
       <Main>
         <div className='mb-2 flex flex-wrap items-center justify-between space-y-2'>
           <div>
@@ -45,4 +32,6 @@ export default function Users() {
       <UsersDialogs />
     </UsersProvider>
   )
-}
+})
+
+export default Users

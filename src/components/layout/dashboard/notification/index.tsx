@@ -2,13 +2,17 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import {
-  notificationService,
-  type Notification,
-} from '@/services/notification.service'
-import { useAppSelector } from '@/store/hooks'
+  setNotifications,
+  addNotification,
+  updateNotification,
+  removeNotification,
+  clearNotifications,
+  markAllAsRead,
+} from '@/store/notificationSlice'
 import { Bell, Trash2 } from 'lucide-react'
-import { Socket } from 'socket.io-client'
+import { getSocket } from '@/services/socket.service'
 import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { type Notification } from '@/types/notifications'
 
 function Dot({ className }: { className?: string }) {
   return (
@@ -36,155 +41,40 @@ function Dot({ className }: { className?: string }) {
 }
 
 export const NotificationHeaderMenu = () => {
+  const dispatch = useAppDispatch()
+  const { notifications, unreadCount } = useAppSelector(
+    (state) => state.notifications
+  )
   const user = useAppSelector((state) => state.user.user)
-  const [notifications, setNotifications] = useState<Notification[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [hasMore, setHasMore] = useState(false)
-  const [skip, setSkip] = useState(0)
-  const LIMIT = 20
-  const socketRef = useRef<Socket | null>(null)
+  const socket = getSocket()
 
-
-
-
-
-  // Fetch notifications on mount (fallback for initial load)
-  useEffect(() => {
-    if (user) {
-      setLoading(true)
-      notificationService
-        .getNotifications({ limit: LIMIT, skip: 0 })
-        .then((response) => {
-          setNotifications(response.data.notifications)
-          setHasMore(response.data.hasMore)
-          setSkip(response.data.notifications.length)
-          setUnreadCount(response.data.notifications.filter((n) => !n.read).length)
-        })
-        .catch(() => {
-          toast.error('Failed to fetch notifications')
-        })
-        .finally(() => setLoading(false))
-    }
-  }, [user])
-
-  // Socket emit helpers
-  const emitSocketEvent = (event: string, payload?: unknown) => {
-    if (socketRef.current && socketRef.current.connected) {
-      socketRef.current.emit(event, payload)
-      return true
-    }
-    return false
-  }
-
-  // Mark all as read
-  const handleMarkAllAsRead = async () => {
-    if (
-      !emitSocketEvent('notification:mark-all-as-read', {
-        userId: user?._id || user?.id,
-      })
-    ) {
-      // fallback REST
-      try {
-        await notificationService.markAllAsRead()
-        setNotifications((prev) =>
-          prev.map((notification) => ({ ...notification, read: true }))
-        )
-        setUnreadCount(0)
-        toast.success('All notifications marked as read')
-      } catch (_error) {
-        toast.error('Failed to mark all notifications as read')
-      }
+  const handleMarkAllAsRead = () => {
+    if (socket) {
+      socket.emit('markAllNotificationsAsRead')
     }
   }
 
-  // Mark single as read
-  const handleNotificationClick = async (notification: Notification) => {
-    if (notification.read) return
-    if (
-      !emitSocketEvent('notification:mark-as-read', {
+  const handleNotificationClick = (notification: Notification) => {
+    if (!notification.read && socket) {
+      socket.emit('markNotificationAsRead', {
         notificationId: notification._id,
-        userId: user?._id || user?.id,
       })
-    ) {
-      // fallback REST
-      try {
-        await notificationService.markAsRead(notification._id)
-        setNotifications((prev) =>
-          prev.map((n) =>
-            n._id === notification._id ? { ...n, read: true } : n
-          )
-        )
-        setUnreadCount((prev) => Math.max(0, prev - 1))
-      } catch (_error) {
-        toast.error('Failed to mark notification as read')
-      }
     }
   }
 
-  // Delete single notification
-  const handleDeleteNotification = async (
+  const handleDeleteNotification = (
     notificationId: string,
     event: React.MouseEvent
   ) => {
     event.stopPropagation()
-    if (
-      !emitSocketEvent('notification:delete', {
-        notificationId,
-        userId: user?._id || user?.id,
-      })
-    ) {
-      // fallback REST
-      try {
-        await notificationService.deleteNotification(notificationId)
-        setNotifications((prev) => prev.filter((n) => n._id !== notificationId))
-        const deletedNotification = notifications.find(
-          (n) => n._id === notificationId
-        )
-        if (deletedNotification && !deletedNotification.read) {
-          setUnreadCount((prev) => Math.max(0, prev - 1))
-        }
-        toast.success('Notification deleted')
-      } catch (_error) {
-        toast.error('Failed to delete notification')
-      }
+    if (socket) {
+      socket.emit('deleteNotification', { notificationId })
     }
   }
 
-  // Delete all notifications
-  const handleDeleteAll = async () => {
-    if (
-      !emitSocketEvent('notification:delete-all', {
-        userId: user?._id || user?.id,
-      })
-    ) {
-      // fallback REST
-      try {
-        await notificationService.deleteAllNotifications()
-        setNotifications([])
-        setUnreadCount(0)
-        toast.success('All notifications deleted')
-      } catch (_error) {
-        toast.error('Failed to delete all notifications')
-      }
-    }
-  }
-
-  // Load more notifications
-  const handleLoadMore = () => {
-    if (!loading && hasMore) {
-      setLoading(true)
-      notificationService
-        .getNotifications({ limit: LIMIT, skip })
-        .then((response) => {
-          setNotifications((prev) => [...prev, ...response.data.notifications])
-          setHasMore(response.data.hasMore)
-          setSkip(skip + response.data.notifications.length)
-        })
-        .catch(() => {
-          toast.error('Failed to fetch notifications')
-        })
-        .finally(() => setLoading(false))
+  const handleDeleteAll = () => {
+    if (socket) {
+      socket.emit('deleteAllNotifications')
     }
   }
 
@@ -292,17 +182,6 @@ export const NotificationHeaderMenu = () => {
                   </div>
                 </div>
               ))}
-              {hasMore && (
-                <div className='px-3 py-2 text-center'>
-                  <button
-                    className='text-xs text-muted-foreground hover:text-foreground'
-                    onClick={handleLoadMore}
-                    disabled={loading}
-                  >
-                    {loading ? 'Loading...' : 'Load more'}
-                  </button>
-                </div>
-              )}
             </>
           )}
         </div>

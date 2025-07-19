@@ -10,7 +10,7 @@ import './index.css'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
 import store, { persistor } from './store/store'
-import { initWebSocket } from './services/socketService'
+import { initWebSocket } from './services/socket.service'
 
 // Initialize WebSocket connection
 initWebSocket(store)

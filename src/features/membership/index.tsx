@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { membershipService } from '@/services/membership.service'
 import { useAppSelector } from '@/store/hooks'
@@ -34,12 +34,7 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
-import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
 
 interface MembershipData {
   membershipType: 'primary' | 'active' | 'executive'
@@ -86,7 +81,7 @@ const membershipBenefits = {
   },
 }
 
-export default function Membership() {
+const Membership = memo(() => {
   const user = useAppSelector((state) => state.user.user)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
@@ -213,67 +208,58 @@ export default function Membership() {
 
   if (loading || !membershipData) {
     return (
-      <>
-        <Header fixed>
-          <Search />
-          <div className='ml-auto flex items-center space-x-4'>
-            <ThemeSwitch />
-            <ProfileDropdown />
-          </div>
-        </Header>
-        <Main>
-          <div className='mx-auto w-full'>
-            <Skeleton className='mb-6 h-10 w-64' />
+      <Main>
+        <div className='mx-auto w-full'>
+          <Skeleton className='mb-6 h-10 w-64' />
 
-            <Card className='mb-8 overflow-hidden rounded-lg border-2 shadow-md'>
-              <CardContent className='p-6'>
-                <div className='flex flex-col items-center gap-6 sm:flex-row sm:items-start'>
-                  <Skeleton className='h-24 w-24 rounded-full sm:h-32 sm:w-32' />
+          <Card className='mb-8 overflow-hidden rounded-lg border-2 shadow-md'>
+            <CardContent className='p-6'>
+              <div className='flex flex-col items-center gap-6 sm:flex-row sm:items-start'>
+                <Skeleton className='h-24 w-24 rounded-full sm:h-32 sm:w-32' />
 
-                  <div className='flex-1 space-y-4'>
-                    <div className='flex items-center justify-between'>
-                      <Skeleton className='h-8 w-48' />
-                      <Skeleton className='h-6 w-16 rounded-full' />
-                    </div>
+                <div className='flex-1 space-y-4'>
+                  <div className='flex items-center justify-between'>
+                    <Skeleton className='h-8 w-48' />
+                    <Skeleton className='h-6 w-16 rounded-full' />
+                  </div>
 
-                    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i}>
-                          <Skeleton className='mb-1 h-4 w-24' />
-                          <Skeleton className='h-6 w-32' />
-                        </div>
-                      ))}
-                      <div className='sm:col-span-2'>
+                  <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i}>
                         <Skeleton className='mb-1 h-4 w-24' />
-                        <Skeleton className='h-2.5 w-full rounded-full' />
+                        <Skeleton className='h-6 w-32' />
                       </div>
-                    </div>
-
-                    <div className='flex flex-col gap-2 sm:flex-row sm:justify-start'>
-                      <Skeleton className='h-10 w-full sm:w-32' />
-                      <Skeleton className='h-10 w-full sm:w-32' />
+                    ))}
+                    <div className='sm:col-span-2'>
+                      <Skeleton className='mb-1 h-4 w-24' />
+                      <Skeleton className='h-2.5 w-full rounded-full' />
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            <Skeleton className='mb-4 h-8 w-32' />
-            <Card className='mb-8'>
-              <CardContent className='pt-6'>
-                <div className='space-y-3'>
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className='flex items-center'>
-                      <Skeleton className='mr-2 h-5 w-5 rounded-full' />
-                      <Skeleton className='h-5 w-64' />
-                    </div>
-                  ))}
+                  <div className='flex flex-col gap-2 sm:flex-row sm:justify-start'>
+                    <Skeleton className='h-10 w-full sm:w-32' />
+                    <Skeleton className='h-10 w-full sm:w-32' />
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </Main>
-      </>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Skeleton className='mb-4 h-8 w-32' />
+          <Card className='mb-8'>
+            <CardContent className='pt-6'>
+              <div className='space-y-3'>
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className='flex items-center'>
+                    <Skeleton className='mr-2 h-5 w-5 rounded-full' />
+                    <Skeleton className='h-5 w-64' />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Main>
     )
   }
 
@@ -286,119 +272,99 @@ export default function Membership() {
   // If user is not verified, show verification required message
   if (!isVerified || !isApproved) {
     return (
-      <>
-        <Header fixed>
-          <Search />
-          <div className='ml-auto flex items-center space-x-4'>
-            <ThemeSwitch />
-            <ProfileDropdown />
-          </div>
-        </Header>
-        <Main>
-          <div className='mx-auto w-full'>
-            <h1 className='mb-6 text-3xl font-bold'>Membership Details</h1>
-            <Card className='mb-8 border-yellow-300 bg-yellow-50'>
-              <CardContent className='p-6'>
-                <div className='flex flex-col items-center text-center'>
-                  <Award className='mb-4 h-16 w-16 text-yellow-500' />
-                  <h2 className='mb-2 text-2xl font-bold text-yellow-800'>
-                    Verification Required
-                  </h2>
-                  <p className='mb-4 max-w-md text-yellow-700'>
-                    Your account is currently pending verification. Once
-                    verified, you'll be able to access membership features and
-                    upgrade to primary membership.
-                  </p>
-                  <Button
-                    variant='outline'
-                    className='border-yellow-300 bg-white text-yellow-700 hover:bg-yellow-100'
-                  >
-                    Check Verification Status
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </Main>
-      </>
+      <Main>
+        <div className='mx-auto w-full'>
+          <h1 className='mb-6 text-3xl font-bold'>Membership Details</h1>
+          <Card className='mb-8 border-yellow-300 bg-yellow-50'>
+            <CardContent className='p-6'>
+              <div className='flex flex-col items-center text-center'>
+                <Award className='mb-4 h-16 w-16 text-yellow-500' />
+                <h2 className='mb-2 text-2xl font-bold text-yellow-800'>
+                  Verification Required
+                </h2>
+                <p className='mb-4 max-w-md text-yellow-700'>
+                  Your account is currently pending verification. Once verified,
+                  you'll be able to access membership features and upgrade to
+                  primary membership.
+                </p>
+                <Button
+                  variant='outline'
+                  className='border-yellow-300 bg-white text-yellow-700 hover:bg-yellow-100'
+                >
+                  Check Verification Status
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Main>
     )
   }
 
   // If user is verified but not a primary member, show upgrade option
   if (isVerified && isApproved && !isPrimaryMember && !isActiveMember) {
     return (
-      <>
-        <Header fixed>
-          <Search />
-          <div className='ml-auto flex items-center space-x-4'>
-            <ThemeSwitch />
-            <ProfileDropdown />
-          </div>
-        </Header>
-        <Main>
-          <div className='mx-auto w-full'>
-            <h1 className='mb-6 text-3xl font-bold'>Membership Details</h1>
+      <Main>
+        <div className='mx-auto w-full'>
+          <h1 className='mb-6 text-3xl font-bold'>Membership Details</h1>
 
-            {/* Upgrade to Primary Membership Card */}
-            <Card className='mb-8 border-blue-300 bg-blue-50'>
-              <CardContent className='p-6'>
-                <div className='flex flex-col items-center text-center'>
-                  <Award className='mb-4 h-16 w-16 text-blue-500' />
-                  <h2 className='mb-2 text-2xl font-bold text-blue-800'>
-                    Upgrade to Primary Membership
-                  </h2>
-                  <p className='mb-4 max-w-md text-blue-700'>
-                    Your account is verified! Now you can upgrade to Primary
-                    Membership for just ₹5 to unlock all features.
-                  </p>
-                  <div className='mb-6 flex items-center justify-center'>
-                    <span className='text-3xl font-bold text-blue-800'>₹5</span>
-                    <span className='ml-2 text-blue-600'>one-time payment</span>
-                  </div>
-                  <Button
-                    onClick={handlePaymentClick}
-                    className='bg-blue-600 text-white hover:bg-blue-700'
-                  >
-                    Pay Now to Activate
-                    <ArrowRight className='ml-2 h-4 w-4' />
-                  </Button>
+          {/* Upgrade to Primary Membership Card */}
+          <Card className='mb-8 border-blue-300 bg-blue-50'>
+            <CardContent className='p-6'>
+              <div className='flex flex-col items-center text-center'>
+                <Award className='mb-4 h-16 w-16 text-blue-500' />
+                <h2 className='mb-2 text-2xl font-bold text-blue-800'>
+                  Upgrade to Primary Membership
+                </h2>
+                <p className='mb-4 max-w-md text-blue-700'>
+                  Your account is verified! Now you can upgrade to Primary
+                  Membership for just ₹5 to unlock all features.
+                </p>
+                <div className='mb-6 flex items-center justify-center'>
+                  <span className='text-3xl font-bold text-blue-800'>₹5</span>
+                  <span className='ml-2 text-blue-600'>one-time payment</span>
                 </div>
+                <Button
+                  onClick={handlePaymentClick}
+                  className='bg-blue-600 text-white hover:bg-blue-700'
+                >
+                  Pay Now to Activate
+                  <ArrowRight className='ml-2 h-4 w-4' />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Primary Membership Benefits */}
+          <section className='mb-8'>
+            <h2 className='mb-4 text-2xl font-semibold'>
+              Primary Membership Benefits
+            </h2>
+            <Card>
+              <CardContent className='pt-6'>
+                <ul className='space-y-4'>
+                  {membershipBenefits.primary.benefits.map((benefit, index) => (
+                    <li key={index} className='flex items-start'>
+                      <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                  <li className='flex items-start'>
+                    <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
+                    <span>Access to all basic community features</span>
+                  </li>
+                  <li className='flex items-start'>
+                    <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
+                    <span>
+                      Eligibility for Active Membership after referrals
+                    </span>
+                  </li>
+                </ul>
               </CardContent>
             </Card>
-
-            {/* Primary Membership Benefits */}
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>
-                Primary Membership Benefits
-              </h2>
-              <Card>
-                <CardContent className='pt-6'>
-                  <ul className='space-y-4'>
-                    {membershipBenefits.primary.benefits.map(
-                      (benefit, index) => (
-                        <li key={index} className='flex items-start'>
-                          <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
-                          <span>{benefit}</span>
-                        </li>
-                      )
-                    )}
-                    <li className='flex items-start'>
-                      <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
-                      <span>Access to all basic community features</span>
-                    </li>
-                    <li className='flex items-start'>
-                      <CheckCircle className='mr-2 h-5 w-5 flex-shrink-0 text-green-500' />
-                      <span>
-                        Eligibility for Active Membership after referrals
-                      </span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </section>
-          </div>
-        </Main>
-      </>
+          </section>
+        </div>
+      </Main>
     )
   }
 
@@ -426,14 +392,6 @@ export default function Membership() {
 
   return (
     <>
-      <Header fixed>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
-          <NotificationHeaderMenu />
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </Header>
       <Main>
         <div className='mx-auto w-full'>
           <h1 className='mb-6 text-3xl font-bold'>Membership Details</h1>
@@ -858,4 +816,6 @@ export default function Membership() {
       </Dialog>
     </>
   )
-}
+})
+
+export default Membership

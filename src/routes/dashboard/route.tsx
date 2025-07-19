@@ -3,6 +3,12 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
+import { Header } from '@/components/layout/dashboard/header'
+import { Main } from '@/components/layout/dashboard/main'
+import { NotificationHeaderMenu } from '@/components/layout/dashboard/notification'
+import { ProfileDropdown } from '@/components/profile-dropdown'
+import { Search } from '@/components/search'
+import { ThemeSwitch } from '@/components/theme-switch'
 import { VerificationManager } from '@/components/features/verification/verification-manager'
 import { AppSidebar } from '@/components/layout/dashboard/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
@@ -42,6 +48,14 @@ function DashboardLayout() {
             'group-data-[scroll-locked=1]/body:has-[main.fixed-main]:h-svh'
           )}
         >
+          <Header fixed>
+            <Search />
+            <div className='ml-auto flex items-center space-x-4'>
+              <NotificationHeaderMenu />
+              <ThemeSwitch />
+              <ProfileDropdown />
+            </div>
+          </Header>
           <VerificationManager />
           <Outlet />
         </div>
