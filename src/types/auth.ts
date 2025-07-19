@@ -1,4 +1,5 @@
 // Define a shared User interface for both AuthContext and Redux store
+export type AuthUser = User
 export interface User {
   _id?: string
   id?: string

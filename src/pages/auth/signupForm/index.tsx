@@ -3,7 +3,11 @@ import { Link, useNavigate, useLocation } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import bpplogo from '@/assets/logo/bppLogo.png'
-import { useAuth } from '@/context/AuthContext'
+import {
+  useSendOtp,
+  useVerifyOtp,
+  useRegister,
+} from '@/hooks/queries/useAuthQueries'
 import { useMultiStepForm } from '@/hooks/useMultiStepForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -100,7 +104,10 @@ const MultiStepForm = () => {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { sendOtp, verifyOtp, register, loading } = useAuth()
+  const { mutateAsync: sendOtp, isPending: isSendingOtp } = useSendOtp()
+  const { mutateAsync: verifyOtp, isPending: isVerifyingOtp } = useVerifyOtp()
+  const { mutateAsync: register, isPending: isRegistering } = useRegister()
+  const loading = isSendingOtp || isVerifyingOtp || isRegistering
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
@@ -147,7 +154,8 @@ const MultiStepForm = () => {
         await sendOtp(`+91${data.phone}`)
         updateFields({ identifier: `+91${data.phone}` })
         return true
-      } catch {
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to send OTP')
         return false
       }
     }
@@ -158,9 +166,10 @@ const MultiStepForm = () => {
         return false
       }
       try {
-        await verifyOtp(data.identifier, data.otp)
+        await verifyOtp({ identifier: data.identifier, otp: data.otp })
         return true
-      } catch {
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to verify OTP')
         return false
       }
     }

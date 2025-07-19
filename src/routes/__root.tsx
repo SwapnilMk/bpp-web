@@ -12,9 +12,11 @@ import { initializeAnalytics, trackPageView } from '@/utils/analytics'
 import { Toaster } from '@/components/ui/toaster'
 import GeneralError from '@/features/errors/general-error'
 import NotFoundError from '@/features/errors/not-found-error'
+import { useWebSocket } from '@/hooks/useWebSocket'
 
 const RootComponent = () => {
   const location = useLocation()
+  useWebSocket()
 
   useEffect(() => {
     const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID

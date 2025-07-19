@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileService } from '@/services/profile.service'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { useUpdateUser } from '@/hooks/queries/useUserQueries'
+import { RootState } from '@/store/store'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -41,8 +41,8 @@ interface OtpDialogState {
 }
 
 export default function ContactForm() {
-  const { user } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const { mutate: updateUser, isPending: loading } = useUpdateUser()
   const [otpDialog, setOtpDialog] = useState<OtpDialogState | null>(null)
 
   const form = useForm<ContactFormValues>({
@@ -60,7 +60,6 @@ export default function ContactForm() {
         email: user.email ?? '',
         phone: user.phone ?? '',
       })
-      setLoading(false)
     }
   }, [user, form])
 
@@ -68,41 +67,37 @@ export default function ContactForm() {
     setOtpDialog(null)
   }
 
-  const handleUpdate: SubmitHandler<ContactFormValues> = async (data) => {
-    try {
-      setLoading(true)
+  const handleUpdate: SubmitHandler<ContactFormValues> = (data) => {
+    if (data.email !== user?.email || data.phone !== user?.phone) {
+      const field = data.email !== user?.email ? 'email' : 'phone'
+      const value = field === 'email' ? data.email : data.phone
 
-      if (data.email !== user?.email || data.phone !== user?.phone) {
-        const field = data.email !== user?.email ? 'email' : 'phone'
-        const value = field === 'email' ? data.email : data.phone
-
-        if (value) {
-          const response = await profileService.requestUpdate({
-            updates: { [field]: value },
-            type: 'OTP_REQUIRED',
-          })
-
-          if (response.data.success && response.data.data?.requiresOtp) {
-            setOtpDialog({
-              isOpen: true,
-              type: field as 'email' | 'phone',
-              identifier: value,
-              field,
-              value,
-              onSuccess: handleOtpSuccess,
-            })
+      if (value) {
+        updateUser(
+          { [field]: value },
+          {
+            onSuccess: (data: any) => {
+              if (data.requiresOtp) {
+                setOtpDialog({
+                  isOpen: true,
+                  type: field as 'email' | 'phone',
+                  identifier: value,
+                  field,
+                  value,
+                  onSuccess: handleOtpSuccess,
+                })
+              } else {
+                toast.success('Contact details updated successfully')
+              }
+            },
+            onError: (error) => {
+              toast.error(error.message || 'Failed to initiate update')
+            },
           }
-        }
-      } else {
-        toast.info('No changes detected')
+        )
       }
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(
-        axiosError.response?.data?.message || 'Failed to initiate update'
-      )
-    } finally {
-      setLoading(false)
+    } else {
+      toast.info('No changes detected')
     }
   }
 

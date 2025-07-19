@@ -1,15 +1,15 @@
-import { memo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Pencil } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
 import { cn } from '@/lib/utils'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
 import { DashboardData } from '@/hooks/use-dashboard-data'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { RootState } from '@/store/store'
 
 type CardStyle = {
   bg: string
@@ -70,8 +70,8 @@ interface UserCardProps {
   isLoading: boolean
 }
 
-const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
-  const { user: authUser } = useAuth()
+const UserCard = ({ dashboardData, isLoading }: UserCardProps) => {
+  const authUser = useSelector((state: RootState) => state.auth.user)
   const navigate = useNavigate()
   const isPrimaryMember = dashboardData.user.role === UserRole.PRIMARY_MEMBER
   const isActiveMember = dashboardData.user.role === UserRole.ACTIVE_MEMBER
@@ -302,8 +302,6 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
       </CardContent>
     </Card>
   )
-})
-
-UserCard.displayName = 'UserCard'
+}
 
 export default UserCard

@@ -1,11 +1,11 @@
-import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Phone } from 'lucide-react'
 import bppLogo from '@/assets/logo/bppLogo.png'
-import { useAuth } from '@/context/AuthContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '@/store/authSlice'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Form,
@@ -19,6 +19,8 @@ import { Input } from '@/components/ui/input'
 import { Toaster } from '@/components/ui/sonner'
 import { LoadingButton } from '@/components/features/LoadingButton'
 import { PasswordInput } from '@/components/features/password-input'
+import { AppDispatch, RootState } from '@/store/store'
+import { toast } from 'sonner'
 
 const loginSchema = z.object({
   identifier: z
@@ -33,9 +35,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>
 
 const Login = () => {
-  const { login } = useAuth()
+  const dispatch: AppDispatch = useDispatch()
+  const { loading, error } = useSelector((state: RootState) => state.auth)
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -51,21 +53,21 @@ const Login = () => {
   const isPhone = phoneRegex.test(identifierValue)
 
   async function onSubmit(values: LoginFormValues) {
-    try {
-      setIsLoading(true)
-      let identifier = values.identifier
-      if (isPhone) {
-        identifier = `+91${identifier}`
-      }
-      const payload = { phone: identifier, password: values.password }
-      await login(payload)
+    let identifier = values.identifier
+    if (isPhone) {
+      identifier = `+91${identifier}`
+    }
+    const payload = { phone: identifier, password: values.password }
+    const result = await dispatch(login(payload))
+    if (login.fulfilled.match(result)) {
+      toast.success('Login successful!')
       setTimeout(() => {
         navigate({ to: '/dashboard' })
       }, 2000)
-    } catch (_error) {
-      // Error handling
-    } finally {
-      setIsLoading(false)
+    } else {
+      toast.error(
+        (result.payload as string) || 'Login failed. Please try again.'
+      )
     }
   }
 
@@ -147,11 +149,12 @@ const Login = () => {
                       </FormItem>
                     )}
                   />
+                  {error && <p className='text-red-500 text-sm'>{error}</p>}
                   <LoadingButton
                     type='submit'
                     className='w-full'
                     variant='default'
-                    loading={isLoading}
+                    loading={loading}
                     size='sm'
                   >
                     Login

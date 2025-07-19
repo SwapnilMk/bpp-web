@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileService } from '@/services/profile.service'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { useUpdateUser } from '@/hooks/queries/useUserQueries'
+import { RootState } from '@/store/store'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -45,8 +45,8 @@ const ProfessionalFormSchema = z.object({
 type ProfessionalFormValues = z.infer<typeof ProfessionalFormSchema>
 
 export default function ProfessionalForm() {
-  const { user } = useAuth()
-  const [loading, setLoading] = useState(true)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const { mutate: updateUser, isPending: loading } = useUpdateUser()
 
   const form = useForm<ProfessionalFormValues>({
     resolver: zodResolver(ProfessionalFormSchema),
@@ -85,36 +85,28 @@ export default function ProfessionalForm() {
           experienceCert: undefined,
         },
       })
-      setLoading(false)
     }
   }, [user, form])
 
-  const handleUpdate: SubmitHandler<ProfessionalFormValues> = async (data) => {
-    try {
-      setLoading(true)
-
-      if (
-        JSON.stringify(data.professional) !== JSON.stringify(user?.professional)
-      ) {
-        const response = await profileService.requestUpdate({
-          updates: { professional: data.professional },
-          type: 'SENSITIVE',
-        })
-
-        if (response.data.success) {
-          toast.success('Professional details update request sent for approval')
+  const handleUpdate: SubmitHandler<ProfessionalFormValues> = (data) => {
+    if (
+      JSON.stringify(data.professional) !== JSON.stringify(user?.professional)
+    ) {
+      updateUser(
+        { professional: data.professional },
+        {
+          onSuccess: () => {
+            toast.success('Professional details update request sent for approval')
+          },
+          onError: (error) => {
+            toast.error(
+              error.message || 'Failed to update professional details'
+            )
+          },
         }
-      } else {
-        toast.info('No changes detected in professional details')
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(
-        axiosError.response?.data?.message ||
-          'Failed to update professional details'
       )
-    } finally {
-      setLoading(false)
+    } else {
+      toast.info('No changes detected in professional details')
     }
   }
 

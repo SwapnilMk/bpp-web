@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
-import { COOKIE_KEYS } from '@/context/authUtils'
+import { store } from '@/store/store'
+import { selectIsAuthenticated } from '@/store/selectors'
 import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { VerificationManager } from '@/components/features/verification/verification-manager'
@@ -11,9 +12,9 @@ import SkipToMain from '@/components/skip-to-main'
 export const Route = createFileRoute('/dashboard')({
   component: DashboardLayout,
   beforeLoad: async ({ location }) => {
-    const authToken = Cookies.get(COOKIE_KEYS.AUTH_TOKEN)
+    const isAuthenticated = selectIsAuthenticated(store.getState())
 
-    if (!authToken) {
+    if (!isAuthenticated) {
       throw redirect({
         to: '/sign-in',
         search: {

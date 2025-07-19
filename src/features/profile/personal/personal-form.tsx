@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileService } from '@/services/profile.service'
 import { ImagePlus } from 'lucide-react'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { useUpdateUser } from '@/hooks/queries/useUserQueries'
+import { RootState } from '@/store/store'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -53,8 +53,8 @@ const PersonalFormSchema = z.object({
 type PersonalFormValues = z.infer<typeof PersonalFormSchema>
 
 export default function PersonalForm() {
-  const { user, updateUser } = useAuth()
-  const [loading, setLoading] = useState(true)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const { mutate: updateUser, isPending: loading } = useUpdateUser()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const form = useForm<PersonalFormValues>({
@@ -84,70 +84,61 @@ export default function PersonalForm() {
         age: user.age,
         gender: user.gender as Gender,
       })
-      setLoading(false)
     }
   }, [user, form])
 
-  const handleUpdate: SubmitHandler<PersonalFormValues> = async (data) => {
-    try {
-      setLoading(true)
-
-      // Handle profile picture (NON_SENSITIVE, no approval required)
-      if (data.profilePicture !== user?.profilePicture) {
-        const response = await profileService.requestUpdate({
-          updates: { profilePicture: data.profilePicture },
-          type: 'NON_SENSITIVE',
-        })
-
-        if (response.data.success && response.data.data) {
-          // Update user in context (assuming backend returns updated user)
-          updateUser({ ...user!, profilePicture: data.profilePicture })
-          toast.success('Profile picture updated successfully')
+  const handleUpdate: SubmitHandler<PersonalFormValues> = (data) => {
+    // Handle profile picture (NON_SENSITIVE, no approval required)
+    if (data.profilePicture !== user?.profilePicture) {
+      updateUser(
+        { profilePicture: data.profilePicture },
+        {
+          onSuccess: () => {
+            toast.success('Profile picture updated successfully')
+          },
+          onError: (error) => {
+            toast.error(error.message || 'Failed to update profile picture')
+          },
         }
-      }
-
-      // Handle personal details (SENSITIVE, requires approval)
-      const personalData = {
-        title: data.title,
-        firstName: data.firstName,
-        middleName: data.middleName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth,
-        age: data.age,
-        gender: data.gender,
-      }
-
-      if (
-        JSON.stringify(personalData) !==
-        JSON.stringify({
-          title: user?.title,
-          firstName: user?.firstName,
-          middleName: user?.middleName,
-          lastName: user?.lastName,
-          dateOfBirth: user?.dateOfBirth,
-          age: user?.age,
-          gender: user?.gender,
-        })
-      ) {
-        const response = await profileService.requestUpdate({
-          updates: { personal: personalData },
-          type: 'SENSITIVE',
-        })
-
-        if (response.data.success) {
-          toast.success('Personal details update request sent for approval')
-        }
-      } else {
-        toast.info('No changes detected in personal details')
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(
-        axiosError.response?.data?.message ||
-          'Failed to update personal details'
       )
-    } finally {
-      setLoading(false)
+    }
+
+    // Handle personal details (SENSITIVE, requires approval)
+    const personalData = {
+      title: data.title,
+      firstName: data.firstName,
+      middleName: data.middleName,
+      lastName: data.lastName,
+      dateOfBirth: data.dateOfBirth,
+      age: data.age,
+      gender: data.gender,
+    }
+
+    if (
+      JSON.stringify(personalData) !==
+      JSON.stringify({
+        title: user?.title,
+        firstName: user?.firstName,
+        middleName: user?.middleName,
+        lastName: user?.lastName,
+        dateOfBirth: user?.dateOfBirth,
+        age: user?.age,
+        gender: user?.gender,
+      })
+    ) {
+      updateUser(
+        { ...personalData },
+        {
+          onSuccess: () => {
+            toast.success('Personal details update request sent for approval')
+          },
+          onError: (error) => {
+            toast.error(error.message || 'Failed to update personal details')
+          },
+        }
+      )
+    } else {
+      toast.info('No changes detected in personal details')
     }
   }
 

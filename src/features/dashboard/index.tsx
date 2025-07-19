@@ -1,7 +1,6 @@
 import { Users, UserCheck, TrendingUp } from 'lucide-react'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
-import { useAuth } from '@/context/AuthContext'
-import { DashboardData, useDashboardData } from '@/hooks/use-dashboard-data'
+import { useDashboardDataQuery } from '@/hooks/queries/useDashboardQueries'
 import { RouteGuard } from '@/components/features/auth/route-guard'
 import { Header } from '@/components/layout/dashboard/header'
 import { Main } from '@/components/layout/dashboard/main'
@@ -16,6 +15,8 @@ import { RecentActivities } from './components/recent-activities'
 import { StatsGrid } from './components/stats-grid'
 import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store/store'
 
 type StatCardKey = keyof DashboardData | 'activeMembers'
 
@@ -59,21 +60,8 @@ const statCards = [
 
 // Main Dashboard Component
 export default function Dashboard() {
-  const { data: dashboardData, isLoading } = useDashboardData()
-  const { user: authUser } = useAuth()
-
-  // --- FAKE DATA OVERRIDE ---
-  const fakeDashboardData = {
-    ...dashboardData,
-    totalMembersIndia: 103824,
-    totalMembersState: 393,
-    totalPrimaryMembersState: 353,
-    totalActiveMembersState: 110,
-    referrals: {
-      ...(dashboardData?.referrals || {}),
-      totalReferrals: 5046,
-    },
-  }
+  const { data: dashboardData, isLoading } = useDashboardDataQuery()
+  const authUser = useSelector((state: RootState) => state.auth.user)
 
   const user =
     !isLoading && authUser
@@ -106,12 +94,12 @@ export default function Dashboard() {
       </Header>
 
       <Main>
-        <UserCard dashboardData={fakeDashboardData} isLoading={isLoading} />
+        <UserCard dashboardData={dashboardData} isLoading={isLoading} />
         <StepperStats />
         <div className='space-y-6'>
           <StatsGrid
             isLoading={isLoading}
-            dashboardData={fakeDashboardData}
+            dashboardData={dashboardData}
             isVerified={isVerified || false}
             statCards={statCards}
           />
@@ -125,18 +113,18 @@ export default function Dashboard() {
               isLoading={isLoading}
             />
             <RecentActivities
-              dashboardData={fakeDashboardData}
+              dashboardData={dashboardData}
               isLoading={isLoading}
             />
           </div>
 
           <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
             <AreaChartComponent
-              dashboardData={fakeDashboardData}
+              dashboardData={dashboardData}
               isLoading={isLoading}
             />
             <PieChartComponent
-              dashboardData={fakeDashboardData}
+              dashboardData={dashboardData}
               isLoading={isLoading}
             />
           </div>

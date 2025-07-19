@@ -1,7 +1,8 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { RootState } from '@/store/store'
-import { useSelector } from 'react-redux'
-import { useAuth } from '@/context/AuthContext'
+import { RootState, AppDispatch } from '@/store/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { useLogout } from '@/hooks/queries/useAuthQueries'
+import { clearCredentials } from '@/store/authSlice'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,19 +15,25 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { toast } from 'sonner'
 
 export function ProfileDropdown() {
-  const { logout } = useAuth()
+  const { mutate: logout } = useLogout()
   const user = useSelector((state: RootState) => state.auth.user)
   const navigate = useNavigate()
+  const dispatch: AppDispatch = useDispatch()
 
-  const handleLogout = async () => {
-    try {
-      await logout()
-      navigate({ to: '/sign-in', replace: true })
-    } catch (_error) {
-      // Error is handled by toast in AuthContext
-    }
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        dispatch(clearCredentials())
+        navigate({ to: '/sign-in', replace: true })
+        toast.success('Logged out successfully')
+      },
+      onError: (error) => {
+        toast.error(error.message || 'Logout failed')
+      },
+    })
   }
 
   return (

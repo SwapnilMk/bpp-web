@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileService } from '@/services/profile.service'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { useUpdateUser } from '@/hooks/queries/useUserQueries'
+import { RootState } from '@/store/store'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -36,8 +36,8 @@ const AddressFormSchema = z.object({
 type AddressFormValues = z.infer<typeof AddressFormSchema>
 
 export default function AddressForm() {
-  const { user } = useAuth()
-  const [loading, setLoading] = useState(true)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const { mutate: updateUser, isPending: loading } = useUpdateUser()
 
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(AddressFormSchema),
@@ -66,33 +66,24 @@ export default function AddressForm() {
           pincode: '',
         },
       })
-      setLoading(false)
     }
   }, [user, form])
 
-  const handleUpdate: SubmitHandler<AddressFormValues> = async (data) => {
-    try {
-      setLoading(true)
-
-      if (JSON.stringify(data.address) !== JSON.stringify(user?.address)) {
-        const response = await profileService.requestUpdate({
-          updates: { address: data.address },
-          type: 'SENSITIVE',
-        })
-
-        if (response.data.success) {
-          toast.success('Address update request sent for approval')
+  const handleUpdate: SubmitHandler<AddressFormValues> = (data) => {
+    if (JSON.stringify(data.address) !== JSON.stringify(user?.address)) {
+      updateUser(
+        { address: data.address },
+        {
+          onSuccess: () => {
+            toast.success('Address update request sent for approval')
+          },
+          onError: (error) => {
+            toast.error(error.message || 'Failed to update address')
+          },
         }
-      } else {
-        toast.info('No changes detected in address')
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(
-        axiosError.response?.data?.message || 'Failed to update address'
       )
-    } finally {
-      setLoading(false)
+    } else {
+      toast.info('No changes detected in address')
     }
   }
 

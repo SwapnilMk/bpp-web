@@ -1,19 +1,34 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import authReducer from './authSlice'
+import userReducer from './userSlice'
+import dashboardReducer from './dashboardSlice'
+import membershipReducer from './membershipSlice'
+import walletReducer from './walletSlice'
+import referralReducer from './referralSlice'
+import queryReducer from './querySlice'
 
 const persistConfig = {
   key: 'root',
   storage,
+  whitelist: ['auth'], // We only want to persist the auth slice
 }
 
-const persistedReducer = persistReducer(persistConfig, authReducer)
+const rootReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
+  dashboard: dashboardReducer,
+  membership: membershipReducer,
+  wallet: walletReducer,
+  referral: referralReducer,
+  query: queryReducer,
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-  reducer: {
-    auth: persistedReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

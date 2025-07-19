@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { RootState } from '@/store/store'
+import { RootState, AppDispatch } from '@/store/store'
 import {
   BadgeCheck,
   Bell,
@@ -7,8 +7,9 @@ import {
   LogOut,
   Sparkles,
 } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { useLogout } from '@/hooks/queries/useAuthQueries'
+import { clearCredentials } from '@/store/authSlice'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -25,20 +26,26 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { toast } from 'sonner'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { logout } = useAuth()
+  const { mutate: logout } = useLogout()
   const navigate = useNavigate()
+  const dispatch: AppDispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
 
-  const handleLogout = async () => {
-    try {
-      await logout()
-      navigate({ to: '/sign-in', replace: true })
-    } catch (_error) {
-      // Error is handled by toast in AuthContext
-    }
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        dispatch(clearCredentials())
+        navigate({ to: '/sign-in', replace: true })
+        toast.success('Logged out successfully')
+      },
+      onError: (error) => {
+        toast.error(error.message || 'Logout failed')
+      },
+    })
   }
 
   const isEligibleForUpgrade =

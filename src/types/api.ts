@@ -6,15 +6,17 @@ export interface ApiResponse<T> {
   token?: string
 }
 
+export interface LoginResponseData {
+  user: User
+  accessToken: string
+  sessionId: string
+}
+
 // Login response type
 export interface LoginResponse {
   success: boolean
   message: string
-  data: {
-    user: User
-    accessToken: string
-    sessionId: string
-  }
+  data: LoginResponseData
 }
 
 // Registration response type

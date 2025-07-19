@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from '@tanstack/react-router'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { selectIsAuthenticated } from '@/store/selectors'
 
 interface RouteGuardProps {
   children: React.ReactNode
 }
 
 export function RouteGuard({ children }: RouteGuardProps) {
-  const { isAuthenticated } = useAuth()
+  const isAuthenticated = useSelector(selectIsAuthenticated)
   const navigate = useNavigate()
   const location = useLocation()
 

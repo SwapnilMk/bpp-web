@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileService } from '@/services/profile.service'
 import type { User } from '@/types/auth'
 import { toast } from 'sonner'
-import { useAuth } from '@/context/AuthContext'
+import { useSelector } from 'react-redux'
+import { useUpdateUser } from '@/hooks/queries/useUserQueries'
+import { RootState } from '@/store/store'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -58,8 +58,8 @@ const DocumentsFormSchema = z.object({
 type DocumentsFormValues = z.infer<typeof DocumentsFormSchema>
 
 export default function DocumentsForm() {
-  const { user } = useAuth()
-  const [loading, setLoading] = useState(true)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const { mutate: updateUser, isPending: loading } = useUpdateUser()
 
   const form = useForm<DocumentsFormValues>({
     resolver: zodResolver(DocumentsFormSchema),
@@ -76,61 +76,55 @@ export default function DocumentsForm() {
         aadhaar: user.aadhaar ?? undefined,
         voter: user.voter ?? undefined,
       })
-      setLoading(false)
     }
   }, [user, form])
 
-  const handleUpdate: SubmitHandler<DocumentsFormValues> = async (data) => {
-    try {
-      setLoading(true)
+  const handleUpdate: SubmitHandler<DocumentsFormValues> = (data) => {
+    const userData = user as UserWithDocumentUpdates
 
-      const userData = user as UserWithDocumentUpdates
-
-      if (
-        JSON.stringify(data.aadhaar) !== JSON.stringify(userData?.aadhaar) &&
-        (userData?.aadhaar?.updateCount ?? 0) < 2
-      ) {
-        const response = await profileService.requestUpdate({
-          updates: { aadhaar: data.aadhaar },
-          type: 'SENSITIVE',
-        })
-
-        if (response.data.success) {
-          toast.success('Aadhaar update request sent for approval')
+    if (
+      JSON.stringify(data.aadhaar) !== JSON.stringify(userData?.aadhaar) &&
+      (userData?.aadhaar?.updateCount ?? 0) < 2
+    ) {
+      updateUser(
+        { aadhaar: data.aadhaar },
+        {
+          onSuccess: () => {
+            toast.success('Aadhaar update request sent for approval')
+          },
+          onError: (error) => {
+            toast.error(error.message || 'Failed to update Aadhaar')
+          },
         }
-      } else if ((userData?.aadhaar?.updateCount ?? 0) >= 2) {
-        toast.error('Aadhaar details can only be updated twice')
-      }
-
-      if (
-        JSON.stringify(data.voter) !== JSON.stringify(userData?.voter) &&
-        (userData?.voter?.updateCount ?? 0) < 2
-      ) {
-        const response = await profileService.requestUpdate({
-          updates: { voter: data.voter },
-          type: 'SENSITIVE',
-        })
-
-        if (response.data.success) {
-          toast.success('Voter ID update request sent for approval')
-        }
-      } else if ((userData?.voter?.updateCount ?? 0) >= 2) {
-        toast.error('Voter ID details can only be updated twice')
-      }
-
-      if (
-        JSON.stringify(data.aadhaar) === JSON.stringify(userData?.aadhaar) &&
-        JSON.stringify(data.voter) === JSON.stringify(userData?.voter)
-      ) {
-        toast.info('No changes detected in documents')
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(
-        axiosError.response?.data?.message || 'Failed to update documents'
       )
-    } finally {
-      setLoading(false)
+    } else if ((userData?.aadhaar?.updateCount ?? 0) >= 2) {
+      toast.error('Aadhaar details can only be updated twice')
+    }
+
+    if (
+      JSON.stringify(data.voter) !== JSON.stringify(userData?.voter) &&
+      (userData?.voter?.updateCount ?? 0) < 2
+    ) {
+      updateUser(
+        { voter: data.voter },
+        {
+          onSuccess: () => {
+            toast.success('Voter ID update request sent for approval')
+          },
+          onError: (error) => {
+            toast.error(error.message || 'Failed to update Voter ID')
+          },
+        }
+      )
+    } else if ((userData?.voter?.updateCount ?? 0) >= 2) {
+      toast.error('Voter ID details can only be updated twice')
+    }
+
+    if (
+      JSON.stringify(data.aadhaar) === JSON.stringify(userData?.aadhaar) &&
+      JSON.stringify(data.voter) === JSON.stringify(userData?.voter)
+    ) {
+      toast.info('No changes detected in documents')
     }
   }
 
