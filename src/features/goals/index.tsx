@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, easeInOut } from 'framer-motion'
 import { ArrowLeft, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -20,70 +20,120 @@ const GoalsPage = memo(() => {
     setSelectedGoal(null)
   }
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.05,
+        duration: 0.3,
+      },
+    }),
+  }
+
+  const detailVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: easeInOut,
+      },
+    },
+    exit: { opacity: 0 },
+  }
+
   return (
-    <Main>
-      <AnimatePresence mode='wait'>
+    <Main >
+      <AnimatePresence mode="wait">
         {!selectedGoal ? (
           <motion.div
-            key='goals-grid'
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            key="goals-grid"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+              exit: { opacity: 0, y: -20 },
+            }}
             transition={{ duration: 0.3 }}
-            className='space-y-6'
+            className="w-full px-4 sm:px-6 lg:px-4"
           >
-            <h1 className='text-3xl font-bold tracking-tight'>Our Goals</h1>
-            <Separator />
-            <div className='mt-8 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            {/* Header Section */}
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+                Our Core Objectives
+              </h1>
+              <p className="mt-2 sm:mt-3 text-base sm:text-lg text-muted-foreground">
+                A blueprint for a stronger, more inclusive future.
+              </p>
+            </div>
+            <Separator className="mb-6 sm:mb-8" />
+            
+            {/* Goals Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
               {goals.map((goal, index) => (
                 <motion.div
                   key={goal.number}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className='h-64'
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ 
+                    y: -5, 
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    transition: { duration: 0.2 }
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="h-full"
                 >
                   <Card
-                    className={`${goal.bgColor} flex h-full cursor-pointer flex-col overflow-hidden text-white transition-all duration-200`}
+                    className="flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border-border bg-card shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border/50 dark:hover:border-border/70 active:scale-[0.98]"
                     onClick={() => handleGoalClick(goal)}
-                    role='button'
+                    role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
                         handleGoalClick(goal)
                       }
                     }}
                   >
-                    <CardContent className='flex h-full flex-col p-0'>
-                      {/* Header with Goal Number */}
-                      <div className='flex items-center justify-between border-b border-white/20 p-3'>
-                        <span className='text-lg font-bold sm:text-xl'>
-                          {goal.number}
-                        </span>
-                      </div>
-
-                      {/* Main Content */}
-                      <div className='flex flex-1 flex-col items-center justify-center p-4 text-center'>
-                        {/* Icon */}
-                        <div className='mb-4 flex items-center justify-center'>
+                    <CardContent className="flex flex-1 flex-col p-4 sm:p-6">
+                      <div className="mb-3 sm:mb-4 flex items-start gap-3 sm:gap-4">
+                        <div 
+                          className="flex-shrink-0 p-2 rounded-lg"
+                          style={{ 
+                            backgroundColor: goal.bgColor.replace('bg-[', '').replace(']', ''),
+                            color: 'white'
+                          }}
+                        >
                           <goal.icon
-                            size={48}
-                            color={goal.iconColor}
-                            className='sm:h-12 sm:w-12'
+                            size={24}
+                            className="sm:w-8 sm:h-8"
                           />
                         </div>
-
-                        {/* Title */}
-                        <h3 className='mb-2 line-clamp-2 text-sm font-bold leading-tight sm:text-base'>
-                          {goal.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className='line-clamp-3 text-xs opacity-90 sm:text-sm'>
-                          {goal.description}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <h2 className="text-sm sm:text-base lg:text-lg font-semibold text-foreground leading-tight">
+                            {goal.title}
+                          </h2>
+                        </div>
+                      </div>
+                      <p className="flex-1 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                        {goal.description}
+                      </p>
+                      <div className="mt-3 sm:mt-4 text-right">
+                        <span 
+                          className="text-xs font-medium uppercase tracking-wider px-2 py-1 rounded-md"
+                          style={{ 
+                            color: goal.bgColor.replace('bg-[', '').replace(']', ''),
+                            backgroundColor: `${goal.bgColor.replace('bg-[', '').replace(']', '')}20`
+                          }}
+                        >
+                          {goal.number}
+                        </span>
                       </div>
                     </CardContent>
                   </Card>
@@ -92,69 +142,106 @@ const GoalsPage = memo(() => {
             </div>
           </motion.div>
         ) : (
+          // Detail View for a selected goal
           <motion.div
-            key='goal-detail'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`min-h-screen ${selectedGoal.bgColor} text-white`}
+            key="goal-detail"
+            variants={detailVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="min-h-screen bg-background w-full"
           >
-            <div className='relative h-full'>
-              {/* Back Button */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className='absolute left-6 top-6 z-10'
-              >
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+              {/* Header and Controls */}
+              <div className="sticky top-0 z-10 flex items-center justify-between bg-background/95 backdrop-blur-sm py-4 border-b border-border">
                 <Button
-                  variant='ghost'
-                  size='sm'
+                  variant="ghost"
+                  size="sm"
                   onClick={handleBackClick}
-                  className='bg-white/20 text-white backdrop-blur-sm hover:bg-white/30'
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-foreground hover:bg-accent hover:text-accent-foreground"
                 >
-                  <ArrowLeft className='mr-2 h-4 w-4' />
-                  Back to Goals
+                  <ArrowLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">Back to Goals</span>
+                  <span className="sm:hidden">Back</span>
                 </Button>
-              </motion.div>
-
-              {/* Close Button */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className='absolute right-6 top-6 z-10'
-              >
                 <Button
-                  variant='ghost'
-                  size='sm'
+                  variant="ghost"
+                  size="icon"
                   onClick={handleBackClick}
-                  className='bg-white/20 text-white backdrop-blur-sm hover:bg-white/30'
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-foreground hover:bg-accent hover:text-accent-foreground"
                 >
-                  <X className='h-4 w-4' />
+                  <X className="h-4 w-4" />
                 </Button>
-              </motion.div>
+              </div>
 
               {/* Goal Content */}
-              <div className='flex min-h-screen flex-col items-center justify-center p-8'>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className='mx-auto max-w-5xl text-justify'
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className='prose prose-invert max-w-none'
-                    dangerouslySetInnerHTML={{
-                      __html: selectedGoal.content || '',
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: 0.2, duration: 0.5 },
+                }}
+                className="mt-6 sm:mt-8"
+              >
+                {/* Goal Header */}
+                <div className="mb-6 sm:mb-8 text-center">
+                  <div 
+                    className="inline-flex items-center justify-center p-4 rounded-full mb-4"
+                    style={{ 
+                      backgroundColor: selectedGoal.bgColor.replace('bg-[', '').replace(']', ''),
+                      color: 'white'
                     }}
-                  />
-                </motion.div>
-              </div>
+                  >
+                    <selectedGoal.icon
+                      size={48}
+                      className="sm:w-12 sm:h-12"
+                    />
+                  </div>
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
+                    {selectedGoal.title}
+                  </h1>
+                </div>
+                
+                <Separator className="mb-6 sm:mb-8" />
+                
+                {/* Goal Content */}
+                <article
+                  className="prose prose-sm sm:prose-base lg:prose-lg max-w-none text-foreground dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground prose-h3:text-foreground prose-h3:font-bold prose-h3:mb-4 prose-h3:text-xl sm:prose-h3:text-2xl lg:prose-h3:text-3xl prose-p:leading-relaxed prose-ul:leading-relaxed prose-li:leading-relaxed"
+                  style={{
+                    '--tw-prose-body': 'hsl(var(--muted-foreground))',
+                    '--tw-prose-headings': 'hsl(var(--foreground))',
+                    '--tw-prose-links': 'hsl(var(--primary))',
+                    '--tw-prose-bold': 'hsl(var(--foreground))',
+                    '--tw-prose-counters': 'hsl(var(--muted-foreground))',
+                    '--tw-prose-bullets': 'hsl(var(--muted-foreground))',
+                    '--tw-prose-hr': 'hsl(var(--border))',
+                    '--tw-prose-quotes': 'hsl(var(--foreground))',
+                    '--tw-prose-quote-borders': 'hsl(var(--border))',
+                    '--tw-prose-captions': 'hsl(var(--muted-foreground))',
+                    '--tw-prose-code': 'hsl(var(--foreground))',
+                    '--tw-prose-pre-code': 'hsl(var(--muted-foreground))',
+                    '--tw-prose-pre-bg': 'hsl(var(--muted))',
+                    '--tw-prose-th-borders': 'hsl(var(--border))',
+                    '--tw-prose-td-borders': 'hsl(var(--border))',
+                  } as React.CSSProperties}
+                  dangerouslySetInnerHTML={{
+                    __html: selectedGoal.content || '',
+                  }}
+                />
+
+                {/* Back Button at End */}
+                <div className="mt-12 sm:mt-16 flex justify-center">
+                  <Button
+                    onClick={handleBackClick}
+                    className="flex items-center gap-2 px-6 py-3 text-base font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                    <span className="hidden sm:inline">Back to All Goals</span>
+                    <span className="sm:hidden">Back to Goals</span>
+                  </Button>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}

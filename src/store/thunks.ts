@@ -1,5 +1,6 @@
 import * as authService from '@/services/auth.service'
 import * as dashboardService from '@/services/dashboard.service'
+import * as membershipService from '@/services/membership.service'
 import { disconnectWebSocket } from '@/services/socket.service'
 import * as userService from '@/services/user.service'
 import { LoginCredentials, RegistrationData, User } from '@/types/auth'
@@ -17,6 +18,11 @@ import {
   setDashboardLoading,
   setDashboardError,
 } from './dashboardSlice'
+import {
+  setMembershipData,
+  setMembershipLoading,
+  setMembershipError,
+} from './membershipSlice'
 import { persistor } from './store'
 import { setUser, clearUser } from './userSlice'
 
@@ -243,6 +249,23 @@ export const revokeAllOtherSessions = createAsyncThunk(
       await authService.revokeAllOtherSessions()
     } catch (_error) {
       throw new Error('Failed to revoke other sessions')
+    }
+  }
+)
+
+export const fetchMembershipData = createAsyncThunk(
+  'membership/fetchMembershipData',
+  async (_, { dispatch }) => {
+    try {
+      dispatch(setMembershipLoading(true))
+      const membershipData = await membershipService.fetchMembershipData()
+      dispatch(setMembershipData(membershipData))
+      return membershipData
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      dispatch(setMembershipError(errorMessage))
+      toast.error(errorMessage)
+      throw new Error(errorMessage)
     }
   }
 )

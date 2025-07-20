@@ -271,3 +271,72 @@ export interface Session {
   updatedAt: string
   __v?: number
 }
+
+export interface MembershipData {
+  id: string
+  number: string
+  currentMembershipType: 'ACTIVE' | 'PRIMARY' | 'PENDING' | 'CANCELLED'
+  membershipFee: number
+  startDate: string
+  membershipActiveTo: string
+  paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'CANCELLED'
+  paymentFrequency: 'Yearly' | 'Monthly' | 'Quarterly'
+  nextBillingDate: string
+  nextBillingAmount: number
+  hasPendingChange?: boolean
+  pendingChangeType?: 'upgrade' | 'downgrade' | 'renewal'
+  pendingChangeDetails?: string
+  hasPendingCancellation?: boolean
+  pendingCancellationData?: {
+    reason: string
+    details: string
+    requestDate: string
+  }
+  isCancelled?: boolean
+  cancellationRequested?: boolean
+  cancellationRequestDate?: string | null
+  cancellationSource?: 'member' | 'admin'
+}
+
+export interface MembershipHistoryItem {
+  id: string
+  membershipType: string
+  subscriptionStatus: 'Active' | 'Expired'
+  amount: number
+  paymentStatus: 'Paid' | 'Pending' | 'Failed' | 'Cancelled'
+  startDate: string
+  paidThroughDate: string | null
+  nextBillingDate: string | null
+}
+
+export interface MembershipUserData {
+  name: string
+  phone: string
+  email: string
+  role: string
+  profilePicture: string
+  location: string
+  address: {
+    line1: string
+    line2: string
+    cityOrVillage: string
+    district: string
+    state: string
+    pincode: string
+  }
+  occupation: string
+  referralCode: string
+  dateOfBirth: string
+  age: number
+  gender: string
+}
+
+export interface MembershipResponse {
+  success: boolean
+  data: {
+    user: MembershipUserData
+    membership: MembershipData
+    history: MembershipHistoryItem[]
+  }
+  message?: string
+}

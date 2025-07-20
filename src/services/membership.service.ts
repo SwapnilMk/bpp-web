@@ -1,33 +1,35 @@
-import { ApiResponse } from '@/types/api'
-import { postData } from './api.service'
+import { asApiResponse, MembershipResponse } from '@/types/api'
+import { getData } from './api.service'
 
-interface CertificateRequestResponse {
-  success: boolean
-  message: string
-  data?: {
-    certificateRequestId: string
-    status: string
-    message: string
-  }
-}
-
-export const membershipService = {
-  uploadCertificate: async (
-    photo: File,
-    membershipId: string
-  ): Promise<ApiResponse<CertificateRequestResponse>> => {
-    const formData = new FormData()
-    formData.append('photoUrl', photo)
-    formData.append('membershipId', membershipId)
-
-    return postData(
-      '/users/membership/certificate/request',
-      formData as unknown as Record<string, unknown>,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+export const fetchMembershipData = async (): Promise<MembershipResponse['data']> => {
+  try {
+    const response = await getData<MembershipResponse>('/users/membership')
+    if (response && typeof response === 'object' && 'data' in response) {
+      const apiData = response.data
+      if (
+        apiData &&
+        typeof apiData === 'object' &&
+        'success' in apiData &&
+        'data' in apiData
+      ) {
+        return apiData.data
       }
-    )
-  },
+      const typedResponse = asApiResponse<MembershipResponse['data']>(response)
+      return typedResponse.data
+    }
+    // If response is already the data object (fallback)
+    if (
+      response &&
+      typeof response === 'object' &&
+      'user' in response &&
+      'membership' in response
+    ) {
+      return response as MembershipResponse['data']
+    }
+    throw new Error('Invalid response format from membership API')
+  } catch (err) {
+    const error =
+      err instanceof Error ? err : new Error('Failed to load membership data')
+    throw error
+  }
 }

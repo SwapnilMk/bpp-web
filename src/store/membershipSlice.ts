@@ -1,35 +1,58 @@
+import { MembershipData, MembershipHistoryItem, MembershipUserData } from '@/types/api'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface MembershipState {
-  number: string | null
-  type: string | null
-  status: string | null
-  cardUrl?: string
-  startDate?: string
-  expiryDate?: string
+  data: {
+    user: MembershipUserData | null
+    membership: MembershipData | null
+    history: MembershipHistoryItem[]
+  } | null
+  isLoading: boolean
+  error: string | null
 }
 
 const initialState: MembershipState = {
-  number: null,
-  type: null,
-  status: null,
-  cardUrl: undefined,
-  startDate: undefined,
-  expiryDate: undefined,
+  data: null,
+  isLoading: false,
+  error: null,
 }
 
 const membershipSlice = createSlice({
   name: 'membership',
   initialState,
   reducers: {
-    setMembership: (state, action: PayloadAction<MembershipState>) => {
-      return { ...state, ...action.payload }
+    setMembershipData: (state, action: PayloadAction<{
+      user: MembershipUserData
+      membership: MembershipData
+      history: MembershipHistoryItem[]
+    }>) => {
+      state.data = action.payload
+      state.isLoading = false
+      state.error = null
     },
-    clearMembership: () => {
-      return initialState
+    setMembershipLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload
+      if (action.payload) {
+        state.error = null
+      }
+    },
+    setMembershipError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
+      state.isLoading = false
+    },
+    clearMembershipData: (state) => {
+      state.data = null
+      state.isLoading = false
+      state.error = null
     },
   },
 })
 
-export const { setMembership, clearMembership } = membershipSlice.actions
+export const {
+  setMembershipData,
+  setMembershipLoading,
+  setMembershipError,
+  clearMembershipData,
+} = membershipSlice.actions
+
 export default membershipSlice.reducer
