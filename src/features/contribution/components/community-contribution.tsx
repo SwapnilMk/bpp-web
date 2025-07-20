@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchCaseStatus } from '@/store/thunks'
+import { useNavigate } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,41 +13,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { LegalContribution } from '@/features/legal-contribution'
 import TermsDialog from './terms-dialog'
 
 interface CommunityContributionProps {
   setCurrentStep: (step: number) => void
 }
 
-export const CommunityContribution = ({
-  setCurrentStep,
-}: CommunityContributionProps) => {
+export const CommunityContribution = ({}: CommunityContributionProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false)
   const [typeOfSupport, setTypeOfSupport] = useState<string | null>(null)
   const [category, setCategory] = useState<string | null>(null)
-  const [formStarted, setFormStarted] = useState(false)
   const dispatch = useAppDispatch()
   const { status, isLoading } = useAppSelector((state) => state.case)
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(fetchCaseStatus())
   }, [dispatch])
 
   const handleGetStarted = () => {
-    setFormStarted(true)
-  }
-
-  if (formStarted) {
-    return (
-      <div className='fixed inset-0 z-50 bg-background'>
-        <LegalContribution
-          typeOfSupport={typeOfSupport}
-          category={category}
-          setCurrentStep={setCurrentStep}
-        />
-      </div>
-    )
+    navigate({ to: '/dashboard/community-contribution/legal-assistance' })
   }
 
   return (

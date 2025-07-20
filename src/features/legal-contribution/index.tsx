@@ -42,32 +42,16 @@ type FormData =
   | BeneficiaryFormValues
   | LocationSchemaFormValues
 
-interface LegalContributionProps {
-  typeOfSupport: string | null
-  category: string | null
-  setCurrentStep: (step: number) => void
-}
+interface LegalContributionProps {}
 
-export const LegalContribution = memo(
-  ({ typeOfSupport, category, setCurrentStep }: LegalContributionProps) => {
-    const [formData, setFormData] = useState({})
-    const { toast } = useToast()
-    const navigate = useNavigate()
-    const [isFullScreen, setIsFullScreen] = useState(false)
+export const LegalContribution = memo(({}: LegalContributionProps) => {
+  const [formData, setFormData] = useState({})
+  const { toast } = useToast()
+  const navigate = useNavigate()
 
-    const { currentStepIndex, next, back, goTo } = useMultiStepForm(
-      steps as unknown as React.ReactElement[]
-    )
-
-    useEffect(() => {
-      setCurrentStep(currentStepIndex)
-    }, [currentStepIndex, setCurrentStep])
-
-    useEffect(() => {
-      if (typeOfSupport && category) {
-        setFormData((prev) => ({ ...prev, typeOfSupport, category }))
-      }
-    }, [typeOfSupport, category])
+  const { currentStepIndex, next, back, goTo } = useMultiStepForm(
+    steps as unknown as React.ReactElement[]
+  )
 
     const handleNext = (data: FormData) => {
       setFormData((prev) => ({ ...prev, ...data }))
@@ -104,10 +88,6 @@ export const LegalContribution = memo(
       }
     }
 
-    const toggleFullScreen = () => {
-      setIsFullScreen(!isFullScreen)
-    }
-
     const renderStep = () => {
       switch (currentStepIndex) {
         case 0:
@@ -117,8 +97,8 @@ export const LegalContribution = memo(
             <CaseInfoForm
               onNext={handleNext}
               onBack={handleBack}
-              typeOfSupport={typeOfSupport}
-              category={category}
+              typeOfSupport={null}
+              category={null}
             />
           )
         case 2:
@@ -141,18 +121,7 @@ export const LegalContribution = memo(
     }
 
     return (
-      <div
-        className={`container mx-auto p-4 ${isFullScreen ? 'fixed inset-0 z-50 bg-background' : ''}`}
-      >
-        <div className='flex justify-end'>
-          <Button onClick={toggleFullScreen} variant='ghost' size='icon'>
-            {isFullScreen ? (
-              <Minimize className='h-6 w-6' />
-            ) : (
-              <Maximize className='h-6 w-6' />
-            )}
-          </Button>
-        </div>
+      <div className='container mx-auto p-4'>
         <Stepper>
           {steps.map((step, index) => (
             <StepperItem

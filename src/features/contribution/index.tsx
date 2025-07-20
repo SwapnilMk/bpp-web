@@ -21,7 +21,6 @@ const Contribution = memo(() => {
     (state) => state.dashboard
   )
   const authUser = useAppSelector((state) => state.user.user)
-  const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
     dispatch(fetchDashboardData())
@@ -76,8 +75,7 @@ const Contribution = memo(() => {
                 </CardTitle>
               </CardHeader>
               <CardContent className='h-[calc(100%-4rem)] overflow-auto p-5'>
-                <Stepper currentStep={currentStep} />
-                <CommunityContribution setCurrentStep={setCurrentStep} />
+                <CommunityContribution setCurrentStep={() => {}} />
               </CardContent>
             </Card>
           </div>
@@ -88,46 +86,5 @@ const Contribution = memo(() => {
   )
 })
 
-export const Stepper = ({ currentStep }: { currentStep: number }) => {
-  return (
-    <div className='relative space-y-4'>
-      <div className='relative h-3 rounded-full bg-gray-200'>
-        <div
-          className='absolute h-full rounded-full bg-primary transition-all'
-          style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-        />
-        <div className='absolute inset-0 flex justify-between'>
-          {steps.map((step, index) => (
-            <div
-              key={step.id}
-              className='relative flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg'
-              style={{
-                left: '30px',
-                transform: 'translateY(-30%) translateX(-90%)',
-              }}
-            >
-              <div
-                className={`flex h-full w-full items-center justify-center rounded-full font-medium ${
-                  index <= currentStep
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-300 text-gray-600'
-                }`}
-              >
-                {index + 1}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className='flex justify-between'>
-        {steps.map((step) => (
-          <span key={step.id} className='max-w-[100px] text-sm font-medium'>
-            {step.label}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default Contribution
