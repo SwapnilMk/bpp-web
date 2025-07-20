@@ -1,24 +1,69 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Stepper } from '../index'
-import TermsDialog from './terms-dialog'
+} from '@/components/ui/select';
+import { Stepper } from '../index';
+import TermsDialog from './terms-dialog';
+import { LegalContribution } from '../legal';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchCaseStatus } from '@/store/thunks/case.thunk';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-export const CommunityContribution = () => {
-  const [isDialogOpen, setDialogOpen] = useState(false)
-  const [typeOfSupport, setTypeOfSupport] = useState<string | null>(null)
-  const [category, setCategory] = useState<string | null>(null)
+interface CommunityContributionProps {
+  setCurrentStep: (step: number) => void;
+}
+
+export const CommunityContribution = ({ setCurrentStep }: CommunityContributionProps) => {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [typeOfSupport, setTypeOfSupport] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const [formStarted, setFormStarted] = useState(false);
+  const dispatch = useAppDispatch();
+  const { status, isLoading } = useAppSelector((state) => state.case);
+
+  useEffect(() => {
+    dispatch(fetchCaseStatus());
+  }, [dispatch]);
+
+  const handleGetStarted = () => {
+    setFormStarted(true);
+  };
+
+  if (formStarted) {
+    return <LegalContribution typeOfSupport={typeOfSupport} category={category} setCurrentStep={setCurrentStep} />;
+  }
 
   return (
     <div className='space-y-4'>
-      <Stepper currentStep={0} />
+      {isLoading ? (
+        <p>Loading case status...</p>
+      ) : (
+        status.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Case Status</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {status.map((caseStatus) => (
+                <div key={caseStatus.id} className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold">{caseStatus.id}</p>
+                    <p className="text-sm text-muted-foreground">{caseStatus.date}</p>
+                  </div>
+                  <Badge>{caseStatus.status}</Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )
+      )}
 
       <div className='mt-6 rounded-lg bg-gray-100 p-4 shadow-md'>
         <h3 className='text-lg font-bold text-gray-800'>
@@ -62,7 +107,7 @@ export const CommunityContribution = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='BPP Support'>BPP Support (Free)</SelectItem>
-              <SelectItem value='Legal Cases' disabled>
+              <SelectItem value='Legal Cases'>
                 Legal Cases
               </SelectItem>
               <SelectItem value='Medical Cases' disabled>
@@ -98,11 +143,15 @@ export const CommunityContribution = () => {
         </div>
       </div>
 
-      <Button className='mt-4 w-full' disabled={!typeOfSupport || !category}>
+      <Button
+        className='mt-4 w-full'
+        disabled={!typeOfSupport || !category}
+        onClick={handleGetStarted}
+      >
         Get Started
       </Button>
 
       <TermsDialog isOpen={isDialogOpen} onOpenChange={setDialogOpen} />
     </div>
-  )
-}
+  );
+};
