@@ -1,28 +1,42 @@
-import { Case, CaseSummary } from '@/types/contribution';
-import { PagedResponse, Pagination } from '@/types/api';
-import { authApi } from './api.service';
+import { Case, CaseSummary } from '@/types/contribution'
+import apiClient from './api.service'
 
-const getCaseSummaries = async (pagination: Pagination): Promise<PagedResponse<CaseSummary>> => {
-  const response = await authApi.get('/cases', { params: pagination });
-  return response.data;
-};
+export interface Pagination {
+  page?: number
+  limit?: number
+  [key: string]: string | number | undefined
+}
+
+export interface PagedResponse<T> {
+  data: T[]
+  total: number
+  page: number
+  limit: number
+}
+
+const getCaseSummaries = async (
+  pagination: Pagination
+): Promise<PagedResponse<CaseSummary>> => {
+  const response = await apiClient.get('/cases', { params: pagination })
+  return response.data
+}
 
 const getCase = async (caseId: string): Promise<Case> => {
-  const response = await authApi.get(`/cases/${caseId}`);
-  return response.data;
-};
+  const response = await apiClient.get(`/cases/${caseId}`)
+  return response.data
+}
 
 const createCase = async (caseData: FormData): Promise<Case> => {
-  const response = await authApi.post('/cases', caseData, {
+  const response = await apiClient.post('/cases', caseData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 export const contributionService = {
   getCaseSummaries,
   getCase,
   createCase,
-};
+}

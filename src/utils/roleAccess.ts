@@ -35,8 +35,6 @@ const memberRoutes = {
     '/dashboard/events',
     '/dashboard/campaigns',
     '/dashboard/help-center',
-    '/dashboard/membership',
-    '/dashboard/membership/payment',
     '/dashboard/settings',
     '/dashboard/settings/appearance',
     '/dashboard/settings/notifications',

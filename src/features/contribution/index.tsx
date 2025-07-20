@@ -21,7 +21,7 @@ const Contribution = memo(() => {
     (state) => state.dashboard
   )
   const authUser = useAppSelector((state) => state.user.user)
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
     dispatch(fetchDashboardData())

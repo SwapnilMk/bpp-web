@@ -31,6 +31,7 @@ import {
 interface RecentActivitiesProps {
   dashboardData: DashboardData
   isLoading: boolean
+  className?: string
 }
 
 interface Activity {
@@ -44,10 +45,11 @@ interface Activity {
 export function RecentActivities({
   dashboardData,
   isLoading,
+  className,
 }: RecentActivitiesProps) {
   if (isLoading) {
     return (
-      <Card className='lg:col-span-3'>
+      <Card className={className || 'lg:col-span-3'}>
         <CardHeader className='pb-3'>
           <CardTitle className='text-lg'>Recent Activities</CardTitle>
           <CardDescription className='text-sm'>
@@ -158,7 +160,7 @@ export function RecentActivities({
   }
 
   return (
-    <Card className='lg:col-span-3'>
+    <Card className={className || 'lg:col-span-3'}>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-3'>
         <div>
           <CardTitle className='text-lg'>Recent Activities</CardTitle>

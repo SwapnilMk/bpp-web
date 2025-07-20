@@ -1,43 +1,52 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { fetchCaseStatus } from '@/store/thunks'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Stepper } from '../index';
-import TermsDialog from './terms-dialog';
-import { LegalContribution } from '../legal';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchCaseStatus } from '@/store/thunks/case.thunk';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+} from '@/components/ui/select'
+import { LegalContribution } from '@/features/legal-contribution'
+import TermsDialog from './terms-dialog'
 
 interface CommunityContributionProps {
-  setCurrentStep: (step: number) => void;
+  setCurrentStep: (step: number) => void
 }
 
-export const CommunityContribution = ({ setCurrentStep }: CommunityContributionProps) => {
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [typeOfSupport, setTypeOfSupport] = useState<string | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
-  const [formStarted, setFormStarted] = useState(false);
-  const dispatch = useAppDispatch();
-  const { status, isLoading } = useAppSelector((state) => state.case);
+export const CommunityContribution = ({
+  setCurrentStep,
+}: CommunityContributionProps) => {
+  const [isDialogOpen, setDialogOpen] = useState(false)
+  const [typeOfSupport, setTypeOfSupport] = useState<string | null>(null)
+  const [category, setCategory] = useState<string | null>(null)
+  const [formStarted, setFormStarted] = useState(false)
+  const dispatch = useAppDispatch()
+  const { status, isLoading } = useAppSelector((state) => state.case)
 
   useEffect(() => {
-    dispatch(fetchCaseStatus());
-  }, [dispatch]);
+    dispatch(fetchCaseStatus())
+  }, [dispatch])
 
   const handleGetStarted = () => {
-    setFormStarted(true);
-  };
+    setFormStarted(true)
+  }
 
   if (formStarted) {
-    return <LegalContribution typeOfSupport={typeOfSupport} category={category} setCurrentStep={setCurrentStep} />;
+    return (
+      <div className='fixed inset-0 z-50 bg-background'>
+        <LegalContribution
+          typeOfSupport={typeOfSupport}
+          category={category}
+          setCurrentStep={setCurrentStep}
+        />
+      </div>
+    )
   }
 
   return (
@@ -52,10 +61,15 @@ export const CommunityContribution = ({ setCurrentStep }: CommunityContributionP
             </CardHeader>
             <CardContent>
               {status.map((caseStatus) => (
-                <div key={caseStatus.id} className="flex items-center justify-between">
+                <div
+                  key={caseStatus.id}
+                  className='flex items-center justify-between'
+                >
                   <div>
-                    <p className="font-bold">{caseStatus.id}</p>
-                    <p className="text-sm text-muted-foreground">{caseStatus.date}</p>
+                    <p className='font-bold'>{caseStatus.id}</p>
+                    <p className='text-sm text-muted-foreground'>
+                      {caseStatus.date}
+                    </p>
                   </div>
                   <Badge>{caseStatus.status}</Badge>
                 </div>
@@ -107,9 +121,7 @@ export const CommunityContribution = ({ setCurrentStep }: CommunityContributionP
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='BPP Support'>BPP Support (Free)</SelectItem>
-              <SelectItem value='Legal Cases'>
-                Legal Cases
-              </SelectItem>
+              <SelectItem value='Legal Cases' disabled>Legal Cases</SelectItem>
               <SelectItem value='Medical Cases' disabled>
                 Medical Cases
               </SelectItem>
@@ -153,5 +165,5 @@ export const CommunityContribution = ({ setCurrentStep }: CommunityContributionP
 
       <TermsDialog isOpen={isDialogOpen} onOpenChange={setDialogOpen} />
     </div>
-  );
-};
+  )
+}

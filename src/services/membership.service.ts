@@ -1,7 +1,9 @@
 import { asApiResponse, MembershipResponse } from '@/types/api'
 import { getData } from './api.service'
 
-export const fetchMembershipData = async (): Promise<MembershipResponse['data']> => {
+export const fetchMembershipData = async (): Promise<
+  MembershipResponse['data']
+> => {
   try {
     const response = await getData<MembershipResponse>('/users/membership')
     if (response && typeof response === 'object' && 'data' in response) {

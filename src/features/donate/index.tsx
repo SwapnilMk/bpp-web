@@ -1,9 +1,16 @@
 import { memo, useState, useEffect } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import { getData } from '@/services/api.service'
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Main } from '@/components/layout/dashboard/main'
 import { columns } from './components/columns'
@@ -12,6 +19,7 @@ import { Donation } from './data/schema'
 
 const Donate = memo(() => {
   const navigate = useNavigate()
+  const { history } = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [donations, setDonations] = useState<Donation[]>([])
@@ -20,6 +28,7 @@ const Donate = memo(() => {
     recurringDonations: 0,
     oneTimeDonations: 0,
   })
+  const [showSoonModal] = useState(true)
 
   useEffect(() => {
     const fetchDonations = async () => {
@@ -57,100 +66,157 @@ const Donate = memo(() => {
   }, [])
 
   return (
-    <Main>
-      <div className='mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center'>
-        <div className='w-full'>
-          <div className='mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
-            <div>
-              <h1 className='text-2xl font-bold'>Donor Dashboard</h1>
-              <p className='text-muted-foreground'>
-                Support our political party by viewing your donation history and
-                contributing more.
-              </p>
+    <>
+      {/* Donations Opening Soon Modal */}
+      <Dialog open={showSoonModal}>
+        <DialogContent className='max-w-md text-center'>
+          <DialogHeader>
+            <div className='mb-4 flex justify-center'>
+              <AlertCircle className='h-12 w-12 text-orange-500' />
             </div>
-            <Button
-              variant='outline'
-              disabled
-              onClick={() => navigate({ to: '/dashboard/donate/add-donation' })}
-            >
-              <PlusIcon className='mr-2 h-4 w-4' />
-              Make a Donation
-            </Button>
-          </div>
+            <DialogTitle className='text-2xl font-bold'>
+              Donations Opening Soon
+            </DialogTitle>
+            <DialogDescription>
+              We are currently awaiting official registration confirmation under
+              Section 29A of the Representation of the People Act, 1951.
+              <br />
+              <br />
+              Donations will be accepted after registration is confirmed by the
+              Election Commission of India.
+              <br />
+              <br />
+              Thank you for your support and patience!
+            </DialogDescription>
+          </DialogHeader>
+          <Button className='mt-6 w-full' onClick={() => history.go(-1)}>
+            Go Back
+          </Button>
+        </DialogContent>
+      </Dialog>
 
-          {/* Donation Summary */}
-          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-            <Card>
-              <CardHeader>
-                <CardTitle>Total Donations</CardTitle>
-              </CardHeader>
-              <CardContent className='flex items-center justify-between'>
-                <div className='text-4xl font-bold'>
-                  Rs {donationSummary.totalDonations.toLocaleString()}
+      {/* Dashboard Content (blurred/dimmed when modal is open) */}
+      <Main>
+        <div
+          className={
+            showSoonModal ? 'pointer-events-none blur-sm brightness-75' : ''
+          }
+        >
+          <div className='mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center'>
+            <div className='w-full'>
+              <div className='mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
+                <div>
+                  <h1 className='text-3xl font-extrabold tracking-tight'>
+                    Donor Dashboard
+                  </h1>
+                  <p className='text-lg text-muted-foreground'>
+                    Support our political party by viewing your donation history
+                    and contributing more.
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Recurring Donations</CardTitle>
-              </CardHeader>
-              <CardContent className='flex items-center justify-between'>
-                <div className='text-4xl font-bold'>
-                  Rs {donationSummary.recurringDonations.toLocaleString()}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>One-Time Donations</CardTitle>
-              </CardHeader>
-              <CardContent className='flex items-center justify-between'>
-                <div className='text-4xl font-bold'>
-                  Rs {donationSummary.oneTimeDonations.toLocaleString()}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                <Button
+                  size='lg'
+                  className='bg-primary font-semibold text-white shadow-md transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60'
+                  disabled
+                  onClick={() =>
+                    navigate({ to: '/dashboard/donate/add-donation' })
+                  }
+                >
+                  <PlusIcon className='mr-2 h-5 w-5' />
+                  Make a Donation
+                </Button>
+              </div>
 
-          {/* Donation History */}
-          <div className='mt-8'>
-            <h2 className='mb-4 text-xl font-bold'>Donation History</h2>
-            <Card>
-              <CardContent className='p-6'>
-                {loading ? (
-                  <div className='space-y-4'>
-                    <div className='flex items-center justify-between'>
-                      <Skeleton className='h-8 w-[250px]' />
-                      <Skeleton className='h-8 w-[100px]' />
+              {/* Donation Summary */}
+              <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+                <Card className='rounded-xl shadow-md'>
+                  <CardHeader className='flex flex-row items-center justify-between'>
+                    <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
+                      <span className='inline-block rounded-full bg-primary/10 p-2 text-primary'>
+                        <PlusIcon className='h-6 w-6' />
+                      </span>
+                      Total Donations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className='flex items-center justify-between'>
+                    <div className='text-4xl font-extrabold text-primary'>
+                      Rs {donationSummary.totalDonations.toLocaleString()}
                     </div>
-                    <div className='h-[300px] overflow-hidden'>
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <div
-                          key={index}
-                          className='mb-4 flex items-center justify-between'
-                        >
-                          <Skeleton className='h-12 w-[200px]' />
-                          <Skeleton className='h-12 w-[150px]' />
-                          <Skeleton className='h-12 w-[100px]' />
+                  </CardContent>
+                </Card>
+                <Card className='rounded-xl shadow-md'>
+                  <CardHeader className='flex flex-row items-center justify-between'>
+                    <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
+                      <span className='inline-block rounded-full bg-green-100 p-2 text-green-600'>
+                        <PlusIcon className='h-6 w-6' />
+                      </span>
+                      Recurring Donations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className='flex items-center justify-between'>
+                    <div className='text-4xl font-extrabold text-green-600'>
+                      Rs {donationSummary.recurringDonations.toLocaleString()}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className='rounded-xl shadow-md'>
+                  <CardHeader className='flex flex-row items-center justify-between'>
+                    <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
+                      <span className='inline-block rounded-full bg-blue-100 p-2 text-blue-600'>
+                        <PlusIcon className='h-6 w-6' />
+                      </span>
+                      One-Time Donations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className='flex items-center justify-between'>
+                    <div className='text-4xl font-extrabold text-blue-600'>
+                      Rs {donationSummary.oneTimeDonations.toLocaleString()}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Donation History */}
+              <div className='mt-8'>
+                <h2 className='mb-4 text-xl font-bold'>Donation History</h2>
+                <Card className='rounded-xl shadow'>
+                  <CardContent className='p-6'>
+                    {loading ? (
+                      <div className='space-y-4'>
+                        <div className='flex items-center justify-between'>
+                          <Skeleton className='h-8 w-[250px]' />
+                          <Skeleton className='h-8 w-[100px]' />
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : error ? (
-                  <div className='text-center text-red-500'>{error}</div>
-                ) : donations.length === 0 ? (
-                  <div className='text-center text-muted-foreground'>
-                    No donation history found.
-                  </div>
-                ) : (
-                  <DataTable columns={columns} data={donations} />
-                )}
-              </CardContent>
-            </Card>
+                        <div className='h-[300px] overflow-hidden'>
+                          {Array.from({ length: 5 }).map((_, index) => (
+                            <div
+                              key={index}
+                              className='mb-4 flex items-center justify-between'
+                            >
+                              <Skeleton className='h-12 w-[200px]' />
+                              <Skeleton className='h-12 w-[150px]' />
+                              <Skeleton className='h-12 w-[100px]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : error ? (
+                      <div className='text-center text-red-500'>{error}</div>
+                    ) : donations.length === 0 ? (
+                      <div className='text-center text-muted-foreground'>
+                        No donation history found.
+                      </div>
+                    ) : (
+                      <DataTable columns={columns} data={donations} />
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </Main>
+      </Main>
+    </>
   )
 })
 

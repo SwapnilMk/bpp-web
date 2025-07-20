@@ -159,7 +159,7 @@ const CommunityContribution = () => {
           </div>
         </div>
       </section>
-      <section className="container py-8">
+      <section className='container py-8'>
         <CaseLifecycle />
       </section>
     </>
