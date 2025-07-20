@@ -8,6 +8,7 @@ import notificationReducer from './notificationSlice'
 import referralReducer from './referralSlice'
 import userReducer from './userSlice'
 import walletReducer from './walletSlice'
+import caseReducer from './slices/case.slice'
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   wallet: walletReducer,
   referral: referralReducer,
   notifications: notificationReducer,
+  case: caseReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

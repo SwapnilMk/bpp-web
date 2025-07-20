@@ -10,11 +10,17 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 interface CaseInfoFormProps {
   onNext: (data: CaseRegistrationFormValues) => void;
   onBack: () => void;
+  typeOfSupport: string | null;
+  category: string | null;
 }
 
-export function CaseInfoForm({ onNext, onBack }: CaseInfoFormProps) {
+export function CaseInfoForm({ onNext, onBack, typeOfSupport, category }: CaseInfoFormProps) {
   const form = useForm<CaseRegistrationFormValues>({
     resolver: zodResolver(caseRegisterSchema),
+    defaultValues: {
+      typeOfSupport: typeOfSupport || '',
+      category: category || '',
+    },
   });
 
   const onSubmit = (data: CaseRegistrationFormValues) => {
@@ -31,7 +37,7 @@ export function CaseInfoForm({ onNext, onBack }: CaseInfoFormProps) {
             <FormItem>
               <FormLabel>Type of Support</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} readOnly />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -44,7 +50,7 @@ export function CaseInfoForm({ onNext, onBack }: CaseInfoFormProps) {
             <FormItem>
               <FormLabel>Category</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} readOnly />
               </FormControl>
               <FormMessage />
             </FormItem>
