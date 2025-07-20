@@ -1,9 +1,11 @@
 import * as authService from '@/services/auth.service'
+import { caseService } from '@/services/case.service'
 import * as dashboardService from '@/services/dashboard.service'
 import * as membershipService from '@/services/membership.service'
 import { disconnectWebSocket } from '@/services/socket.service'
 import * as userService from '@/services/user.service'
 import { LoginCredentials, RegistrationData, User } from '@/types/auth'
+import { CaseStatus } from '@/types/case'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
 import {
@@ -12,19 +14,19 @@ import {
   COOKIE_KEYS,
   getErrorMessage,
 } from '@/context/authUtils'
-import { setCredentials, clearCredentials } from './authSlice'
+import { setCredentials, clearCredentials } from './slice/authSlice'
 import {
   setDashboardData,
   setDashboardLoading,
   setDashboardError,
-} from './dashboardSlice'
+} from './slice/dashboardSlice'
 import {
   setMembershipData,
   setMembershipLoading,
   setMembershipError,
-} from './membershipSlice'
+} from './slice/membershipSlice'
+import { setUser, clearUser } from './slice/userSlice'
 import { persistor } from './store'
-import { setUser, clearUser } from './userSlice'
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -266,6 +268,18 @@ export const fetchMembershipData = createAsyncThunk(
       dispatch(setMembershipError(errorMessage))
       toast.error(errorMessage)
       throw new Error(errorMessage)
+    }
+  }
+)
+
+export const fetchCaseStatus = createAsyncThunk<CaseStatus[]>(
+  'case/fetchStatus',
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await caseService.getCaseStatus()
+      return data
+    } catch (error) {
+      return rejectWithValue(error)
     }
   }
 )

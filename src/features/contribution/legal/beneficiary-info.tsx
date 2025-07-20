@@ -1,33 +1,43 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { beneficiarySchema, BeneficiaryFormValues } from './schema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { bankNames } from '@/data/bank-names';
-import { Combobox } from '@/components/ui/combobox';
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { IndianBankNames } from '@/data/bank-names'
+import { Button } from '@/components/ui/button'
+import { Combobox, ComboboxItem } from '@/components/ui/combobox'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { beneficiarySchema, BeneficiaryFormValues } from './schema'
 
 interface BeneficiaryInfoFormProps {
-  onNext: (data: BeneficiaryFormValues) => void;
-  onBack: () => void;
+  onNext: (data: BeneficiaryFormValues) => void
+  onBack: () => void
 }
 
-export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps) {
+export function BeneficiaryInfoForm({
+  onNext,
+  onBack,
+}: BeneficiaryInfoFormProps) {
   const form = useForm<BeneficiaryFormValues>({
     resolver: zodResolver(beneficiarySchema),
-  });
+  })
 
   const onSubmit = (data: BeneficiaryFormValues) => {
-    onNext(data);
-  };
+    onNext(data)
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
-          name="beneficiaryType"
+          name='beneficiaryType'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Beneficiary Type</FormLabel>
@@ -35,17 +45,17 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex space-x-4"
+                  className='flex space-x-4'
                 >
-                  <FormItem className="flex items-center space-x-2">
+                  <FormItem className='flex items-center space-x-2'>
                     <FormControl>
-                      <RadioGroupItem value="lawFirms" />
+                      <RadioGroupItem value='lawFirms' />
                     </FormControl>
                     <FormLabel>Law Firms</FormLabel>
                   </FormItem>
-                  <FormItem className="flex items-center space-x-2">
+                  <FormItem className='flex items-center space-x-2'>
                     <FormControl>
-                      <RadioGroupItem value="independentAdvocate" />
+                      <RadioGroupItem value='independentAdvocate' />
                     </FormControl>
                     <FormLabel>Independent Advocate</FormLabel>
                   </FormItem>
@@ -57,7 +67,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="nameOfLawFirm"
+          name='nameOfLawFirm'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name of Law Firm</FormLabel>
@@ -70,7 +80,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="nameOfAdvocate"
+          name='nameOfAdvocate'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name of Advocate</FormLabel>
@@ -83,7 +93,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="enrollmentNumber"
+          name='enrollmentNumber'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Enrollment Number</FormLabel>
@@ -96,7 +106,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="stateBarCouncil"
+          name='stateBarCouncil'
           render={({ field }) => (
             <FormItem>
               <FormLabel>State Bar Council</FormLabel>
@@ -109,7 +119,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="gstNumber"
+          name='gstNumber'
           render={({ field }) => (
             <FormItem>
               <FormLabel>GST Number</FormLabel>
@@ -122,15 +132,18 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="bankName"
+          name='bankName'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bank Name</FormLabel>
               <FormControl>
-                <Combobox
-                  options={bankNames.map((name) => ({ label: name, value: name }))}
-                  {...field}
-                />
+                <Combobox {...field} onValueChange={field.onChange}>
+                  {IndianBankNames.map((name) => (
+                    <ComboboxItem key={name} value={name}>
+                      {name}
+                    </ComboboxItem>
+                  ))}
+                </Combobox>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -138,7 +151,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="accountNumber"
+          name='accountNumber'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Account Number</FormLabel>
@@ -151,7 +164,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="accountHolderName"
+          name='accountHolderName'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Account Holder Name</FormLabel>
@@ -164,7 +177,7 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
         />
         <FormField
           control={form.control}
-          name="ifscCode"
+          name='ifscCode'
           render={({ field }) => (
             <FormItem>
               <FormLabel>IFSC Code</FormLabel>
@@ -175,11 +188,13 @@ export function BeneficiaryInfoForm({ onNext, onBack }: BeneficiaryInfoFormProps
             </FormItem>
           )}
         />
-        <div className="flex justify-between">
-          <Button type="button" onClick={onBack}>Back</Button>
-          <Button type="submit">Next</Button>
+        <div className='flex justify-between'>
+          <Button type='button' onClick={onBack}>
+            Back
+          </Button>
+          <Button type='submit'>Next</Button>
         </div>
       </form>
     </Form>
-  );
+  )
 }

@@ -11,7 +11,7 @@ import LeafletMap from './components/leaflet-map'
 import { PieChartComponent } from './components/pie-chart'
 import { RecentActivities } from './components/recent-activities'
 import { StatsGrid } from './components/stats-grid'
-import { StepperStats } from './components/stepper-stats'
+// import { StepperStats } from './components/stepper-stats'
 import UserCard from './components/user-card'
 
 type StatCardKey =
@@ -131,7 +131,7 @@ const Dashboard = memo(() => {
     <Main>
       <div className='space-y-3'>
         <UserCard dashboardData={safeDashboardData} isLoading={isLoading} />
-        <StepperStats />
+        {/* <StepperStats /> */}
         <StatsGrid
           isLoading={isLoading}
           dashboardData={safeDashboardData}
@@ -139,17 +139,19 @@ const Dashboard = memo(() => {
           statCards={statCards}
         />
 
-        <div className='grid grid-cols-1 gap-3 lg:grid-cols-7'>
+        <div className='grid grid-cols-1 gap-3 lg:grid-cols-12'>
           <LeafletMap
             city={user?.address?.city || ''}
             state={user?.address?.state || ''}
             district={user?.address?.district || ''}
             totalMembers={dashboardData?.totalMembersState || 0}
             isLoading={isLoading}
+            className='lg:col-span-6'
           />
           <RecentActivities
             dashboardData={safeDashboardData}
             isLoading={isLoading}
+            className='lg:col-span-6'
           />
         </div>
 
