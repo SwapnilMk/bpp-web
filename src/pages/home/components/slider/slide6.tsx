@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Sword } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import MoneyPower from '@/assets/images/backgrounds/sliders/GAINST MUSCLE AND MONEY POWER.webp'
+import MoneyPower from '@/assets/images/backgrounds/sliders/GAINST_MUSCLE_AND_MONEY_POWER.webp'
 
 export function Slide6() {
   const navigate = useNavigate()

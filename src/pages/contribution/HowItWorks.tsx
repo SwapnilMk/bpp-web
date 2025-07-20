@@ -25,9 +25,9 @@ import {
   ScrollText,
   Target,
 } from 'lucide-react'
-import flowchart3 from '@/assets/charts/bpp_flowchart3.svg'
+import flowchart from '@/assets/charts/bpp_flowchart.svg'
 import communityContribution from '@/assets/images/community/communitycontribution.png'
-import community from '@/assets/images/headerBanners/community.png'
+import community from '@/assets/images/headerBanners/community.webp'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -758,7 +758,7 @@ const HowItWorksContent = () => {
             className='relative'
           >
             <img
-              src={flowchart3}
+              src={flowchart}
               className='w-full rounded-md'
               alt='Registration process'
             />

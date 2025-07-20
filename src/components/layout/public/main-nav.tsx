@@ -4,7 +4,7 @@ import { useMainMenuList } from '@/data/menu/main-menu'
 import type { Group, Menu, Submenu } from '@/data/menu/main-menu'
 import { ChevronDown, MenuIcon, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import bppLogo from '@/assets/logo/bppLogo.png'
+import bppLogo from '@/assets/logo/bppLogo.webp'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {

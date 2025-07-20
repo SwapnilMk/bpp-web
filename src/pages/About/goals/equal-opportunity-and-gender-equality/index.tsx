@@ -1,4 +1,4 @@
-import img2 from '@/assets/images/backgrounds/sliders/EQUAL OPPORTUNITY AND GENDER EQUALITY.jpeg'
+import img2 from '@/assets/images/backgrounds/sliders/EQUAL_OPPORTUNITY_AND_GENDER_EQUALITY.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const EqualOpportunityAndGenderEqualityPage = () => {

@@ -23,16 +23,12 @@ export const membersInfoSchema = z.object({
       message: 'Date of Birth must be in YYYY-MM-DD format',
     })
     .optional(),
-  aadhaarCard: z
-    .string()
-    .regex(/^\d{12}$/, {
-      message: 'Aadhaar Card number must be exactly 12 digits',
-    }),
-  voterId: z
-    .string()
-    .regex(/^[a-zA-Z0-9]{10}$/, {
-      message: 'Voter ID must be exactly 10 alphanumeric characters',
-    }),
+  aadhaarCard: z.string().regex(/^\d{12}$/, {
+    message: 'Aadhaar Card number must be exactly 12 digits',
+  }),
+  voterId: z.string().regex(/^[a-zA-Z0-9]{10}$/, {
+    message: 'Voter ID must be exactly 10 alphanumeric characters',
+  }),
 })
 
 export const caseRegisterSchema = z.object({
@@ -45,11 +41,9 @@ export const caseRegisterSchema = z.object({
     .min(1, { message: 'Category is required' })
     .max(100, { message: 'Category must not exceed 100 characters' }),
   typeOfCase: z.string().min(1, { message: 'Type of Case is required' }),
-  dateOfDispute: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: 'Date of Dispute must be in YYYY-MM-DD format',
-    }),
+  dateOfDispute: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: 'Date of Dispute must be in YYYY-MM-DD format',
+  }),
   briefYourCase: z
     .string()
     .min(1, { message: 'Brief your case is required' })

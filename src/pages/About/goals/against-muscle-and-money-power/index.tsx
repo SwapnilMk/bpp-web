@@ -1,4 +1,4 @@
-import img3 from '@/assets/images/backgrounds/sliders/GAINST MUSCLE AND MONEY POWER.webp'
+import img3 from '@/assets/images/backgrounds/sliders/GAINST_MUSCLE_AND_MONEY_POWER.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const MuscleAndMoneyPowerPage = () => {

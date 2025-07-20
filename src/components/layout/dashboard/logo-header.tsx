@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import bppLogo from '@/assets/logo/bppLogo.png'
+import bppLogo from '@/assets/logo/bppLogo.webp'
 
 export function LogoHeader() {
   return (

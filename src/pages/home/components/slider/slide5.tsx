@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import GoodHealth from '@/assets/images/backgrounds/sliders/GOOD HEALTH AND WELL-BEING.jpeg'
+import GoodHealth from '@/assets/images/backgrounds/sliders/GOOD_HEALTH_AND_WELL_BEING.webp'
 
 export function Slide5() {
   const navigate = useNavigate()

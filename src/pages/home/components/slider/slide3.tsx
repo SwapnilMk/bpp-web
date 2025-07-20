@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Building2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import NationalIntegrity from '@/assets/images/backgrounds/sliders/NATIONAL INTEGRITY.jpeg'
+import NationalIntegrity from '@/assets/images/backgrounds/sliders/NATIONAL_INTEGRITY.webp'
 
 export function Slide3() {
   const navigate = useNavigate()

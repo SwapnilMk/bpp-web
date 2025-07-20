@@ -1,0 +1,1 @@
+import{dC as r}from"./react-vendor-DHXlblm3.js";import{G as o}from"./index-2NBrDHfX.js";import"./tanstack-vendor-CGADoYpr.js";import"./vendor-bQrEs1q3.js";const a=r("/(errors)/500")({component:o});export{a as Route};

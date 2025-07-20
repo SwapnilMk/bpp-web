@@ -6,7 +6,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { useAppDispatch } from '@/store/hooks'
 import { login } from '@/store/thunks'
 import { Phone } from 'lucide-react'
-import bppLogo from '@/assets/logo/bppLogo.png'
+import bppLogo from '@/assets/logo/bppLogo.webp'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Form,

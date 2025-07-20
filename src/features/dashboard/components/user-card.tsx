@@ -17,7 +17,7 @@ import {
   Share2,
   ExternalLink,
 } from 'lucide-react'
-import bppLogo from '@/assets/logo/bppLogo.png'
+import bppLogo from '@/assets/logo/bppLogo.webp'
 import { cn } from '@/lib/utils'
 import { UserRole, UserStatus } from '@/utils/roleAccess'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

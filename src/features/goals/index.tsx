@@ -64,13 +64,10 @@ const GoalsPage = memo(() => {
             {/* Header Section */}
             <div className='mb-6 sm:mb-8'>
               <h1 className='text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl'>
-                Our Core Objectives
+                Our Goals
               </h1>
-              <p className='mt-2 text-base text-muted-foreground sm:mt-3 sm:text-lg'>
-                A blueprint for a stronger, more inclusive future.
-              </p>
             </div>
-            <Separator className='mb-6 sm:mb-8' />
+            <Separator className='mb-4 sm:mb-5' />
 
             {/* Goals Grid */}
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>

@@ -45,7 +45,7 @@ type FormData =
 interface LegalContributionProps {
   typeOfSupport: string | null
   category: string | null
-  setCurrentStep: (step: number) => void
+  setCurrentStep?: (step: number) => void
 }
 
 export const LegalContribution = memo(
@@ -60,7 +60,7 @@ export const LegalContribution = memo(
     )
 
     useEffect(() => {
-      setCurrentStep(currentStepIndex)
+      if (setCurrentStep) setCurrentStep(currentStepIndex)
     }, [currentStepIndex, setCurrentStep])
 
     useEffect(() => {
@@ -142,30 +142,32 @@ export const LegalContribution = memo(
 
     return (
       <div
-        className={`container mx-auto p-4 ${isFullScreen ? 'fixed inset-0 z-50 bg-background' : ''}`}
+        className={`flex min-h-screen w-full flex-col items-center justify-start bg-background p-2 sm:p-6 md:p-10 lg:p-16`}
       >
-        <div className='flex justify-end'>
-          <Button onClick={toggleFullScreen} variant='ghost' size='icon'>
-            {isFullScreen ? (
-              <Minimize className='h-6 w-6' />
-            ) : (
-              <Maximize className='h-6 w-6' />
-            )}
-          </Button>
+        <div className='w-full max-w-2xl'>
+          <div className='mb-2 flex justify-end'>
+            <Button onClick={toggleFullScreen} variant='ghost' size='icon'>
+              {isFullScreen ? (
+                <Minimize className='h-6 w-6' />
+              ) : (
+                <Maximize className='h-6 w-6' />
+              )}
+            </Button>
+          </div>
+          <Stepper>
+            {steps.map((step, index) => (
+              <StepperItem
+                key={step.label}
+                step={index}
+                onClick={() => goTo(index)}
+                className={currentStepIndex === index ? 'cursor-pointer' : ''}
+              >
+                <StepperTitle>{step.label}</StepperTitle>
+              </StepperItem>
+            ))}
+          </Stepper>
+          <div className='mt-8'>{renderStep()}</div>
         </div>
-        <Stepper>
-          {steps.map((step, index) => (
-            <StepperItem
-              key={step.label}
-              step={index}
-              onClick={() => goTo(index)}
-              className={currentStepIndex === index ? 'cursor-pointer' : ''}
-            >
-              <StepperTitle>{step.label}</StepperTitle>
-            </StepperItem>
-          ))}
-        </Stepper>
-        <div className='mt-8'>{renderStep()}</div>
       </div>
     )
   }

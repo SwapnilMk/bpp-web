@@ -1,0 +1,1 @@
+import{dC as o}from"./react-vendor-DHXlblm3.js";import{N as r}from"./index-2NBrDHfX.js";import"./tanstack-vendor-CGADoYpr.js";import"./vendor-bQrEs1q3.js";const i=o("/(errors)/404")({component:r});export{i as Route};

@@ -6,7 +6,6 @@ import { fetchMembershipData } from '@/store/thunks'
 import { motion } from 'framer-motion'
 import {
   Calendar,
-  DollarSign,
   Clock,
   FileText,
   Shield,
@@ -636,7 +635,6 @@ export default function Membership() {
 
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
-                    <DollarSign className='h-3 w-3 text-muted-foreground sm:h-4 sm:w-4' />
                     <span className='text-sm font-medium sm:text-base'>
                       ₹{membership.membershipFee}
                     </span>
@@ -706,7 +704,6 @@ export default function Membership() {
 
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
-                    <DollarSign className='h-3 w-3 text-muted-foreground sm:h-4 sm:w-4' />
                     <span className='text-sm font-medium sm:text-base'>
                       ₹{membership.nextBillingAmount}
                     </span>

@@ -1,4 +1,4 @@
-import community from '@/assets/images/headerBanners/community.png'
+import community from '@/assets/images/headerBanners/community.webp'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 import { CaseLifecycle } from '@/features/contribution/components/case-lifecycle'

@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/QUALITY EDUCATION.jpg'
+import img1 from '@/assets/images/backgrounds/sliders/QUALITY_EDUCATION.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const QualityEducation = () => {

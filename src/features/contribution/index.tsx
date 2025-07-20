@@ -21,7 +21,7 @@ const Contribution = memo(() => {
     (state) => state.dashboard
   )
   const authUser = useAppSelector((state) => state.user.user)
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep] = useState(0)
 
   useEffect(() => {
     dispatch(fetchDashboardData())
@@ -77,7 +77,7 @@ const Contribution = memo(() => {
               </CardHeader>
               <CardContent className='h-[calc(100%-4rem)] overflow-auto p-5'>
                 <Stepper currentStep={currentStep} />
-                <CommunityContribution setCurrentStep={setCurrentStep} />
+                <CommunityContribution />
               </CardContent>
             </Card>
           </div>

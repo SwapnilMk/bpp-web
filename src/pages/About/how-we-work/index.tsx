@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import GetToKnowImg from '@/assets/images/headerBanners/GetToKnow.png'
+import GetToKnowImg from '@/assets/images/headerBanners/GetToKnow.webp'
 import bppflag from '@/assets/images/logos/bppflag.png'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

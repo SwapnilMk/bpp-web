@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/EMPLOYMENT & ECONOMIC GROWTH.jpeg'
+import img1 from '@/assets/images/backgrounds/sliders/EMPLOYMENT_ECONOMIC_GROWTH.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const EmploymentAndEconomicGrowth = () => {

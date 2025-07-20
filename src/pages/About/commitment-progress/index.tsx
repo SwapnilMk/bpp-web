@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import commitment from '@/assets/images/headerBanners/commitment.png'
+import commitment from '@/assets/images/headerBanners/commitment.webp'
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
