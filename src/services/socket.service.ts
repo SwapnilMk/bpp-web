@@ -29,11 +29,11 @@ export const initWebSocket = (store: Store) => {
     })
 
     socket.on('connect', () => {
-      console.log('Socket connected')
+      // TODO: handle connection
     })
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected')
+      // TODO: handle disconnection
     })
 
     socket.on('notifications', (data: Notification[]) => {
