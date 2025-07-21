@@ -20,7 +20,7 @@ import {
 import { toast } from 'sonner'
 import bppLogo from '@/assets/logo/bppLogo.webp'
 import { cn } from '@/lib/utils'
-import { UserRole, UserStatus } from '@/utils/roleAccess'
+import { UserRole, UserStatus } from '@/utils/role-access'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
