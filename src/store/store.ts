@@ -1,13 +1,14 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import authReducer from './authSlice'
-import dashboardReducer from './dashboardSlice'
-import membershipReducer from './membershipSlice'
-import notificationReducer from './notificationSlice'
-import referralReducer from './referralSlice'
-import userReducer from './userSlice'
-import walletReducer from './walletSlice'
+import authReducer from './slice/authSlice'
+import caseReducer from './slice/case.slice'
+import dashboardReducer from './slice/dashboardSlice'
+import membershipReducer from './slice/membershipSlice'
+import notificationReducer from './slice/notificationSlice'
+import referralReducer from './slice/referralSlice'
+import userReducer from './slice/userSlice'
+import walletReducer from './slice/walletSlice'
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   wallet: walletReducer,
   referral: referralReducer,
   notifications: notificationReducer,
+  case: caseReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

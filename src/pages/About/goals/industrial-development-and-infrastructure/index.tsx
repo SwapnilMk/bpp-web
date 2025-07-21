@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/INDUSTRIAL DEVELOPMENT & INFRASTRUCTURE.jpeg'
+import img1 from '@/assets/images/backgrounds/sliders/INDUSTRIAL_DEVELOPMENT_INFRASTRUCTURE.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const IndustrialDevelopmentAndInfrastructure = () => {

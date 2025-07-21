@@ -17,9 +17,10 @@ import {
   Share2,
   ExternalLink,
 } from 'lucide-react'
-import bppLogo from '@/assets/logo/bppLogo.png'
+import { toast } from 'sonner'
+import bppLogo from '@/assets/logo/bppLogo.webp'
 import { cn } from '@/lib/utils'
-import { UserRole, UserStatus } from '@/utils/roleAccess'
+import { UserRole, UserStatus } from '@/utils/role-access'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -526,23 +527,25 @@ const UserCard = memo(({ dashboardData, isLoading }: UserCardProps) => {
               )}
               {!showBasicInfoOnly && dashboardData?.referrals?.referralCode && (
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     const referralLink = `${window.location.origin}/sign-up?ref=${dashboardData.referrals.referralCode}`
-                    const shareText = `🌟 Join Bharatiya Popular Party and be part of the change! 🌟
-
-🤝 Community Contribution - Financial Support Anywhere, Anytime
-💪 Together we can make our community strong and prosperous
-🏛️ Upholding democracy, secularism, and socialism
-🎯 Building a developed democratic India with equal opportunities
-
-Join us in creating a stronger, more connected community where everyone benefits!
-
-Sign up now: ${referralLink}
-
-#BharatiyaPopularParty #CommunityContribution #StrongerIndia`
-
-                    navigator.clipboard.writeText(shareText)
-                    // You can add a toast notification here
+                    const shareText = `I’m inviting you to join Bharatiya Popular Party (BPP)\n\nUse my referral code (${dashboardData.referrals.referralCode}) during registration and become part of a community contribution to support each other.\nOne Rupee. One Vote. One Change.\n\n${referralLink}`
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({
+                          title: 'Join Bharatiya Popular Party',
+                          text: shareText,
+                        })
+                        toast.success('Referral link shared!')
+                      } catch (_err) {
+                        // fallback to clipboard
+                        await navigator.clipboard.writeText(shareText)
+                        toast.success('Referral message copied to clipboard!')
+                      }
+                    } else {
+                      await navigator.clipboard.writeText(shareText)
+                      toast.success('Referral message copied to clipboard!')
+                    }
                   }}
                   className='rounded-md p-1.5 transition-colors hover:bg-muted/50'
                   title='Share referral link with compelling message'

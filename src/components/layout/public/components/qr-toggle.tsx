@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Download } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import appQr from '@/assets/appQR.svg'
+import appQr from '@/assets/QRCode/appQR.svg'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 

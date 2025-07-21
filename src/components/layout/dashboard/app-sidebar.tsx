@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/store/hooks'
-import { hasAccess, hasBusinessCommunityAccess } from '@/utils/roleAccess'
+import { hasAccess, hasBusinessCommunityAccess } from '@/utils/role-access'
 import {
   Sidebar,
   SidebarContent,

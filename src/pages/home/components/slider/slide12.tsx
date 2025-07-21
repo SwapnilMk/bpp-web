@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { GraduationCap } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import QualityEduction from '@/assets/images/backgrounds/sliders/QUALITY EDUCATION.jpg'
+import QualityEduction from '@/assets/images/backgrounds/sliders/QUALITY_EDUCATION.webp'
 
 export function Slide12() {
   const navigate = useNavigate()

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { QrCode } from 'lucide-react'
 import { FaAndroid } from 'react-icons/fa'
-import appQr from '@/assets/appQR.svg'
-import bppPhone from '@/assets/mockups/bppPhone.png'
+import bppPhone from '@/assets/mockups/bppPhone.webp'
+import appQr from '@/assets/qrcode/appQR.svg'
 import {
   Accordion,
   AccordionContent,

@@ -1,41 +1,51 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { locationSchema, LocationSchemaFormValues } from './schema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
-import { states } from '@/data/states';
-import { Combobox } from '@/components/ui/combobox';
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { stateWithDistrictData } from '@/data/states'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Combobox, ComboboxItem } from '@/components/ui/combobox'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { locationSchema, LocationSchemaFormValues } from './schema'
 
 interface LocationInfoFormProps {
-  onNext: (data: LocationSchemaFormValues) => void;
-  onBack: () => void;
+  onNext: (data: LocationSchemaFormValues) => void
+  onBack: () => void
 }
 
 export function LocationInfoForm({ onNext, onBack }: LocationInfoFormProps) {
   const form = useForm<LocationSchemaFormValues>({
     resolver: zodResolver(locationSchema),
-  });
+  })
 
   const onSubmit = (data: LocationSchemaFormValues) => {
-    onNext(data);
-  };
+    onNext(data)
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
-          name="state"
+          name='state'
           render={({ field }) => (
             <FormItem>
               <FormLabel>State</FormLabel>
               <FormControl>
-                <Combobox
-                  options={states.map((name) => ({ label: name, value: name }))}
-                  {...field}
-                />
+                <Combobox {...field} onValueChange={field.onChange}>
+                  {stateWithDistrictData.states.map((state) => (
+                    <ComboboxItem key={state.state} value={state.state}>
+                      {state.state}
+                    </ComboboxItem>
+                  ))}
+                </Combobox>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -43,7 +53,7 @@ export function LocationInfoForm({ onNext, onBack }: LocationInfoFormProps) {
         />
         <FormField
           control={form.control}
-          name="district"
+          name='district'
           render={({ field }) => (
             <FormItem>
               <FormLabel>District</FormLabel>
@@ -56,7 +66,7 @@ export function LocationInfoForm({ onNext, onBack }: LocationInfoFormProps) {
         />
         <FormField
           control={form.control}
-          name="pincode"
+          name='pincode'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pincode</FormLabel>
@@ -69,28 +79,28 @@ export function LocationInfoForm({ onNext, onBack }: LocationInfoFormProps) {
         />
         <FormField
           control={form.control}
-          name="agreement"
+          name='agreement'
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
               <FormControl>
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>
-                  I agree to the terms and conditions
-                </FormLabel>
+              <div className='space-y-1 leading-none'>
+                <FormLabel>I agree to the terms and conditions</FormLabel>
               </div>
             </FormItem>
           )}
         />
-        <div className="flex justify-between">
-          <Button type="button" onClick={onBack}>Back</Button>
-          <Button type="submit">Next</Button>
+        <div className='flex justify-between'>
+          <Button type='button' onClick={onBack}>
+            Back
+          </Button>
+          <Button type='submit'>Next</Button>
         </div>
       </form>
     </Form>
-  );
+  )
 }

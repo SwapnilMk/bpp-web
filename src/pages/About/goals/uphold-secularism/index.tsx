@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/INDIA UPHOLD SECULARISM .jpeg'
+import img1 from '@/assets/images/backgrounds/sliders/INDIA_UPHOLD_SECULARISM.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const UpholdSecularism = () => {

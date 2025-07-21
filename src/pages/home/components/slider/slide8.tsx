@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Factory } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import IndustryDevelopment from '@/assets/images/backgrounds/sliders/INDUSTRIAL DEVELOPMENT & INFRASTRUCTURE.jpeg'
+import IndustryDevelopment from '@/assets/images/backgrounds/sliders/INDUSTRIAL_DEVELOPMENT_INFRASTRUCTURE.webp'
 
 export function Slide8() {
   const navigate = useNavigate()

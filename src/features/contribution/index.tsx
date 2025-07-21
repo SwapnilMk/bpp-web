@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchDashboardData } from '@/store/thunks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,6 +21,7 @@ const Contribution = memo(() => {
     (state) => state.dashboard
   )
   const authUser = useAppSelector((state) => state.user.user)
+  const [currentStep] = useState(0)
 
   useEffect(() => {
     dispatch(fetchDashboardData())
@@ -75,6 +76,7 @@ const Contribution = memo(() => {
                 </CardTitle>
               </CardHeader>
               <CardContent className='h-[calc(100%-4rem)] overflow-auto p-5'>
+                <Stepper currentStep={currentStep} />
                 <CommunityContribution />
               </CardContent>
             </Card>

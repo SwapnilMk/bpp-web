@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import EqualOpportunity from '@/assets/images/backgrounds/sliders/EQUAL OPPORTUNITY AND GENDER EQUALITY.jpeg'
+import EqualOpportunity from '@/assets/images/backgrounds/sliders/EQUAL_OPPORTUNITY_AND_GENDER_EQUALITY.webp'
 
 export function Slide4() {
   const navigate = useNavigate()

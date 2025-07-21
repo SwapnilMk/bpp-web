@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { BadgeDollarSign } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import Employment from '@/assets/images/backgrounds/sliders/EMPLOYMENT & ECONOMIC GROWTH.jpeg'
+import Employment from '@/assets/images/backgrounds/sliders/EMPLOYMENT_ECONOMIC_GROWTH.webp'
 
 export function Slide9() {
   const navigate = useNavigate()

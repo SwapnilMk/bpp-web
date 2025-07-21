@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Scale } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import justicePeace from '@/assets/images/backgrounds/sliders/JUSTICE, PEACE, CALM AND PROSPERITY.jpeg'
+import justicePeace from '@/assets/images/backgrounds/sliders/JUSTICE_PEACE_CALM_PROSPERITY.webp'
 
 export function Slide10() {
   const navigate = useNavigate()

@@ -5,7 +5,7 @@ import {
   removeNotification,
   clearNotifications,
   markAllAsRead,
-} from '@/store/notificationSlice'
+} from '@/store/slice/notificationSlice'
 import { Notification } from '@/types/notifications'
 import { Store } from '@reduxjs/toolkit'
 import { io, Socket } from 'socket.io-client'

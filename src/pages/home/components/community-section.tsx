@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import PartyPeoples from '@/assets/images/backgrounds/Party Peoples.png'
+import PartyPeoples from '@/assets/images/backgrounds/party_peoples.webp'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 

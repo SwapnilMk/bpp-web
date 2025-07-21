@@ -1,4 +1,4 @@
-import img3 from '@/assets/images/backgrounds/sliders/UPLIFTMENT OF FARMERS.jpeg'
+import img3 from '@/assets/images/backgrounds/sliders/UPLIFTMENT_OF_FARMERS.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const UpliftmentOfFarmersPage = () => {

@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Church } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import Secularism from '@/assets/images/backgrounds/sliders/INDIA UPHOLD SECULARISM .jpeg'
+import Secularism from '@/assets/images/backgrounds/sliders/INDIA_UPHOLD_SECULARISM.webp'
 
 export function Slide7() {
   const navigate = useNavigate()

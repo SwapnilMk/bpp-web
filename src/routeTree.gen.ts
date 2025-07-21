@@ -40,6 +40,7 @@ import { Route as DashboardMembershipUpgradeIndexImport } from './routes/dashboa
 import { Route as DashboardMembershipRenewalIndexImport } from './routes/dashboard/membership/renewal/index'
 import { Route as DashboardMembershipPaymentIndexImport } from './routes/dashboard/membership/payment/index'
 import { Route as DashboardDonateAddDonationIndexImport } from './routes/dashboard/donate/add-donation/index'
+import { Route as DashboardCommunityContributionLegalAssistanceIndexImport } from './routes/dashboard/community-contribution/legal-assistance/index'
 import { Route as PublicMembershipUpgradeRenewalsIndexImport } from './routes/_public/membership/upgrade-renewals/index'
 import { Route as PublicMembershipPrivilegesIndexImport } from './routes/_public/membership/privileges/index'
 import { Route as PublicMembershipFaqIndexImport } from './routes/_public/membership/faq/index'
@@ -86,7 +87,6 @@ const DashboardSettingsRouteLazyImport = createFileRoute(
 )()
 const DashboardProfileRouteLazyImport = createFileRoute('/dashboard/profile')()
 const DashboardUsersIndexLazyImport = createFileRoute('/dashboard/users/')()
-const DashboardTasksIndexLazyImport = createFileRoute('/dashboard/tasks/')()
 const DashboardSettingsIndexLazyImport = createFileRoute(
   '/dashboard/settings/',
 )()
@@ -95,7 +95,6 @@ const DashboardHelpCenterIndexLazyImport = createFileRoute(
   '/dashboard/help-center/',
 )()
 const DashboardChatsIndexLazyImport = createFileRoute('/dashboard/chats/')()
-const DashboardAppsIndexLazyImport = createFileRoute('/dashboard/apps/')()
 const DashboardSettingsSessionsLazyImport = createFileRoute(
   '/dashboard/settings/sessions',
 )()
@@ -245,14 +244,6 @@ const DashboardUsersIndexLazyRoute = DashboardUsersIndexLazyImport.update({
   import('./routes/dashboard/users/index.lazy').then((d) => d.Route),
 )
 
-const DashboardTasksIndexLazyRoute = DashboardTasksIndexLazyImport.update({
-  id: '/tasks/',
-  path: '/tasks/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any).lazy(() =>
-  import('./routes/dashboard/tasks/index.lazy').then((d) => d.Route),
-)
-
 const DashboardSettingsIndexLazyRoute = DashboardSettingsIndexLazyImport.update(
   {
     id: '/',
@@ -286,14 +277,6 @@ const DashboardChatsIndexLazyRoute = DashboardChatsIndexLazyImport.update({
   getParentRoute: () => DashboardRouteRoute,
 } as any).lazy(() =>
   import('./routes/dashboard/chats/index.lazy').then((d) => d.Route),
-)
-
-const DashboardAppsIndexLazyRoute = DashboardAppsIndexLazyImport.update({
-  id: '/apps/',
-  path: '/apps/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any).lazy(() =>
-  import('./routes/dashboard/apps/index.lazy').then((d) => d.Route),
 )
 
 const DashboardWalletIndexRoute = DashboardWalletIndexImport.update({
@@ -486,6 +469,13 @@ const DashboardDonateAddDonationIndexRoute =
   DashboardDonateAddDonationIndexImport.update({
     id: '/donate/add-donation/',
     path: '/donate/add-donation/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardCommunityContributionLegalAssistanceIndexRoute =
+  DashboardCommunityContributionLegalAssistanceIndexImport.update({
+    id: '/community-contribution/legal-assistance/',
+    path: '/community-contribution/legal-assistance/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 
@@ -956,13 +946,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWalletIndexImport
       parentRoute: typeof DashboardRouteImport
     }
-    '/dashboard/apps/': {
-      id: '/dashboard/apps/'
-      path: '/apps'
-      fullPath: '/dashboard/apps'
-      preLoaderRoute: typeof DashboardAppsIndexLazyImport
-      parentRoute: typeof DashboardRouteImport
-    }
     '/dashboard/chats/': {
       id: '/dashboard/chats/'
       path: '/chats'
@@ -990,13 +973,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/settings/'
       preLoaderRoute: typeof DashboardSettingsIndexLazyImport
       parentRoute: typeof DashboardSettingsRouteLazyImport
-    }
-    '/dashboard/tasks/': {
-      id: '/dashboard/tasks/'
-      path: '/tasks'
-      fullPath: '/dashboard/tasks'
-      preLoaderRoute: typeof DashboardTasksIndexLazyImport
-      parentRoute: typeof DashboardRouteImport
     }
     '/dashboard/users/': {
       id: '/dashboard/users/'
@@ -1137,6 +1113,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/membership/upgrade-renewals'
       preLoaderRoute: typeof PublicMembershipUpgradeRenewalsIndexImport
       parentRoute: typeof PublicImport
+    }
+    '/dashboard/community-contribution/legal-assistance/': {
+      id: '/dashboard/community-contribution/legal-assistance/'
+      path: '/community-contribution/legal-assistance'
+      fullPath: '/dashboard/community-contribution/legal-assistance'
+      preLoaderRoute: typeof DashboardCommunityContributionLegalAssistanceIndexImport
+      parentRoute: typeof DashboardRouteImport
     }
     '/dashboard/donate/add-donation/': {
       id: '/dashboard/donate/add-donation/'
@@ -1305,11 +1288,10 @@ interface DashboardRouteRouteChildren {
   DashboardMembershipIndexRoute: typeof DashboardMembershipIndexRoute
   DashboardReferralIndexRoute: typeof DashboardReferralIndexRoute
   DashboardWalletIndexRoute: typeof DashboardWalletIndexRoute
-  DashboardAppsIndexLazyRoute: typeof DashboardAppsIndexLazyRoute
   DashboardChatsIndexLazyRoute: typeof DashboardChatsIndexLazyRoute
   DashboardHelpCenterIndexLazyRoute: typeof DashboardHelpCenterIndexLazyRoute
-  DashboardTasksIndexLazyRoute: typeof DashboardTasksIndexLazyRoute
   DashboardUsersIndexLazyRoute: typeof DashboardUsersIndexLazyRoute
+  DashboardCommunityContributionLegalAssistanceIndexRoute: typeof DashboardCommunityContributionLegalAssistanceIndexRoute
   DashboardDonateAddDonationIndexRoute: typeof DashboardDonateAddDonationIndexRoute
   DashboardMembershipPaymentIndexRoute: typeof DashboardMembershipPaymentIndexRoute
   DashboardMembershipRenewalIndexRoute: typeof DashboardMembershipRenewalIndexRoute
@@ -1331,11 +1313,11 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardMembershipIndexRoute: DashboardMembershipIndexRoute,
   DashboardReferralIndexRoute: DashboardReferralIndexRoute,
   DashboardWalletIndexRoute: DashboardWalletIndexRoute,
-  DashboardAppsIndexLazyRoute: DashboardAppsIndexLazyRoute,
   DashboardChatsIndexLazyRoute: DashboardChatsIndexLazyRoute,
   DashboardHelpCenterIndexLazyRoute: DashboardHelpCenterIndexLazyRoute,
-  DashboardTasksIndexLazyRoute: DashboardTasksIndexLazyRoute,
   DashboardUsersIndexLazyRoute: DashboardUsersIndexLazyRoute,
+  DashboardCommunityContributionLegalAssistanceIndexRoute:
+    DashboardCommunityContributionLegalAssistanceIndexRoute,
   DashboardDonateAddDonationIndexRoute: DashboardDonateAddDonationIndexRoute,
   DashboardMembershipPaymentIndexRoute: DashboardMembershipPaymentIndexRoute,
   DashboardMembershipRenewalIndexRoute: DashboardMembershipRenewalIndexRoute,
@@ -1484,12 +1466,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/membership': typeof DashboardMembershipIndexRoute
   '/dashboard/referral': typeof DashboardReferralIndexRoute
   '/dashboard/wallet': typeof DashboardWalletIndexRoute
-  '/dashboard/apps': typeof DashboardAppsIndexLazyRoute
   '/dashboard/chats': typeof DashboardChatsIndexLazyRoute
   '/dashboard/help-center': typeof DashboardHelpCenterIndexLazyRoute
   '/dashboard/profile/': typeof DashboardProfileIndexLazyRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexLazyRoute
-  '/dashboard/tasks': typeof DashboardTasksIndexLazyRoute
   '/dashboard/users': typeof DashboardUsersIndexLazyRoute
   '/membership/details/$membershipId': typeof PublicMembershipDetailsMembershipIdRoute
   '/about/bpp-goals': typeof PublicAboutBppGoalsIndexRoute
@@ -1510,6 +1490,7 @@ export interface FileRoutesByFullPath {
   '/membership/faq': typeof PublicMembershipFaqIndexRoute
   '/membership/privileges': typeof PublicMembershipPrivilegesIndexRoute
   '/membership/upgrade-renewals': typeof PublicMembershipUpgradeRenewalsIndexRoute
+  '/dashboard/community-contribution/legal-assistance': typeof DashboardCommunityContributionLegalAssistanceIndexRoute
   '/dashboard/donate/add-donation': typeof DashboardDonateAddDonationIndexRoute
   '/dashboard/membership/payment': typeof DashboardMembershipPaymentIndexRoute
   '/dashboard/membership/renewal': typeof DashboardMembershipRenewalIndexRoute
@@ -1562,12 +1543,10 @@ export interface FileRoutesByTo {
   '/dashboard/membership': typeof DashboardMembershipIndexRoute
   '/dashboard/referral': typeof DashboardReferralIndexRoute
   '/dashboard/wallet': typeof DashboardWalletIndexRoute
-  '/dashboard/apps': typeof DashboardAppsIndexLazyRoute
   '/dashboard/chats': typeof DashboardChatsIndexLazyRoute
   '/dashboard/help-center': typeof DashboardHelpCenterIndexLazyRoute
   '/dashboard/profile': typeof DashboardProfileIndexLazyRoute
   '/dashboard/settings': typeof DashboardSettingsIndexLazyRoute
-  '/dashboard/tasks': typeof DashboardTasksIndexLazyRoute
   '/dashboard/users': typeof DashboardUsersIndexLazyRoute
   '/membership/details/$membershipId': typeof PublicMembershipDetailsMembershipIdRoute
   '/about/bpp-goals': typeof PublicAboutBppGoalsIndexRoute
@@ -1588,6 +1567,7 @@ export interface FileRoutesByTo {
   '/membership/faq': typeof PublicMembershipFaqIndexRoute
   '/membership/privileges': typeof PublicMembershipPrivilegesIndexRoute
   '/membership/upgrade-renewals': typeof PublicMembershipUpgradeRenewalsIndexRoute
+  '/dashboard/community-contribution/legal-assistance': typeof DashboardCommunityContributionLegalAssistanceIndexRoute
   '/dashboard/donate/add-donation': typeof DashboardDonateAddDonationIndexRoute
   '/dashboard/membership/payment': typeof DashboardMembershipPaymentIndexRoute
   '/dashboard/membership/renewal': typeof DashboardMembershipRenewalIndexRoute
@@ -1645,12 +1625,10 @@ export interface FileRoutesById {
   '/dashboard/membership/': typeof DashboardMembershipIndexRoute
   '/dashboard/referral/': typeof DashboardReferralIndexRoute
   '/dashboard/wallet/': typeof DashboardWalletIndexRoute
-  '/dashboard/apps/': typeof DashboardAppsIndexLazyRoute
   '/dashboard/chats/': typeof DashboardChatsIndexLazyRoute
   '/dashboard/help-center/': typeof DashboardHelpCenterIndexLazyRoute
   '/dashboard/profile/': typeof DashboardProfileIndexLazyRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexLazyRoute
-  '/dashboard/tasks/': typeof DashboardTasksIndexLazyRoute
   '/dashboard/users/': typeof DashboardUsersIndexLazyRoute
   '/_public/membership/details/$membershipId': typeof PublicMembershipDetailsMembershipIdRoute
   '/_public/about/bpp-goals/': typeof PublicAboutBppGoalsIndexRoute
@@ -1671,6 +1649,7 @@ export interface FileRoutesById {
   '/_public/membership/faq/': typeof PublicMembershipFaqIndexRoute
   '/_public/membership/privileges/': typeof PublicMembershipPrivilegesIndexRoute
   '/_public/membership/upgrade-renewals/': typeof PublicMembershipUpgradeRenewalsIndexRoute
+  '/dashboard/community-contribution/legal-assistance/': typeof DashboardCommunityContributionLegalAssistanceIndexRoute
   '/dashboard/donate/add-donation/': typeof DashboardDonateAddDonationIndexRoute
   '/dashboard/membership/payment/': typeof DashboardMembershipPaymentIndexRoute
   '/dashboard/membership/renewal/': typeof DashboardMembershipRenewalIndexRoute
@@ -1728,12 +1707,10 @@ export interface FileRouteTypes {
     | '/dashboard/membership'
     | '/dashboard/referral'
     | '/dashboard/wallet'
-    | '/dashboard/apps'
     | '/dashboard/chats'
     | '/dashboard/help-center'
     | '/dashboard/profile/'
     | '/dashboard/settings/'
-    | '/dashboard/tasks'
     | '/dashboard/users'
     | '/membership/details/$membershipId'
     | '/about/bpp-goals'
@@ -1754,6 +1731,7 @@ export interface FileRouteTypes {
     | '/membership/faq'
     | '/membership/privileges'
     | '/membership/upgrade-renewals'
+    | '/dashboard/community-contribution/legal-assistance'
     | '/dashboard/donate/add-donation'
     | '/dashboard/membership/payment'
     | '/dashboard/membership/renewal'
@@ -1805,12 +1783,10 @@ export interface FileRouteTypes {
     | '/dashboard/membership'
     | '/dashboard/referral'
     | '/dashboard/wallet'
-    | '/dashboard/apps'
     | '/dashboard/chats'
     | '/dashboard/help-center'
     | '/dashboard/profile'
     | '/dashboard/settings'
-    | '/dashboard/tasks'
     | '/dashboard/users'
     | '/membership/details/$membershipId'
     | '/about/bpp-goals'
@@ -1831,6 +1807,7 @@ export interface FileRouteTypes {
     | '/membership/faq'
     | '/membership/privileges'
     | '/membership/upgrade-renewals'
+    | '/dashboard/community-contribution/legal-assistance'
     | '/dashboard/donate/add-donation'
     | '/dashboard/membership/payment'
     | '/dashboard/membership/renewal'
@@ -1886,12 +1863,10 @@ export interface FileRouteTypes {
     | '/dashboard/membership/'
     | '/dashboard/referral/'
     | '/dashboard/wallet/'
-    | '/dashboard/apps/'
     | '/dashboard/chats/'
     | '/dashboard/help-center/'
     | '/dashboard/profile/'
     | '/dashboard/settings/'
-    | '/dashboard/tasks/'
     | '/dashboard/users/'
     | '/_public/membership/details/$membershipId'
     | '/_public/about/bpp-goals/'
@@ -1912,6 +1887,7 @@ export interface FileRouteTypes {
     | '/_public/membership/faq/'
     | '/_public/membership/privileges/'
     | '/_public/membership/upgrade-renewals/'
+    | '/dashboard/community-contribution/legal-assistance/'
     | '/dashboard/donate/add-donation/'
     | '/dashboard/membership/payment/'
     | '/dashboard/membership/renewal/'
@@ -2005,11 +1981,10 @@ export const routeTree = rootRoute
         "/dashboard/membership/",
         "/dashboard/referral/",
         "/dashboard/wallet/",
-        "/dashboard/apps/",
         "/dashboard/chats/",
         "/dashboard/help-center/",
-        "/dashboard/tasks/",
         "/dashboard/users/",
+        "/dashboard/community-contribution/legal-assistance/",
         "/dashboard/donate/add-donation/",
         "/dashboard/membership/payment/",
         "/dashboard/membership/renewal/",
@@ -2200,10 +2175,6 @@ export const routeTree = rootRoute
       "filePath": "dashboard/wallet/index.tsx",
       "parent": "/dashboard"
     },
-    "/dashboard/apps/": {
-      "filePath": "dashboard/apps/index.lazy.tsx",
-      "parent": "/dashboard"
-    },
     "/dashboard/chats/": {
       "filePath": "dashboard/chats/index.lazy.tsx",
       "parent": "/dashboard"
@@ -2219,10 +2190,6 @@ export const routeTree = rootRoute
     "/dashboard/settings/": {
       "filePath": "dashboard/settings/index.lazy.tsx",
       "parent": "/dashboard/settings"
-    },
-    "/dashboard/tasks/": {
-      "filePath": "dashboard/tasks/index.lazy.tsx",
-      "parent": "/dashboard"
     },
     "/dashboard/users/": {
       "filePath": "dashboard/users/index.lazy.tsx",
@@ -2303,6 +2270,10 @@ export const routeTree = rootRoute
     "/_public/membership/upgrade-renewals/": {
       "filePath": "_public/membership/upgrade-renewals/index.tsx",
       "parent": "/_public"
+    },
+    "/dashboard/community-contribution/legal-assistance/": {
+      "filePath": "dashboard/community-contribution/legal-assistance/index.tsx",
+      "parent": "/dashboard"
     },
     "/dashboard/donate/add-donation/": {
       "filePath": "dashboard/donate/add-donation/index.tsx",

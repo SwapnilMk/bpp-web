@@ -1,4 +1,4 @@
-import img3 from '@/assets/images/backgrounds/sliders/GOOD HEALTH AND WELL-BEING.jpeg'
+import img3 from '@/assets/images/backgrounds/sliders/GOOD_HEALTH_AND_WELL_BEING.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const GoodHealthAndWellBeingPage = () => {

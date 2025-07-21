@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/NATIONAL INTEGRITY.jpeg'
+import img1 from '@/assets/images/backgrounds/sliders/NATIONAL_INTEGRITY.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const NationalIntegrityPage = () => {

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Building2, Heart, Scale, Users } from 'lucide-react'
-import volunteer from '@/assets/images/headerBanners/volunteer.png'
+import volunteer from '@/assets/images/headerBanners/volunteer.webp'
 import { Button } from '@/components/ui/button'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 

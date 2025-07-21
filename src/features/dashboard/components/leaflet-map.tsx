@@ -23,6 +23,7 @@ interface LeafletMapProps {
   district: string
   totalMembers: number
   isLoading: boolean
+  className?: string
 }
 
 function GeocodeComponent({
@@ -45,11 +46,7 @@ function GeocodeComponent({
     const address = `${city}, ${district}, ${state}, India`
     const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`
 
-    fetch(geocodeUrl, {
-      headers: {
-        'User-Agent': 'YourAppName/1.0 (your.email@example.com)', // Replace with your app name and email
-      },
-    })
+    fetch(geocodeUrl)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.length > 0) {
@@ -89,6 +86,7 @@ export default function LeafletMap({
   totalMembers,
   isLoading,
   city,
+  className,
 }: LeafletMapProps) {
   const mapRef = useRef<L.Map | null>(null)
   const [loading, setLoading] = useState(true)
@@ -105,7 +103,7 @@ export default function LeafletMap({
 
   if (isLoading || loading) {
     return (
-      <Card className='lg:col-span-4'>
+      <Card className={className || 'lg:col-span-4'}>
         <CardHeader>
           <CardTitle>Overview</CardTitle>
         </CardHeader>
@@ -117,7 +115,7 @@ export default function LeafletMap({
   }
 
   return (
-    <Card className='lg:col-span-4'>
+    <Card className={className || 'lg:col-span-6'}>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <div>
           <CardTitle>Overview</CardTitle>

@@ -1,4 +1,4 @@
-import img1 from '@/assets/images/backgrounds/sliders/JUSTICE, PEACE, CALM AND PROSPERITY.jpeg'
+import img1 from '@/assets/images/backgrounds/sliders/JUSTICE_PEACE_CALM_PROSPERITY.webp'
 import HeaderComponent from '@/components/layout/common/HeaderComponent'
 
 const JusticePeaceCalmAndProsperity = () => {

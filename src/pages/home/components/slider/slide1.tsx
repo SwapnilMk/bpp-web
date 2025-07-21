@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import WelcomeBanner from '@/assets/images/backgrounds/sliders/WELCOME TO BPP.png'
+import WelcomeBanner from '@/assets/images/backgrounds/sliders/WELCOME_TO_BPP.webp'
 
 export function Slide1() {
   const navigate = useNavigate()

@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Wheat } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import Farmers from '@/assets/images/backgrounds/sliders/UPLIFTMENT OF FARMERS.jpeg'
+import Farmers from '@/assets/images/backgrounds/sliders/UPLIFTMENT_OF_FARMERS.webp'
 
 export function Slide11() {
   const navigate = useNavigate()
