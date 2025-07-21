@@ -67,25 +67,11 @@ const MultiStepForm = () => {
   const [loading, setLoading] = useState(false)
 
   const handleSendOtp = async (identifier: string) => {
-    try {
-      setLoading(true)
-      await dispatch(sendOtp(identifier)).unwrap()
-    } catch (_error) {
-      // Error is handled by the thunk with toast
-    } finally {
-      setLoading(false)
-    }
+    await dispatch(sendOtp(identifier)).unwrap()
   }
 
   const handleVerifyOtp = async (identifier: string, otp: string) => {
-    try {
-      setLoading(true)
-      await dispatch(verifyOtp({ identifier, otp })).unwrap()
-    } catch (_error) {
-      // Error is handled by the thunk with toast
-    } finally {
-      setLoading(false)
-    }
+    await dispatch(verifyOtp({ identifier, otp })).unwrap()
   }
 
   useEffect(() => {
@@ -129,12 +115,15 @@ const MultiStepForm = () => {
         toast.error('Please enter a valid 10-digit phone number')
         return false
       }
+      setLoading(true)
       try {
         await handleSendOtp(`+91${data.phone}`)
         updateFields({ identifier: `+91${data.phone}` })
         return true
       } catch {
         return false
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -143,11 +132,14 @@ const MultiStepForm = () => {
         toast.error('Please enter a valid 4-digit OTP')
         return false
       }
+      setLoading(true)
       try {
         await handleVerifyOtp(data.identifier, data.otp)
         return true
       } catch {
         return false
+      } finally {
+        setLoading(false)
       }
     }
 

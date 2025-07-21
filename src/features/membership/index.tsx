@@ -16,6 +16,7 @@ import {
   Edit,
 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
+import logo from '@/assets/logo/bppLogo.webp'
 import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -62,8 +63,6 @@ const cardStyles = {
     color: 'text-red-500',
   },
 }
-
-const bppLogo = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNiAzaDZ2NmgtNnoiLz48cGF0aCBkPSJNNiAxNWg2djZoLTZ6Ii8+PHBhdGggZD0iTTE1IDE1aDZ2NmgtNnoiLz48cGF0aCBkPSJNMTUgM2g2djZoLTZ6Ii8+PC9zdmc+`
 
 // --- Membership Card Component ---
 const MembershipCardVisual = ({
@@ -116,7 +115,7 @@ const MembershipCardVisual = ({
           <div className='relative w-full space-y-2 p-3 sm:w-2/3 sm:space-y-3 sm:p-4'>
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat opacity-[0.03]'
-              style={{ backgroundImage: `url(${bppLogo})` }}
+              style={{ backgroundImage: `url(${logo})` }}
             />
             <div className='flex items-start justify-between'>
               <p className='text-xs font-semibold sm:text-sm'>{user.role}</p>
@@ -182,7 +181,7 @@ const MembershipCardVisual = ({
       <div className='relative space-y-2 p-3 sm:space-y-3 sm:p-4'>
         <div
           className='absolute inset-0 bg-contain bg-center bg-no-repeat opacity-[0.03]'
-          style={{ backgroundImage: `url(${bppLogo})` }}
+          style={{ backgroundImage: `url(${logo})` }}
         />
         <div className='flex items-start justify-between'>
           <p className='text-xs font-semibold sm:text-sm'>{user.role}</p>

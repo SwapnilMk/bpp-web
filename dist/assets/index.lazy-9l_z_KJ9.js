@@ -1,1 +1,0 @@
-import{dC as o}from"./react-vendor-DHXlblm3.js";import{az as t}from"./index-2NBrDHfX.js";import"./tanstack-vendor-CGADoYpr.js";import"./vendor-bQrEs1q3.js";const p=o("/dashboard/help-center/")({component:t});export{p as Route};

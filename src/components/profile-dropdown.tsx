@@ -22,9 +22,10 @@ export function ProfileDropdown() {
   const handleLogout = async () => {
     try {
       await dispatch(logout()).unwrap()
-      navigate({ to: '/sign-in', replace: true })
     } catch (_error) {
       // Error is handled by the thunk with toast
+    } finally {
+      navigate({ to: '/sign-in', replace: true })
     }
   }
 

@@ -64,15 +64,16 @@ const Referral = memo(() => {
   }
 
   const handleShare = async () => {
+    const shareText = `I’m inviting you to join Bharatiya Popular Party (BPP)\n\nUse my referral code (${referralProfile?.referralCode}) during registration and become part of a community contribution to support each other.\nOne Rupee. One Vote. One Change.\n\n${referralLink}`
     try {
       await navigator.share({
-        title: 'Join BPP India',
-        text: 'Join BPP India using my referral code!',
-        url: referralLink,
+        title: 'Join Bharatiya Popular Party',
+        text: shareText,
       })
     } catch (_) {
       // Fallback for browsers that don't support Web Share API
-      handleCopyLink()
+      navigator.clipboard.writeText(shareText)
+      toast.success('Referral message copied to clipboard!')
     }
   }
 
