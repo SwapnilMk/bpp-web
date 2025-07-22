@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from 'react-hook-form'
-import { BeneficiaryFormValues } from '@/schema/communityContributionSchema'
+import { BeneficiaryFormValues } from '@/features/contribution/legal/schema/case-registration'
 import {
   Card,
   CardContent,

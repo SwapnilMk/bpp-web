@@ -130,12 +130,12 @@ export const DatePicker = React.memo(function DatePicker({
             !date && 'text-muted-foreground'
           )}
         >
-          <CalendarIcon className='mr-2 h-4 w-4' />
+          <CalendarIcon className='mr-2 w-4 h-4' />
           {date ? format(date, 'PPP') : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0' align='start'>
-        <div className='flex justify-between space-x-1 p-2'>
+      <PopoverContent className='p-0 w-auto' align='start'>
+        <div className='flex justify-between p-2 space-x-1'>
           <Select onValueChange={handleMonthChange} value={month.toString()}>
             <SelectTrigger className='w-[120px]'>
               <SelectValue>{formattedMonth}</SelectValue>

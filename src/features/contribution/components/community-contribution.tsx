@@ -3,13 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { SelectNative } from '@/components/ui/select-native'
 import TermsDialog from './terms-dialog'
 
 export const CommunityContribution = () => {
@@ -31,7 +25,7 @@ export const CommunityContribution = () => {
         <CardTitle>Community Contribution</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='mt-2 rounded-lg bg-gray-100 p-4 shadow-md'>
+        <div className='p-4 mt-2 bg-gray-100 rounded-lg shadow-md'>
           <h3 className='text-lg font-bold text-gray-800'>
             Community Contribution Launch <br />
             Announcement
@@ -67,52 +61,38 @@ export const CommunityContribution = () => {
             </Label>
           </div>
           <div className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
-            <Select onValueChange={(value) => setTypeOfSupport(value)}>
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select...' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='BPP Support'>BPP Support (Free)</SelectItem>
-                <SelectItem value='Legal Cases' disabled>
-                  Legal Cases
-                </SelectItem>
-                <SelectItem value='Medical Cases' disabled>
-                  Medical Cases
-                </SelectItem>
-                <SelectItem value='Social Needs' disabled>
-                  Social Needs
-                </SelectItem>
-                <SelectItem value='Educational Cases' disabled>
-                  Educational Cases
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Select onValueChange={(value) => setCategory(value)}>
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select...' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='Legal Assistance'>
-                  Legal Assistance
-                </SelectItem>
-                <SelectItem value='Legal Aid' disabled>
-                  Legal Aid
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <SelectNative
+              value={typeOfSupport ?? ''}
+              onChange={e => setTypeOfSupport(e.target.value)}
+            >
+              <option value='' disabled>Select...</option>
+              <option value='BPP Support'>BPP Support (Free)</option>
+              <option value='Legal Cases' disabled>Legal Cases</option>
+              <option value='Medical Cases' disabled>Medical Cases</option>
+              <option value='Social Needs' disabled>Social Needs</option>
+              <option value='Educational Cases' disabled>Educational Cases</option>
+            </SelectNative>
+            <SelectNative
+              value={category ?? ''}
+              onChange={e => setCategory(e.target.value)}
+            >
+              <option value='' disabled>Select...</option>
+              <option value='Legal Assistance'>Legal Assistance</option>
+              <option value='Legal Aid' disabled>Legal Aid</option>
+            </SelectNative>
           </div>
-          <div className='text-md mt-4 flex items-center gap-2'>
+          <div className='flex gap-2 items-center mt-4 text-md'>
             <input
               type='checkbox'
               id='termsAccepted'
               checked={termsAccepted}
               onChange={(e) => setTermsAccepted(e.target.checked)}
-              className='h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+              className='w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500'
             />
             <label htmlFor='termsAccepted' className='text-sm text-gray-600'>
               I have read and accept the{' '}
               <span
-                className='ml-1 cursor-pointer text-blue-700 underline'
+                className='ml-1 text-blue-700 underline cursor-pointer'
                 onClick={() => setDialogOpen(true)}
               >
                 Terms and Conditions

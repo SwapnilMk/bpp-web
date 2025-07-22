@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form'
-import { LocationSchemaFormValues } from '@/schema/communityContributionSchema'
+import { LocationSchemaFormValues } from '@/features/contribution/legal/schema/case-registration'
 import {
   Card,
   CardContent,

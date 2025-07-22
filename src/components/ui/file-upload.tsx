@@ -583,7 +583,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
           data-slot='file-upload'
           dir={dir}
           {...rootProps}
-          className={cn('relative flex flex-col gap-2', className)}
+          className={cn('flex relative flex-col gap-2', className)}
         >
           {children}
           <input
@@ -793,7 +793,7 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
       tabIndex={context.disabled ? undefined : 0}
       {...dropzoneProps}
       className={cn(
-        'relative flex select-none flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 outline-none transition-colors hover:bg-accent/30 focus-visible:border-ring/50 data-[disabled]:pointer-events-none data-[dragging]:border-primary/30 data-[invalid]:border-destructive data-[dragging]:bg-accent/30 data-[invalid]:ring-destructive/20',
+        'flex relative flex-col gap-2 justify-center items-center p-6 rounded-lg border-2 border-dashed transition-colors outline-none select-none hover:bg-accent/30 focus-visible:border-ring/50 data-[disabled]:pointer-events-none data-[dragging]:border-primary/30 data-[invalid]:border-destructive data-[dragging]:bg-accent/30 data-[invalid]:ring-destructive/20',
         className
       )}
       onClick={onClick}
@@ -1062,7 +1062,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
           <img
             src={url}
             alt={file.name}
-            className='size-full object-cover'
+            className='object-cover size-full'
             onLoad={(event) => {
               if (!(event.target instanceof HTMLImageElement)) return
               const cachedUrl = urlCache.get(file)
@@ -1127,7 +1127,7 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
       data-slot='file-upload-metadata'
       dir={context.dir}
       {...metadataProps}
-      className={cn('flex min-w-0 flex-1 flex-col', className)}
+      className={cn('flex flex-col flex-1 min-w-0', className)}
     >
       {children ?? (
         <>
@@ -1207,7 +1207,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
           data-slot='file-upload-progress'
           {...progressProps}
           className={cn(
-            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
             className
           )}
         >
@@ -1256,7 +1256,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
           data-slot='file-upload-progress'
           {...progressProps}
           className={cn(
-            'absolute inset-0 bg-primary/50 transition-[clip-path] duration-300 ease-linear',
+            'absolute inset-0 duration-300 ease-linear bg-primary/50 transition-[clip-path]',
             className
           )}
           style={{
@@ -1283,7 +1283,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
           )}
         >
           <div
-            className='h-full w-full flex-1 bg-primary transition-transform duration-300 ease-linear'
+            className='flex-1 w-full h-full transition-transform duration-300 ease-linear bg-primary'
             style={{
               transform: `translateX(-${100 - itemContext.fileState.progress}%)`,
             }}

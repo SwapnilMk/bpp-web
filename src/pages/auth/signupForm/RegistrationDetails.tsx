@@ -135,7 +135,7 @@ export function RegistrationForm({
     <FormWrapper title='User Details'>
       <div className='grid gap-4'>
         {/* ID Type Selection */}
-        <div className='flex flex-col items-center gap-2'>
+        <div className='flex flex-col gap-2 items-center'>
           <span className='text-sm font-semibold'>Select ID Type</span>
           <div className='inline-flex h-9 max-w-[400px] rounded-lg bg-input/50 p-0.5'>
             <RadioGroup
@@ -204,10 +204,10 @@ export function RegistrationForm({
                     }))
                   }
                 >
-                  <FileUploadDropzone className='h-10 flex-row flex-wrap border-dotted px-3 py-2 text-center'>
+                  <FileUploadDropzone className='flex-row flex-wrap px-3 py-2 h-10 text-center border-dotted'>
                     <CloudUpload className='size-4' />
                     <FileUploadTrigger asChild>
-                      <Button variant='link' size='sm' className='h-auto p-0'>
+                      <Button variant='link' size='sm' className='p-0 h-auto'>
                         Upload Front
                       </Button>
                     </FileUploadTrigger>
@@ -252,10 +252,10 @@ export function RegistrationForm({
                     }))
                   }
                 >
-                  <FileUploadDropzone className='h-10 flex-row flex-wrap border-dotted px-3 py-2 text-center'>
+                  <FileUploadDropzone className='flex-row flex-wrap px-3 py-2 h-10 text-center border-dotted'>
                     <CloudUpload className='size-4' />
                     <FileUploadTrigger asChild>
-                      <Button variant='link' size='sm' className='h-auto p-0'>
+                      <Button variant='link' size='sm' className='p-0 h-auto'>
                         Upload Back
                       </Button>
                     </FileUploadTrigger>
@@ -327,10 +327,10 @@ export function RegistrationForm({
                     }))
                   }
                 >
-                  <FileUploadDropzone className='h-10 flex-row flex-wrap border-dotted px-3 py-2 text-center'>
+                  <FileUploadDropzone className='flex-row flex-wrap px-3 py-2 h-10 text-center border-dotted'>
                     <CloudUpload className='size-4' />
                     <FileUploadTrigger asChild>
-                      <Button variant='link' size='sm' className='h-auto p-0'>
+                      <Button variant='link' size='sm' className='p-0 h-auto'>
                         Upload Front
                       </Button>
                     </FileUploadTrigger>
@@ -375,10 +375,10 @@ export function RegistrationForm({
                     }))
                   }
                 >
-                  <FileUploadDropzone className='h-10 flex-row flex-wrap border-dotted px-3 py-2 text-center'>
+                  <FileUploadDropzone className='flex-row flex-wrap px-3 py-2 h-10 text-center border-dotted'>
                     <CloudUpload className='size-4' />
                     <FileUploadTrigger asChild>
-                      <Button variant='link' size='sm' className='h-auto p-0'>
+                      <Button variant='link' size='sm' className='p-0 h-auto'>
                         Upload Back
                       </Button>
                     </FileUploadTrigger>
@@ -424,7 +424,7 @@ export function RegistrationForm({
               head.
             </em>
           </div>
-          <div className='mt-2 flex flex-wrap gap-4'>
+          <div className='flex flex-wrap gap-4 mt-2'>
             <Label className='flex items-center'>
               <Checkbox
                 checked={serveCommunityAccepted === true}

@@ -10,7 +10,7 @@ import {
   fundRequirementSchema,
   locationSchema,
   membersInfoSchema,
-} from '@/schema/communityContributionSchema'
+} from '@/features/contribution/legal/schema/case-registration'
 import { defineStepper } from '@stepperize/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'

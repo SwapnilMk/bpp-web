@@ -4,10 +4,18 @@ export const membersInfoSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   middleName: z.string().optional(),
   lastName: z.string().min(1, 'Last name is required'),
-  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  email: z.string().email('Invalid email address'),
-  dateOfBirth: z.string().optional(),
-  aadhaarCard: z.string().min(12, 'Aadhaar card must be 12 digits'),
+  phone: z.string().regex(/^[0-9]{10}$/, 'Phone number must be 10 digits'),
+  email: z.string().email('Invalid email address').optional(),
+  dateOfBirth: z.string().refine(
+    (val) => {
+      if (!val) return false
+      const dob = new Date(val)
+      const age = new Date().getFullYear() - dob.getFullYear()
+      return age >= 18
+    },
+    { message: 'You must be at least 18 years old' }
+  ),
+  aadhaarCard: z.string().regex(/^[0-9]{12}$/, 'Aadhaar card must be 12 digits'),
   voterId: z.string().min(10, 'Voter ID must be at least 10 characters'),
 })
 
