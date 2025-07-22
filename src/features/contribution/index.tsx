@@ -1,133 +1,56 @@
-import { memo, useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { fetchDashboardData } from '@/store/thunks'
+import { memo } from 'react'
+import CommunityContribution from '@/assets/images/community/internalworking.png'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import ShiftingCountdown from '@/components/features/countdown-timer'
 import { Main } from '@/components/layout/dashboard/main'
-import LeafletMap from '@/features/dashboard/components/leaflet-map'
-import { CommunityContribution } from './components/community-contribution'
-import { StatsSection } from './components/stats-section'
-
-const steps = [
-  { id: 'caseRegistration', label: 'Case Registration' },
-  { id: 'reviewApproval', label: 'Review & Approval' },
-  { id: 'verification', label: 'Verification' },
-  { id: 'completion', label: 'Completion' },
-] as const
+import { CaseHistory } from './components/case-history'
+import { CommunityContribution as CommunityContributionComponent } from './components/community-contribution'
+import { ContributionMap } from './components/contribution-map'
+import { mockCaseStatus } from './data/data'
 
 const Contribution = memo(() => {
-  const dispatch = useAppDispatch()
-  const { data: dashboardData, isLoading } = useAppSelector(
-    (state) => state.dashboard
-  )
-  const authUser = useAppSelector((state) => state.user.user)
-  const [currentStep] = useState(0)
-
-  useEffect(() => {
-    dispatch(fetchDashboardData())
-  }, [dispatch])
-
-  const user =
-    !isLoading && authUser
-      ? {
-          address: {
-            state: authUser.address?.state,
-            district: authUser.address?.district,
-            city: authUser.address?.cityOrVillage,
-          },
-        }
-      : null
-
   return (
     <Main>
-      <div className='mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center'>
-        <div className='w-full'>
-          <div className='mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
-            <div>
-              <h1 className='text-2xl font-bold'>Community Contribution</h1>
-              <p className='text-muted-foreground'>
-                View community contributions and register new cases
-              </p>
-            </div>
-          </div>
-          <div className='w-full'>
-            <Card className='w-full'>
-              <CardHeader>
-                <CardTitle>
-                  <ShiftingCountdown />
-                </CardTitle>
-              </CardHeader>
-            </Card>
-          </div>
-          <div className='my-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2'>
-            <div className='w-full'>
-              <LeafletMap
-                city={user?.address?.city || ''}
-                state={user?.address?.state || ''}
-                district={user?.address?.district || ''}
-                totalMembers={dashboardData?.totalMembersState || 0}
-                isLoading={isLoading}
+      <div className='mb-4'>
+        <h1 className='text-xl font-bold tracking-tight text-foreground text-gray-900 dark:text-white sm:text-2xl lg:text-3xl'>
+          Community Contribution
+        </h1>
+      </div>
+      <Separator className='mb-4' />
+      <Card className='w-full'>
+        <CardHeader>
+          <CardTitle className='text-center text-sm font-bold sm:text-xl lg:text-2xl'>
+            COMMUNITY CONTRIBUTION START IN
+          </CardTitle>
+          <CardContent>
+            <ShiftingCountdown />
+          </CardContent>
+        </CardHeader>
+      </Card>
+      <div className='mt-2 grid grid-cols-1 gap-2 md:grid-cols-2'>
+        <CommunityContributionComponent />
+        <CaseHistory cases={mockCaseStatus} />
+      </div>
+      <div className='mt-2 grid grid-cols-1 gap-2 md:grid-cols-2'>
+        <ContributionMap />
+        <div className='h-full w-full'>
+          <Card className='w-full'>
+            <CardHeader>
+              <CardTitle>Community Contribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <img
+                src={CommunityContribution}
+                alt='Contribution flowchart'
+                className='h-full w-full object-cover'
               />
-            </div>
-            <Card className='h-full overflow-hidden'>
-              <CardHeader>
-                <CardTitle className='text-xl font-semibold'>
-                  Community Contribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className='h-[calc(100%-4rem)] overflow-auto p-5'>
-                <Stepper currentStep={currentStep} />
-                <CommunityContribution />
-              </CardContent>
-            </Card>
-          </div>
-          <StatsSection dashboardData={dashboardData} isLoading={isLoading} />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </Main>
   )
 })
-
-export const Stepper = ({ currentStep }: { currentStep: number }) => {
-  return (
-    <div className='relative space-y-4'>
-      <div className='relative h-3 rounded-full bg-gray-200'>
-        <div
-          className='absolute h-full rounded-full bg-primary transition-all'
-          style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-        />
-        <div className='absolute inset-0 flex justify-between'>
-          {steps.map((step, index) => (
-            <div
-              key={step.id}
-              className='relative flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg'
-              style={{
-                left: '30px',
-                transform: 'translateY(-30%) translateX(-90%)',
-              }}
-            >
-              <div
-                className={`flex h-full w-full items-center justify-center rounded-full font-medium ${
-                  index <= currentStep
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-300 text-gray-600'
-                }`}
-              >
-                {index + 1}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className='flex justify-between'>
-        {steps.map((step) => (
-          <span key={step.id} className='max-w-[100px] text-sm font-medium'>
-            {step.label}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default Contribution

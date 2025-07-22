@@ -14,7 +14,7 @@ type Unit = 'Day' | 'Hour' | 'Minute' | 'Second'
 export default function ShiftingCountdown() {
   return (
     <section className='flex items-center justify-center bg-white p-4 text-black transition-colors duration-500 dark:bg-black dark:text-white'>
-      <div className='flex w-full max-w-5xl items-center bg-transparent'>
+      <div className='flex w-full max-w-7xl items-center bg-transparent'>
         <CountdownItem unit='Day' label='Days' />
         <CountdownItem unit='Hour' label='Hours' />
         <CountdownItem unit='Minute' label='Minutes' />
@@ -30,7 +30,7 @@ function CountdownItem({ unit, label }: { unit: Unit; label: string }) {
   const display = unit === 'Second' ? String(time).padStart(2, '0') : time
 
   return (
-    <div className='flex flex-1 flex-col items-center justify-center gap-1 px-4 py-6 md:gap-2 md:py-8'>
+    <div className='flex flex-1 flex-col items-center justify-center gap-1 px-2 py-2 md:gap-2 md:py-3'>
       <div className='relative w-full overflow-hidden text-center'>
         <span
           ref={ref}

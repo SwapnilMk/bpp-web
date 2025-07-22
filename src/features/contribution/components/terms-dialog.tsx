@@ -14,7 +14,7 @@ interface TermsDialogProps {
 const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, onOpenChange }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[90vh] max-w-5xl overflow-y-auto'>
+      <DialogContent className='max-h-[90vh] max-w-full overflow-y-auto'>
         <DialogHeader>
           <DialogTitle className='mb-4 text-center text-2xl font-bold'>
             Terms of Service

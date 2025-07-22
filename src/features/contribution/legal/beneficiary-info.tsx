@@ -1,200 +1,255 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { IndianBankNames } from '@/data/bank-names'
-import { Button } from '@/components/ui/button'
-import { Combobox, ComboboxItem } from '@/components/ui/combobox'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { BeneficiaryFormValues } from '@/schema/communityContributionSchema'
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { beneficiarySchema, BeneficiaryFormValues } from './schema'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 
-interface BeneficiaryInfoFormProps {
-  onNext: (data: BeneficiaryFormValues) => void
-  onBack: () => void
-}
+export function BeneficiaryForm() {
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext<BeneficiaryFormValues>()
 
-export function BeneficiaryInfoForm({
-  onNext,
-  onBack,
-}: BeneficiaryInfoFormProps) {
-  const form = useForm<BeneficiaryFormValues>({
-    resolver: zodResolver(beneficiarySchema),
-  })
-
-  const onSubmit = (data: BeneficiaryFormValues) => {
-    onNext(data)
-  }
+  const beneficiaryType = useWatch({ control, name: 'beneficiaryType' })
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-        <FormField
-          control={form.control}
-          name='beneficiaryType'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Beneficiary Type</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className='flex space-x-4'
+    <Card>
+      <CardHeader>
+        <CardTitle className='text-2xl font-bold'>
+          Beneficiary Information
+        </CardTitle>
+        <CardDescription className='py-2'>
+          Organization/Individual Information
+        </CardDescription>
+        <Separator />
+      </CardHeader>
+      <CardContent>
+        <div className='space-y-4 text-start'>
+          {/* Radio Buttons Section */}
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='flex items-center space-x-4'>
+              <input
+                type='radio'
+                id='lawFirms'
+                value='lawFirms'
+                {...register('beneficiaryType')}
+                className='radio'
+              />
+              <Label
+                htmlFor='lawFirms'
+                className='block text-sm font-medium text-primary'
+              >
+                Law Firms
+              </Label>
+
+              <input
+                type='radio'
+                id='independentAdvocate'
+                value='independentAdvocate'
+                {...register('beneficiaryType')}
+                className='radio'
+              />
+              <Label
+                htmlFor='independentAdvocate'
+                className='block text-sm font-medium text-primary'
+              >
+                Independent Advocate
+              </Label>
+            </div>
+          </div>
+
+          {/* Conditional Inputs */}
+          {beneficiaryType === 'lawFirms' && (
+            <div>
+              <Label
+                htmlFor='nameOfLawFirm'
+                className='block text-sm font-medium text-primary'
+              >
+                Name of Law Firm*
+              </Label>
+              <Input
+                id='nameOfLawFirm'
+                {...register('nameOfLawFirm')}
+                className='block w-full rounded-md border p-2'
+              />
+              {errors.nameOfLawFirm && (
+                <span className='text-sm text-destructive'>
+                  {errors.nameOfLawFirm.message}
+                </span>
+              )}
+            </div>
+          )}
+
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div>
+              <Label
+                htmlFor='nameOfAdvocate'
+                className='block text-sm font-medium text-primary'
+              >
+                Name of Advocate*
+              </Label>
+              <Input
+                id='nameOfAdvocate'
+                {...register('nameOfAdvocate')}
+                className='block w-full rounded-md border p-2'
+              />
+              {errors.nameOfAdvocate && (
+                <span className='text-sm text-destructive'>
+                  {errors.nameOfAdvocate.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <Label
+                htmlFor='enrollmentNumber'
+                className='block text-sm font-medium text-primary'
+              >
+                Enrollment Number*
+              </Label>
+              <Input
+                id='enrollmentNumber'
+                {...register('enrollmentNumber')}
+                className='block w-full rounded-md border p-2'
+              />
+              {errors.enrollmentNumber && (
+                <span className='text-sm text-destructive'>
+                  {errors.enrollmentNumber.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div>
+              <Label
+                htmlFor='stateBarCouncil'
+                className='block text-sm font-medium text-primary'
+              >
+                State Bar Council*
+              </Label>
+              <Input
+                id='stateBarCouncil'
+                {...register('stateBarCouncil')}
+                className='block w-full rounded-md border p-2'
+              />
+              {errors.stateBarCouncil && (
+                <span className='text-sm text-destructive'>
+                  {errors.stateBarCouncil.message}
+                </span>
+              )}
+            </div>
+            {beneficiaryType === 'lawFirms' && (
+              <div>
+                <Label
+                  htmlFor='gstNumber'
+                  className='block text-sm font-medium text-primary'
                 >
-                  <FormItem className='flex items-center space-x-2'>
-                    <FormControl>
-                      <RadioGroupItem value='lawFirms' />
-                    </FormControl>
-                    <FormLabel>Law Firms</FormLabel>
-                  </FormItem>
-                  <FormItem className='flex items-center space-x-2'>
-                    <FormControl>
-                      <RadioGroupItem value='independentAdvocate' />
-                    </FormControl>
-                    <FormLabel>Independent Advocate</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='nameOfLawFirm'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name of Law Firm</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='nameOfAdvocate'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name of Advocate</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='enrollmentNumber'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Enrollment Number</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='stateBarCouncil'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>State Bar Council</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='gstNumber'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>GST Number</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='bankName'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bank Name</FormLabel>
-              <FormControl>
-                <Combobox {...field} onValueChange={field.onChange}>
-                  {IndianBankNames.map((name) => (
-                    <ComboboxItem key={name} value={name}>
-                      {name}
-                    </ComboboxItem>
-                  ))}
-                </Combobox>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='accountNumber'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Account Number</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='accountHolderName'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Account Holder Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='ifscCode'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>IFSC Code</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className='flex justify-between'>
-          <Button type='button' onClick={onBack}>
-            Back
-          </Button>
-          <Button type='submit'>Next</Button>
+                  GST Number
+                </Label>
+                <Input
+                  id='gstNumber'
+                  {...register('gstNumber')}
+                  className='block w-full rounded-md border p-2'
+                />
+                {errors.gstNumber && (
+                  <span className='text-sm text-destructive'>
+                    {errors.gstNumber.message}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+          {/* Bank Details */}
+          <div className='space-y-4'>
+            <h3 className='text-xl font-bold'>Bank Details</h3>
+            <Separator />
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div>
+                <Label
+                  htmlFor='bankName'
+                  className='block text-sm font-medium text-primary'
+                >
+                  Bank Name*
+                </Label>
+                <Input
+                  id='bankName'
+                  {...register('bankName')}
+                  className='block w-full rounded-md border p-2'
+                />
+                {errors.bankName && (
+                  <span className='text-sm text-destructive'>
+                    {errors.bankName.message}
+                  </span>
+                )}
+              </div>
+              <div>
+                <Label
+                  htmlFor='accountNumber'
+                  className='block text-sm font-medium text-primary'
+                >
+                  Account Number*
+                </Label>
+                <Input
+                  id='accountNumber'
+                  {...register('accountNumber')}
+                  className='block w-full rounded-md border p-2'
+                />
+                {errors.accountNumber && (
+                  <span className='text-sm text-destructive'>
+                    {errors.accountNumber.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div>
+                <Label
+                  htmlFor='accountHolderName'
+                  className='block text-sm font-medium text-primary'
+                >
+                  Account Holder Name*
+                </Label>
+                <Input
+                  id='accountHolderName'
+                  {...register('accountHolderName')}
+                  className='block w-full rounded-md border p-2'
+                />
+                {errors.accountHolderName && (
+                  <span className='text-sm text-destructive'>
+                    {errors.accountHolderName.message}
+                  </span>
+                )}
+              </div>
+              <div>
+                <Label
+                  htmlFor='ifscCode'
+                  className='block text-sm font-medium text-primary'
+                >
+                  IFSC Code*
+                </Label>
+                <Input
+                  id='ifscCode'
+                  {...register('ifscCode')}
+                  className='block w-full rounded-md border p-2'
+                />
+                {errors.ifscCode && (
+                  <span className='text-sm text-destructive'>
+                    {errors.ifscCode.message}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
-    </Form>
+      </CardContent>
+    </Card>
   )
 }

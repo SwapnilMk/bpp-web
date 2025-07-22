@@ -1,83 +1,105 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { useFormContext, FieldErrors } from 'react-hook-form'
+import { FundRequirementFormValues } from '@/schema/communityContributionSchema'
+import { IndianRupee } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { PercentageAmountInput } from './PercentageAmountInput'
-import { fundRequirementSchema, FundRequirementFormValues } from './schema'
+import { Label } from '@/components/ui/label'
 
-interface FundRequirementFormProps {
-  onNext: (data: FundRequirementFormValues) => void
-  onBack: () => void
+interface PercentageAmountInputProps {
+  percentageName: keyof FundRequirementFormValues
+  amountName: keyof FundRequirementFormValues
+  label: string
+  errors: FieldErrors<FundRequirementFormValues>
+  disabled?: boolean
+  onAmountChange: (value: number) => void
 }
 
-export function FundRequirementForm({
-  onNext,
-  onBack,
-}: FundRequirementFormProps) {
-  const form = useForm<FundRequirementFormValues>({
-    resolver: zodResolver(fundRequirementSchema),
-  })
+function PercentageAmountInput({
+  percentageName,
+  amountName,
+  label,
+  errors,
+  disabled = false,
+  onAmountChange,
+}: PercentageAmountInputProps) {
+  const { register } = useFormContext<FundRequirementFormValues>()
 
-  const onSubmit = (data: FundRequirementFormValues) => {
-    onNext(data)
+  return (
+    <div>
+      <Label className='mb-2 block text-sm font-medium text-primary'>
+        {label}
+      </Label>
+      <div className='grid grid-cols-2 gap-4'>
+        <div>
+          <div className='flex rounded-lg shadow-sm'>
+            <Input
+              id={percentageName}
+              type='text'
+              disabled={disabled}
+              className='-me-px flex-1 rounded-e-none'
+              placeholder='Percentage'
+              {...register(percentageName)}
+            />
+            <div className='inline-flex w-9 items-center justify-center rounded-e-lg border border-input bg-background'>
+              <span className='text-sm'>%</span>
+            </div>
+          </div>
+          {errors[percentageName] && (
+            <span className='text-sm text-destructive'>
+              {errors[percentageName]?.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <div className='flex rounded-lg shadow-sm'>
+            <Input
+              id={amountName}
+              type='number'
+              disabled={disabled}
+              className='-me-px flex-1 rounded-e-none'
+              placeholder='Amount'
+              {...register(amountName, {
+                valueAsNumber: true,
+                onChange: (e) =>
+                  onAmountChange(parseFloat(e.target.value) || 0),
+              })}
+            />
+            <div className='inline-flex w-9 items-center justify-center rounded-e-lg border border-input bg-background'>
+              <IndianRupee size={16} strokeWidth={2} />
+            </div>
+          </div>
+          {errors[amountName] && (
+            <span className='text-sm text-destructive'>
+              {errors[amountName]?.message}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function FundRequirementForm() {
+  const {
+    formState: { errors },
+    setValue,
+  } = useFormContext<FundRequirementFormValues>()
+
+  // Example field names, adjust as per your schema
+  const percentageName = 'percentage' as keyof FundRequirementFormValues
+  const amountName = 'amount' as keyof FundRequirementFormValues
+  const label = 'Fund Requirement'
+
+  const handleAmountChange = (value: number) => {
+    setValue(amountName, value)
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-        <FormField
-          control={form.control}
-          name='totalCost'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Total Cost</FormLabel>
-              <FormControl>
-                <Input type='number' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <PercentageAmountInput form={form} name='self' label='Self' />
-        <PercentageAmountInput
-          form={form}
-          name='familyFriends'
-          label='Family & Friends'
-        />
-        <PercentageAmountInput form={form} name='workplace' label='Workplace' />
-        <PercentageAmountInput
-          form={form}
-          name='otherInstitutes'
-          label='Other Institutes'
-        />
-        <FormField
-          control={form.control}
-          name='totalAmountRequested'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Total Amount Requested</FormLabel>
-              <FormControl>
-                <Input type='number' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className='flex justify-between'>
-          <Button type='button' onClick={onBack}>
-            Back
-          </Button>
-          <Button type='submit'>Next</Button>
-        </div>
-      </form>
-    </Form>
+    <PercentageAmountInput
+      percentageName={percentageName}
+      amountName={amountName}
+      label={label}
+      errors={errors}
+      onAmountChange={handleAmountChange}
+    />
   )
 }
