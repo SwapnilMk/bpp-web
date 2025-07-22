@@ -1,16 +1,37 @@
 export const mockCaseStatus = [
   {
-    id: 'CASE-001-AD',
-    date: '2025-07-15',
-    status: 'Under Review',
+    id: 'CASE-2024-001',
+    date: '2024-03-15',
+    status: 'Pending Review',
     category: 'Legal Assistance',
     history: [
-      { status: 'Submitted', date: '2025-07-15' },
-      { status: 'Initial Review', date: '2025-07-16' },
-      { status: 'Lawyer Assigned', date: '2025-07-20' },
-      { status: 'Under Review', date: '2025-07-22' },
+      { status: 'Submitted', date: '2024-03-15' },
+      { status: 'Pending Review', date: '2024-03-16' },
     ],
-    assignedLawyer: 'Adv. Ananya Sharma',
+    assignedLawyer: 'Adv. Priya Sharma',
+  },
+  {
+    id: 'CASE-2024-002',
+    date: '2024-02-10',
+    status: 'Resolved',
+    category: 'Medical Cases',
+    history: [
+      { status: 'Submitted', date: '2024-02-10' },
+      { status: 'In Progress', date: '2024-02-12' },
+      { status: 'Resolved', date: '2024-02-20' },
+    ],
+    assignedLawyer: 'Adv. Rahul Mehta',
+  },
+  {
+    id: 'CASE-2024-003',
+    date: '2024-01-05',
+    status: 'Closed',
+    category: 'Social Needs',
+    history: [
+      { status: 'Submitted', date: '2024-01-05' },
+      { status: 'Closed', date: '2024-01-10' },
+    ],
+    assignedLawyer: 'Adv. Sneha Patil',
   },
 ]
 
@@ -24,9 +45,25 @@ export const mockDashboardStats = {
     { name: 'Educational Cases', value: 70 },
   ],
   activeVolunteers: 128,
-  supportCenters: [
-    { position: [28.6139, 77.209], name: 'Delhi Support Center' },
-    { position: [19.076, 72.8777], name: 'Mumbai Support Center' },
-    { position: [12.9716, 77.5946], name: 'Bengaluru Support Center' },
-  ],
+  pendingCases: 87,
+  resolvedCases: 1200,
+  closedCases: 140,
+}
+
+// Mock user address for map (Navi Mumbai, Maharashtra, India)
+export const mockUserAddress = {
+  line1: 'Sector 17',
+  line2: 'Vashi',
+  cityOrVillage: 'Navi Mumbai',
+  district: 'Raigad',
+  state: 'Maharashtra',
+  pincode: '400703',
+  coordinates: [18.6446, 73.2907],
+}
+
+// Unified mock data object for single API call
+export const mockCommunityContributionData = {
+  caseHistory: mockCaseStatus,
+  dashboardStats: mockDashboardStats,
+  userAddress: mockUserAddress,
 }

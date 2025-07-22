@@ -1,41 +1,47 @@
-import { CaseStatus } from '@/types/case'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchCaseStatus } from '../thunks'
+import { createSlice } from '@reduxjs/toolkit'
+import { submitCase } from '../thunks'
 
 interface CaseState {
-  status: CaseStatus[]
-  isLoading: boolean
+  isSubmitting: boolean
+  submitSuccess: boolean
   error: string | null
 }
 
 const initialState: CaseState = {
-  status: [],
-  isLoading: false,
+  isSubmitting: false,
+  submitSuccess: false,
   error: null,
 }
 
 const caseSlice = createSlice({
   name: 'case',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCaseSubmissionState: (state) => {
+      state.isSubmitting = false
+      state.error = null
+      state.submitSuccess = false
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCaseStatus.pending, (state) => {
-        state.isLoading = true
+      .addCase(submitCase.pending, (state) => {
+        state.isSubmitting = true
         state.error = null
+        state.submitSuccess = false
       })
-      .addCase(
-        fetchCaseStatus.fulfilled,
-        (state, action: PayloadAction<CaseStatus[]>) => {
-          state.isLoading = false
-          state.status = action.payload
-        }
-      )
-      .addCase(fetchCaseStatus.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.payload as string
+      .addCase(submitCase.fulfilled, (state) => {
+        state.isSubmitting = false
+        state.submitSuccess = true
+      })
+      .addCase(submitCase.rejected, (state, action) => {
+        state.isSubmitting = false
+        state.error = action.payload as string | null
+        state.submitSuccess = false
       })
   },
 })
+
+export const { resetCaseSubmissionState } = caseSlice.actions
 
 export default caseSlice.reducer

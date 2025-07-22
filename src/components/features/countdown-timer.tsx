@@ -13,7 +13,7 @@ type Unit = 'Day' | 'Hour' | 'Minute' | 'Second'
 
 export default function ShiftingCountdown() {
   return (
-    <section className='flex items-center justify-center bg-white p-4 text-black transition-colors duration-500 dark:bg-black dark:text-white'>
+    <section className='flex items-center justify-center bg-background p-4 text-foreground transition-colors duration-500'>
       <div className='flex w-full max-w-7xl items-center bg-transparent'>
         <CountdownItem unit='Day' label='Days' />
         <CountdownItem unit='Hour' label='Hours' />
@@ -34,15 +34,15 @@ function CountdownItem({ unit, label }: { unit: Unit; label: string }) {
       <div className='relative w-full overflow-hidden text-center'>
         <span
           ref={ref}
-          className='block font-mono text-3xl font-semibold text-black transition-colors duration-500 dark:text-white md:text-5xl lg:text-7xl'
+          className='block font-mono text-3xl font-semibold text-foreground transition-colors duration-500 md:text-5xl lg:text-7xl'
         >
           {display}
         </span>
       </div>
-      <span className='text-sm font-light text-gray-500 transition-colors duration-500 dark:text-gray-400 md:text-base lg:text-lg'>
+      <span className='text-sm font-light text-muted-foreground transition-colors duration-500 md:text-base lg:text-lg'>
         {label}
       </span>
-      <div className='mt-4 h-px w-full bg-gray-300 transition-colors duration-500 dark:bg-gray-700'></div>
+      <div className='mt-4 h-px w-full bg-border transition-colors duration-500'></div>
     </div>
   )
 }

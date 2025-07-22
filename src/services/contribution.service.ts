@@ -1,42 +1,25 @@
-import { Case, CaseSummary } from '@/types/contribution'
-import apiClient from './api.service'
+import { mockCaseStatus, mockDashboardStats, mockUserAddress } from '@/features/contribution/data/data'
 
-export interface Pagination {
-  page?: number
-  limit?: number
-  [key: string]: string | number | undefined
+export const getCommunityContributionData = async (_userId?: string) => {
+  // Replace with real API call when available
+  try {
+    // Example: const response = await getData(`/contribution/community-data?userId=${userId}`)
+    // return response.data
+    return {
+      caseHistory: mockCaseStatus,
+      dashboardStats: mockDashboardStats,
+      userAddress: mockUserAddress,
+    }
+  } catch {
+    return {
+      caseHistory: mockCaseStatus,
+      dashboardStats: mockDashboardStats,
+      userAddress: mockUserAddress,
+    }
+  }
 }
 
-export interface PagedResponse<T> {
-  data: T[]
-  total: number
-  page: number
-  limit: number
-}
-
-const getCaseSummaries = async (
-  pagination: Pagination
-): Promise<PagedResponse<CaseSummary>> => {
-  const response = await apiClient.get('/cases', { params: pagination })
-  return response.data
-}
-
-const getCase = async (caseId: string): Promise<Case> => {
-  const response = await apiClient.get(`/cases/${caseId}`)
-  return response.data
-}
-
-const createCase = async (caseData: FormData): Promise<Case> => {
-  const response = await apiClient.post('/cases', caseData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
-  return response.data
-}
-
-export const contributionService = {
-  getCaseSummaries,
-  getCase,
-  createCase,
-}
+// Optionally keep the old functions for backward compatibility
+export const getCaseHistory = async () => mockCaseStatus
+export const getDashboardStats = async () => mockDashboardStats
+export const getUserAddress = async () => mockUserAddress 

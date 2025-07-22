@@ -519,7 +519,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
 
         if (onUpload) {
           await onUpload(files, {
-            onProgress: onProgress ?? (() => {}),
+            onProgress: onProgress ?? (() => { }),
             onSuccess: (file) => {
               store.dispatch({ type: 'SET_SUCCESS', file })
             },
@@ -948,9 +948,8 @@ function FileUploadItem(props: FileUploadItemProps) {
         id={id}
         aria-setsize={fileCount}
         aria-posinset={fileIndex}
-        aria-describedby={`${nameId} ${sizeId} ${statusId} ${
-          fileState.error ? messageId : ''
-        }`}
+        aria-describedby={`${nameId} ${sizeId} ${statusId} ${fileState.error ? messageId : ''
+          }`}
         aria-labelledby={nameId}
         data-slot='file-upload-item'
         dir={context.dir}

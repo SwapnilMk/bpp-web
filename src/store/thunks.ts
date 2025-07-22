@@ -5,7 +5,6 @@ import * as membershipService from '@/services/membership.service'
 import { disconnectWebSocket } from '@/services/socket.service'
 import * as userService from '@/services/user.service'
 import { LoginCredentials, RegistrationData, User } from '@/types/auth'
-import { CaseStatus } from '@/types/case'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
 import {
@@ -272,14 +271,27 @@ export const fetchMembershipData = createAsyncThunk(
   }
 )
 
-export const fetchCaseStatus = createAsyncThunk<CaseStatus[]>(
-  'case/fetchStatus',
-  async (_, { rejectWithValue }) => {
+export const submitCase = createAsyncThunk(
+  'case/submitCase',
+  async (allFormData: Record<string, unknown>, { rejectWithValue }) => {
     try {
-      const data = await caseService.getCaseStatus()
-      return data
-    } catch (error) {
-      return rejectWithValue(error)
+      const formData = new FormData()
+      Object.entries(allFormData).forEach(([key, value]) => {
+        if (value instanceof FileList) {
+          if (value.length > 0) formData.append(key, value[0])
+        } else if (typeof value === 'object' && value !== null && !(value instanceof File)) {
+          Object.entries(value).forEach(([k, v]) => formData.append(k, v as unknown as string))
+        } else if (value !== undefined && value !== null) {
+          formData.append(key, value as unknown as string)
+        }
+      })
+      const result = await caseService.createCase(formData)
+      toast.success('Case submitted successfully!')
+      return result
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : 'Submission failed';
+      toast.error(errMsg)
+      return rejectWithValue(errMsg)
     }
   }
 )

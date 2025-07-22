@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 interface TermsDialogProps {
   isOpen: boolean
@@ -14,15 +15,15 @@ interface TermsDialogProps {
 const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, onOpenChange }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[90vh] max-w-full overflow-y-auto'>
+      <DialogContent className='max-h-[70vh] max-w-full sm:max-w-5xl overflow-y-auto bg-white dark:bg-gray-900 flex flex-col'>
         <DialogHeader>
-          <DialogTitle className='mb-4 text-center text-2xl font-bold'>
+          <DialogTitle className='mb-4 text-center text-2xl font-bold text-gray-900 dark:text-gray-100'>
             Terms of Service
           </DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-4 p-2'>
-          <p className='text-sm text-gray-700'>
+        <div className='flex-1 space-y-4 p-2 overflow-y-auto'>
+          <p className='text-sm text-gray-700 dark:text-gray-300'>
             These Terms of Service (the "Terms") are a binding contract between
             you and Bharatiya Popular Party, ("Bharatiya Popular Party," "we"
             "our") Your use of the Services in any way means that you agree to
@@ -30,7 +31,7 @@ const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, onOpenChange }) => {
             use the Services.
           </p>
 
-          <p className='text-sm text-gray-700'>
+          <p className='text-sm text-gray-700 dark:text-gray-300'>
             Please read these Terms carefully. They cover important information
             about Services provided to you.
           </p>
@@ -52,13 +53,13 @@ const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, onOpenChange }) => {
               'By seeking support, members acknowledge that they have read, understood, and agreed to these terms and conditions.',
             ].map((term, index) => (
               <div key={index} className='flex gap-2'>
-                <span className='font-medium'>{index + 1}.</span>
-                <p className='text-sm text-gray-700'>{term}</p>
+                <span className='font-medium text-gray-900 dark:text-gray-100'>{index + 1}.</span>
+                <p className='text-sm text-gray-700 dark:text-gray-300'>{term}</p>
               </div>
             ))}
           </div>
 
-          <div className='mt-6 text-sm text-gray-700'>
+          <div className='mt-6 text-sm text-gray-700 dark:text-gray-300'>
             <p>
               If you have any questions, comments, or concerns regarding these
               terms or the Services, please contact us at:
@@ -67,11 +68,21 @@ const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, onOpenChange }) => {
               Email:{' '}
               <a
                 href='mailto:bpp.headoffice@gmail.com'
-                className='text-blue-600 hover:underline'
+                className='text-blue-600 dark:text-blue-300 hover:underline'
               >
                 bpp.headoffice@gmail.com
               </a>
             </p>
+          </div>
+        </div>
+        <div className='pt-4'>
+          <div className='flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 gap-2'>
+            <Button variant='outline' onClick={() => onOpenChange(false)}>
+              Close
+            </Button>
+            <Button onClick={() => onOpenChange(false)}>
+              Accept
+            </Button>
           </div>
         </div>
       </DialogContent>
